@@ -61,7 +61,7 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
     public Set<PrivateCompany> getAllPrivateCompany() {
         Set<PrivateCompany> privateCompanies = new HashSet<>();
 
-        privateCompanyRepository.findAll().iterator().forEachRemaining(privateCompanies::add);
+        privateCompanyRepository.findAllActivePrivateCompanies().iterator().forEachRemaining(privateCompanies::add);
 
         return privateCompanies;
     }

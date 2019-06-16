@@ -44,7 +44,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role findRoleByDescription(String description) {
-        Optional<Role> roleOptional = roleRepository.findRoleByRoleDescripyion(description);
+        Optional<Role> roleOptional = roleRepository.findRoleByRoleDescription(description);
         if (!roleOptional.isPresent()) {
             throw new RoleException("Role: " + description + " could not be found");
         }
@@ -54,7 +54,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Set<Role> findAllRoles() {
         Set<Role> role = new HashSet<>();
-        roleRepository.findAll().iterator().forEachRemaining(role::add);
+        roleRepository.findAllActiveRoles().iterator().forEachRemaining(role::add);
         return role;
     }
 

@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService {
     public Set<Member> findAllMembers() {
         Set<Member> members = new HashSet<>();
 
-        memberRepository.findAll().iterator().forEachRemaining(members::add);
+        memberRepository.findAllActiveMembers().iterator().forEachRemaining(members::add);
 
         return members;
     }

@@ -60,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
     public Set<Account> findAllAccounts() {
         Set<Account> accounts = new HashSet<>();
 
-        accountRepository.findAll().iterator().forEachRemaining(accounts::add);
+        accountRepository.findAllActiveAccounts().iterator().forEachRemaining(accounts::add);
 
         return accounts;
     }
