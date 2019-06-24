@@ -52,6 +52,7 @@ public class AccountRestController {
             throw new ResourceNotFoundException("Account number: '" + accountNo + "' could not be found.");
     }
 
+    @ApiOperation(value = "Find all active account numbers for Elethu Ikamva.")
     @GetMapping("/accounts")
     Set<Account> findAllAccounts() throws ResourceNotFoundException{
         Set<Account> accountSet = accountService.findAllAccounts();
@@ -68,13 +69,17 @@ public class AccountRestController {
 
     }
 
+    @ApiOperation(value = "An id for the account number to be updated.")
     @PutMapping("/account/update{id}")
-    ResponseEntity<Account> updateAccount(@Valid @RequestBody Account updateAccount, Long id){
+    ResponseEntity<Account> updateAccount(@ApiParam(value = "Account id for an account to be updated:", required = true)
+                                          @Valid @RequestBody Account updateAccount, Long id) throws ResourceNotFoundException{
 
     }
 
+    @ApiOperation(value = "An id for the account number to be deleted.")
     @DeleteMapping("/account/delete/{id}")
-    Map<String, Boolean> deleteAccount(@PathVariable Long id) throws ResourceNotFoundException {
+    Map<String, Boolean> deleteAccount(@ApiParam(value = "Account id for an account to be deleted:", required = true)
+                                       @PathVariable Long id) throws ResourceNotFoundException {
         Account account = accountService.findAccountById(id);
         if(accountService.isAccountActive(account)){
             accountService.deleteAccount(account.getAccountNo());
