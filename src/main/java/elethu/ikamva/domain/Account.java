@@ -3,6 +3,7 @@ package elethu.ikamva.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.Date;
 
 
 @Entity
@@ -23,10 +24,10 @@ public class Account implements Serializable {
     private String accountType;
 
     @Column(name = "CREATED_DATE", nullable = false)
-    private ZonedDateTime insertDate;
+    private Date insertDate;
 
     @Column(name = "END_DATE")
-    private ZonedDateTime endDate;
+    private Date endDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "PRIVATE_COMPANY_FK", nullable = false)
@@ -35,11 +36,11 @@ public class Account implements Serializable {
     public Account() {
     }
 
-    public Account(ZonedDateTime endDate) {
+    public Account(Date endDate) {
         this.endDate = endDate;
     }
 
-    public Account(Long accountNo, String accountType, ZonedDateTime insertDate, PrivateCompany companyAccount) {
+    public Account(Long accountNo, String accountType, Date insertDate, PrivateCompany companyAccount) {
         this.accountNo = accountNo;
         this.accountType = accountType;
         this.insertDate = insertDate;
@@ -71,19 +72,19 @@ public class Account implements Serializable {
         this.accountType = accountType;
     }
 
-    public ZonedDateTime getInsertDate() {
+    public Date getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(ZonedDateTime insertDate) {
+    public void setInsertDate(Date insertDate) {
         this.insertDate = insertDate;
     }
 
-    public ZonedDateTime getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(ZonedDateTime endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

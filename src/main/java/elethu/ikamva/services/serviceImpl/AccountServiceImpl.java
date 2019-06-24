@@ -7,6 +7,7 @@ import elethu.ikamva.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -28,38 +29,45 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteAccount(Account account) {
-        if (isAccountActive(account))
-            saveOrUpdateAccount(account);
+    public void deleteAccount(Long accountNo) {
+        Optional<Account> account = accountRepository.findAccountsByAccountNo(accountNo);
+        Date accountEndDate = new Date(System.currentTimeMillis());
+        if (isAccountActive(account.get())){
+            account.get().setEndDate(accountEndDate);
+            saveOrUpdateAccount(account.get());
+        }
         else
-            throw new AccountException("Account number: " + account.getAccountNo() + " is already inactive or does not exist");
+            throw new AccountException("Account number: " + accountNo + " is already inactive or does not exist");
     }
-
 
     @Override
     public Account findAccountByAccountNo(Long accountNo) {
         Optional<Account> accountOptional = accountRepository.findAccountsByAccountNo(accountNo);
 
-        if (!accountOptional.isPresent())
+        if (accountOptional.isPresent())
+            return accountOptional.get();
+        else
             throw new AccountException("Account number: " + accountNo + " could not be found");
-
-        return accountOptional.get();
     }
 
     @Override
     public Account findAccountById(Long id) {
-        Optional<Account> accountOptional = accountRepository.findById(id);
+        Optional<Account> accountOptional = accountRepository.findAccountsById(id);
 
-        if (!accountOptional.isPresent())
+        if (accountOptional.isPresent())
+            return accountOptional.get();
+        else
             throw new AccountException("Account id: " + id + " could not be found");
+    }
 
-        return accountOptional.get();
+    @Override
+    public Set<Account> findAccountByCompany(Long id) {
+        return null;
     }
 
     @Override
     public Set<Account> findAllAccounts() {
         Set<Account> accounts = new HashSet<>();
-
         accountRepository.findAllActiveAccounts().iterator().forEachRemaining(accounts::add);
 
         return accounts;
@@ -67,6 +75,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Boolean isAccountActive(Account account) {
-        return account.getEndDate() == null && account.getId() != null;
+        if(accountRepository.findAccountsById(account.getId()) != null)
+            return true;
+        else
+            return false;
+
     }
 }
