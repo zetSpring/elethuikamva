@@ -15,6 +15,6 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     Optional<Account> findAccountsById(Long id);
     @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL")
     Set<Account> findAllActiveAccounts();
-    @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL AND acc.companyAccount = ?1")
+    @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL AND acc.id = ?1")
     Set<Account> findAccountsByCompany(Long companyId);
 }

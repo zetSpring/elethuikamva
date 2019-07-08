@@ -15,7 +15,7 @@ public class Role implements Serializable {
     @Column(name = "ROLE_ID", unique = true, nullable = false, length = 10, updatable = false)
     private Long id;
     @Column(name = "ROLE_DESCRIPTION", unique = true, nullable = false)
-    private String roleDescripyion;
+    private String roleDescription;
     @Column(name = "CREATED_DATE", nullable = false)
     private Date createdDate;
     @Column(name = "END_DATE")
@@ -33,12 +33,12 @@ public class Role implements Serializable {
         this.id = id;
     }
 
-    public String getRoleDescripyion() {
-        return roleDescripyion;
+    public String getRoleDescription() {
+        return roleDescription;
     }
 
-    public void setRoleDescripyion(String roleDescripyion) {
-        this.roleDescripyion = roleDescripyion;
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
     }
 
     public Date getCreatedDate() {

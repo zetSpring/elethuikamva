@@ -64,17 +64,17 @@ public class AccountRestController {
 
 
 
-    @PostMapping("/account/save")
-    Map<String, Boolean> saveAccount(@RequestBody Account newAccount) {
-
-    }
-
-    @ApiOperation(value = "An id for the account number to be updated.")
-    @PutMapping("/account/update{id}")
-    ResponseEntity<Account> updateAccount(@ApiParam(value = "Account id for an account to be updated:", required = true)
-                                          @Valid @RequestBody Account updateAccount, Long id) throws ResourceNotFoundException{
-
-    }
+//    @PostMapping("/account/save")
+//    Map<String, Boolean> saveAccount(@RequestBody Account newAccount) {
+//
+//    }
+//
+//    @ApiOperation(value = "An id for the account number to be updated.")
+//    @PutMapping("/account/update{id}")
+//    ResponseEntity<Account> updateAccount(@ApiParam(value = "Account id for an account to be updated:", required = true)
+//                                          @Valid @RequestBody Account updateAccount, Long id) throws ResourceNotFoundException{
+//
+//    }
 
     @ApiOperation(value = "An id for the account number to be deleted.")
     @DeleteMapping("/account/delete/{id}")

@@ -29,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
         if (isRoleActive(role))
             saveOrUpdateRole(role);
         else
-            throw new RoleException("Role: " + role.getRoleDescripyion() + " could not be found for deletion");
+            throw new RoleException("Role: " + role.getRoleDescription() + " could not be found for deletion");
     }
 
     @Override
