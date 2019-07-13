@@ -22,7 +22,7 @@ public class Swagger2Config {
 
     private ApiInfo apiEndPointsInfo(){
         return new ApiInfoBuilder().title("Student Spring Boot REST API")
-                .description("Student Management REST API")
+                .description("Elethu Ikamva Management REST API")
                 .contact(new Contact("Zuko Yawa", "wwww.notyet.africa", "zuko@email.com"))
                 .license("Test 0.1")
                 .licenseUrl("http://local.africa")

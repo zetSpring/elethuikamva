@@ -13,7 +13,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("elethu.ikamva.controllers")
+@ComponentScan({"elethu.ikamva.controllers", "elethu.ikamva.restcontrollers"})
 public class WebMvcConfig implements WebMvcConfigurer {
 
 
@@ -49,7 +49,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/images/**/",
                 "/css/**/",
                 "/js/**/",
-                "/fonts/**/")
+                "/fonts/**/",
+                "/swagger-ui.html")
                 .addResourceLocations("classpath:/resources/",
                         "classpath:/static/images/",
                         "classpath:/static/css/",
