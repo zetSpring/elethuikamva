@@ -5,9 +5,10 @@ import elethu.ikamva.domain.Member;
 import java.util.Set;
 
 public interface MemberService {
-    void saveOrUpdateMember(Member member);
+    Member createNewMember(Member member);
+    Member updateMember(Member member);
 
-    void deleteMember(Member member);
+    void deleteMember(String investmentId);
 
     Member findMemberByInvestmentId(String investmentId);
 

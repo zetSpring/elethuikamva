@@ -1,5 +1,7 @@
 package elethu.ikamva.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -7,6 +9,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "IKAMVA_MEMBERS")
 public class Member implements Serializable {

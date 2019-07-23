@@ -35,8 +35,7 @@ public class MemberRestController {
     }
 
     @PutMapping("/delete/member/{id}")
-    void deleteMember(@PathVariable Long id) {
-        Member member = memberService.findMemberById(id);
-        memberService.deleteMember(member);
+    void deleteMember(@PathVariable String investmentId) {
+        memberService.deleteMember(investmentId);
     }
 }

@@ -1,9 +1,12 @@
 package elethu.ikamva.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+@Data
 @Entity
 @Table(name = "IKAMVA_PROJECTS")
 public class Project implements Serializable {

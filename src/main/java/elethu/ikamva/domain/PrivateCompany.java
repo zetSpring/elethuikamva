@@ -1,10 +1,13 @@
 package elethu.ikamva.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "PRIVATE_COMPANIES")
 public class PrivateCompany implements Serializable {
