@@ -1,12 +1,15 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "IKAMVA_USERS")
 public class User implements Serializable {
@@ -22,6 +25,7 @@ public class User implements Serializable {
     @Column(name = "CREATED_DATE", nullable = false)
     private Date createdDate;
     @Column(name = "END_DATE")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
     @ManyToOne

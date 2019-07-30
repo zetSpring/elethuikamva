@@ -7,15 +7,10 @@ import java.util.Set;
 public interface MemberService {
     Member createNewMember(Member member);
     Member updateMember(Member member);
-
-    void deleteMember(String investmentId);
-
-    Member findMemberByInvestmentId(String investmentId);
-
-    Member findMemberById(Long id);
-
     Set<Member> findAllMembers();
-
+    void deleteMember(String investmentId);
+    Member findMemberByInvestmentId(String investmentId);
+    Member findMemberById(Long id);
     Boolean isMemberActive(Member member);
 }
 

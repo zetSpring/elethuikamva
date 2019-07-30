@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
         Member savedMember = memberRepository.save(member);
         if(!CollectionUtils.isEmpty(member.getMemberContacts())){
             member.getMemberContacts().forEach(contactDetails -> {
-                contactDetails.setMember(savedMember);
+                contactDetails.setMembers(savedMember);
                 contactDetailsRepository.save(contactDetails);
             });
         }
@@ -42,6 +42,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member updateMember(Member member) {
+        if(isMemberActive(member)){
+            memberRepository.save(member);
+        }
         return null;
     }
 
@@ -51,8 +54,6 @@ public class MemberServiceImpl implements MemberService {
         Date todayEndDate;
         //Date memberEndDate;
         //DateFormat dateFormat;
-
-
         if (isMemberActive(deleteMember)) {
             todayEndDate = new Date();
             //dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");

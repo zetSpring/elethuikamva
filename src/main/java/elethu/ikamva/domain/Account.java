@@ -1,8 +1,10 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +12,7 @@ import java.util.Date;
 
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "IKAMVA_ACCOUNTS")
 @ApiModel(description = "Account entity")
@@ -37,15 +40,13 @@ public class Account implements Serializable {
 
     @ApiModelProperty(notes = "Datetime at which the record is deleted from the database.")
     @Column(name = "END_DATE")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
     @OneToOne(cascade = CascadeType.ALL)
     @ApiModelProperty(notes = "Private company identification at which the account belongs to.")
     @JoinColumn(name = "PRIVATE_COMPANY_FK", nullable = false)
     private PrivateCompany companyAccount;
-
-    public Account() {
-    }
 
     public Account(Date endDate) {
         this.endDate = endDate;
@@ -57,77 +58,4 @@ public class Account implements Serializable {
         this.insertDate = insertDate;
         this.companyAccount = companyAccount;
     }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getAccountNo() {
-        return accountNo;
-    }
-
-    public void setAccountNo(Long accountNo) {
-        this.accountNo = accountNo;
-    }
-
-    public String getAccountType() {
-        return accountType;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
-    }
-
-    public Date getInsertDate() {
-        return insertDate;
-    }
-
-    public void setInsertDate(Date insertDate) {
-        this.insertDate = insertDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public PrivateCompany getCompanyAccount() {
-        return companyAccount;
-    }
-
-    public void setCompanyAccount(PrivateCompany companyAccount) {
-        this.companyAccount = companyAccount;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Account)) {
-            return false;
-        }
-        Account otherAccount = (Account) object;
-        {
-            return (this.id != null || otherAccount.id == null) && (this.id == null || this.id.equals(otherAccount.id));
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "elethu.ikamva.domain.Account[id=" + id + "]";
-    }
-
 }
