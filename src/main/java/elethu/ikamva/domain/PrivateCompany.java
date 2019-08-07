@@ -39,7 +39,6 @@ public class PrivateCompany implements Serializable {
     @OneToOne(mappedBy = "companyAccount", cascade = CascadeType.ALL)
     private Account account;
 
-
     public PrivateCompany(Date endDate) {
         this.endDate = endDate;
     }

@@ -66,7 +66,7 @@ public class AccountRestController {
         if(!accountSet.isEmpty())
             return accountSet;
         else
-            throw new ResourceNotFoundException("There are no accounts to found to display.");
+            throw new ResourceNotFoundException("There are no accounts found to display.");
     }
 
 

@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Member implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MEMBER_ID", unique = true, updatable = false, length = 10)
     private Long id;
-    @Column(name = "IDENTITY_NAME", nullable = false, unique = true, length = 13)
+    @Column(name = "IDENTITY_NO", nullable = false, unique = true, length = 13)
     private Long memberIdentityNo;
     @Column(name = "INVESTMENT_ID")
     private String investmentId;
@@ -42,11 +43,12 @@ public class Member implements Serializable {
     private Date endDate;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     private CorpCompany corpCompany;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPayment")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPayment", fetch = FetchType.EAGER)
     private Set<Payment> payments = new HashSet<>();
-    @OneToMany(mappedBy = "members", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ContactDetails> memberContacts = new HashSet<>();
     @OneToOne(mappedBy = "userMember")
     private User user;

@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,21 +20,17 @@ public class ContactDetails implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "CONTACT_ID", nullable = false, updatable = false, unique = true, length = 10)
     private Long id;
-
     @Column(name = "CONTACT", nullable = false, unique = true)
     private String contact;
-
     @Column(name = "CONTACT_TYPE", nullable = false)
     private String contactType;
-
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
     private Date createdDate;
-
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "MEMBER_ID_FK", nullable = false)
     private Member members;
 

@@ -22,7 +22,7 @@ public class CorpCompany implements Serializable {
     @Column(name = "CORPORATE_ID", nullable = false, updatable = false, length = 10, unique = true)
     private Long id;
     @Column(name = "REGISTRATION_NO", nullable = false, unique = true)
-    private Long registrationNo;
+    private String registrationNo;
     @Column(name = "COMPANY_NAME", nullable = false, unique = true)
     private String corpName;
     @Column(name = "REGISTRATION_DATE", nullable = false)
@@ -33,16 +33,16 @@ public class CorpCompany implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
-    @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
     private Set<PrivateCompany> corpPrivateCompany = new HashSet<>();
-    @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Member> memberSet = new HashSet<>();
 
     public CorpCompany(Date endDate) {
         this.endDate = endDate;
     }
 
-    public CorpCompany(Long registrationNo, String corpName, String registeredDate, Date createdCreated) {
+    public CorpCompany(String registrationNo, String corpName, String registeredDate, Date createdCreated) {
         this.registrationNo = registrationNo;
         this.corpName = corpName;
         this.registeredDate = registeredDate;
