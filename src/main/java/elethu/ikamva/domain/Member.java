@@ -45,7 +45,7 @@ public class Member implements Serializable {
     @ManyToOne
     @JsonIgnore
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
-    private CorpCompany corpCompany;
+    private CorpCompany corpMember;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPayment", fetch = FetchType.EAGER)
     private Set<Payment> payments = new HashSet<>();
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -70,7 +70,7 @@ public class Member implements Serializable {
         this.dob = dob;
         this.gender = gender;
         this.createdDate = createdDate;
-        this.corpCompany = corpCompany;
+        this.corpMember = corpCompany;
         this.payments = memberPayment;
         this.memberContacts = memberContacts;
     }
@@ -85,7 +85,7 @@ public class Member implements Serializable {
         this.profilePic = profilePic;
         this.createdDate = createdDate;
         this.endDate = endDate;
-        this.corpCompany = corpCompany;
+        this.corpMember = corpCompany;
         this.payments = memberPayment;
         this.memberContacts = memberContacts;
     }

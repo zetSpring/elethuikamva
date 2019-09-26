@@ -1,6 +1,7 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.Member;
+import elethu.ikamva.exception.ResourceNotFoundException;
 import elethu.ikamva.services.MemberService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +25,24 @@ public class MemberRestController {
 //    }
 
     @GetMapping("/members")
-    Set<Member> findAllMembers() {
-        return memberService.findAllMembers();
+    Set<Member> findAllMembers() throws ResourceNotFoundException {
+        Set<Member> memberSet = memberService.findAllMembers();
+        if(!memberSet.isEmpty())
+        {
+            return memberSet;
+        } else {
+            throw new ResourceNotFoundException("Could not find any members to display.");
+        }
     }
 
 
     @GetMapping("/member/{id}")
-    Member findMember(@PathVariable Long id) {
-        return memberService.findMemberById(id);
+    Member findMember(@PathVariable Long id) throws ResourceNotFoundException{
+        Member findMem = memberService.findMemberById(id);
+        if(memberService.isMemberActive(findMem))
+            return findMem;
+        else
+            throw new ResourceNotFoundException("Member: " + id + "could not be found.");
     }
 
     @PutMapping("/delete/member/{id}")
