@@ -28,6 +28,6 @@ public class Role implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")
     private Set<User> userRoles = new HashSet<>();
 }

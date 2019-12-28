@@ -42,7 +42,7 @@ public class Member implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     private CorpCompany corpMember;
@@ -50,7 +50,7 @@ public class Member implements Serializable {
     private Set<Payment> payments = new HashSet<>();
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<ContactDetails> memberContacts = new HashSet<>();
-    @OneToOne(mappedBy = "userMember")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "userMember")
     private User user;
 
     /*update profile picture*/

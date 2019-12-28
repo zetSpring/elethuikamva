@@ -43,7 +43,7 @@ public class Account implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ApiModelProperty(notes = "Private company identification at which the account belongs to.")
     @JoinColumn(name = "PRIVATE_COMPANY_FK", nullable = false)
     private PrivateCompany companyAccount;

@@ -35,7 +35,7 @@ public class CorpCompany implements Serializable {
 
     @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
     private Set<PrivateCompany> corpPrivateCompany = new HashSet<>();
-    @OneToMany(mappedBy = "corpMember", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "corpMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Member> memberSet = new HashSet<>();
 
     public CorpCompany(Date endDate) {

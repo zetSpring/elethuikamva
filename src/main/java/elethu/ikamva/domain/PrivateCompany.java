@@ -31,12 +31,12 @@ public class PrivateCompany implements Serializable {
     @Column(name = "END_DATE")
     private Date endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     private CorpCompany corpCompany;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "companyProjects")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "companyProjects")
     private Set<Project> projectCompany;
-    @OneToOne(mappedBy = "companyAccount", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "companyAccount", cascade = CascadeType.ALL)
     private Account account;
 
     public PrivateCompany(Date endDate) {

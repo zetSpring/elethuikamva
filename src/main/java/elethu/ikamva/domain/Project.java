@@ -29,7 +29,7 @@ public class Project implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "PRIVATE_COMPANY_ID_FK", nullable = false)
     private PrivateCompany companyProjects;
 

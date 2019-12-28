@@ -28,10 +28,10 @@ public class User implements Serializable {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ROLE_ID_FK", nullable = false)
     private Role role;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MEMBER_ID_PK", nullable = false)
     private Member userMember;
 

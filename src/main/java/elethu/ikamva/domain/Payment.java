@@ -37,7 +37,7 @@ public class Payment implements Serializable {
     @Enumerated(value = EnumType.STRING)
     private TransactionType transactionType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "MEMBER_ID_FK", nullable = false)
     private Member memberPayment;
 
