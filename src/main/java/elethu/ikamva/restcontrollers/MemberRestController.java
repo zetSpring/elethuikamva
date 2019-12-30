@@ -3,13 +3,11 @@ package elethu.ikamva.restcontrollers;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.ResourceNotFoundException;
 import elethu.ikamva.services.MemberService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+@RequestMapping("/api/v1/members")
 @RestController
 public class MemberRestController {
 
@@ -24,7 +22,7 @@ public class MemberRestController {
 //        return memberService.saveOrUpdateMember(member);
 //    }
 
-    @GetMapping("/members")
+    @GetMapping("/")
     Set<Member> findAllMembers() throws ResourceNotFoundException {
         Set<Member> memberSet = memberService.findAllMembers();
         if(!memberSet.isEmpty())
@@ -36,7 +34,7 @@ public class MemberRestController {
     }
 
 
-    @GetMapping("/member/{id}")
+    @GetMapping("/{id}")
     Member findMember(@PathVariable Long id) throws ResourceNotFoundException{
         Member findMem = memberService.findMemberById(id);
         if(memberService.isMemberActive(findMem))
@@ -45,7 +43,7 @@ public class MemberRestController {
             throw new ResourceNotFoundException("Member: " + id + "could not be found.");
     }
 
-    @PutMapping("/delete/member/{id}")
+    @PutMapping("/delete/{id}")
     void deleteMember(@PathVariable String investmentId) {
         memberService.deleteMember(investmentId);
     }

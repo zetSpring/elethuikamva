@@ -90,8 +90,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Set<Member> findAllMembers() {
         Set<Member> members = new HashSet<>();
-
-        memberRepository.findAllActiveMembers().iterator().forEachRemaining(members::add);
+        memberRepository.findAll().iterator().forEachRemaining(members::add);
 
         return members;
     }

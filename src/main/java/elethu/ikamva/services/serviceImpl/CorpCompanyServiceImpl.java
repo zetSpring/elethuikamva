@@ -21,16 +21,6 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     }
 
     @Override
-    public void deleteCorpCompany(CorpCompany corpCompany) {
-
-    }
-
-    @Override
-    public CorpCompany findOne(Long id) {
-        return corpCompanyRepository.findById(id).get();
-    }
-
-    @Override
     public Set<CorpCompany> findAllCorpCompany() {
         Set<CorpCompany> corpCompaniesSet = new HashSet<>();
         corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompaniesSet::add);

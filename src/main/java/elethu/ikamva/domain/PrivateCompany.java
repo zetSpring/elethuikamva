@@ -36,7 +36,7 @@ public class PrivateCompany implements Serializable {
     private CorpCompany corpCompany;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "companyProjects")
     private Set<Project> projectCompany;
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "companyAccount", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "companyAccount", cascade = CascadeType.ALL)
     private Account account;
 
     public PrivateCompany(Date endDate) {

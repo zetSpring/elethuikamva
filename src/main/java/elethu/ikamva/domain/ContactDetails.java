@@ -29,7 +29,7 @@ public class ContactDetails implements Serializable {
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date endDate;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "MEMBER_ID_FK", nullable = false)
     private Member members;

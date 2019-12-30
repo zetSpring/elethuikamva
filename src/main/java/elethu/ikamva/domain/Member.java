@@ -2,8 +2,12 @@ package elethu.ikamva.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,8 +17,10 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "IKAMVA_MEMBERS")
+@EqualsAndHashCode(of = {""})
 public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;

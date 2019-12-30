@@ -5,20 +5,17 @@ import elethu.ikamva.exception.ResourceNotFoundException;
 import elethu.ikamva.services.AccountService;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+@RequestMapping("/api/v1/accounts")
 @RestController
 @Api(value = "Elethu Ikamva Investment", description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
 public class AccountRestController {
-
     private final AccountService accountService;
 
     public AccountRestController(AccountService accountService) {
@@ -30,7 +27,7 @@ public class AccountRestController {
             @ApiResponse(code = 500, message = "Tell me something I don't know")
     })
     @ApiOperation(value = "Find an account by identity")
-    @GetMapping("/account/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Account> findAccountById(@ApiParam(value = "An id for the account number to be retrieved.", required = true)
                                             @PathVariable Long id) throws ResourceNotFoundException {
         Account findAccount = accountService.findAccountById(id);
@@ -40,7 +37,7 @@ public class AccountRestController {
             throw new ResourceNotFoundException("Account id: '" + id + "' could not be found");
     }
     @ApiOperation(value = "Private company id for which to retrieve account account associate with it.")
-    @GetMapping("/account/company/{id}")
+    @GetMapping("/private/{id}")
     Set<Account> findAccountByPrivateCompany(@PathVariable Long id) throws ResourceNotFoundException{
         Set<Account> accounts = accountService.findAccountByCompany(id);
         if(!accounts.isEmpty())
@@ -50,7 +47,7 @@ public class AccountRestController {
     }
 
     @ApiOperation(value = "Find an account by an Account Number ")
-    @GetMapping("/account/account/{accountNo}")
+    @GetMapping("/{accountNo}")
     ResponseEntity<Account> findAccountByAccountNo(@Valid @PathVariable Long accountNo) throws ResourceNotFoundException{
         Account account = accountService.findAccountByAccountNo(accountNo);
         if(accountService.isAccountActive(account))
@@ -60,7 +57,7 @@ public class AccountRestController {
     }
 
     @ApiOperation(value = "Find all active account numbers for Elethu Ikamva.")
-    @GetMapping("/accounts")
+    @GetMapping("/")
     Set<Account> findAllAccounts() throws ResourceNotFoundException{
         Set<Account> accountSet = accountService.findAllAccounts();
         if(!accountSet.isEmpty())
@@ -84,7 +81,7 @@ public class AccountRestController {
 //    }
 
     @ApiOperation(value = "An id for the account number to be deleted.")
-    @DeleteMapping("/account/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     Map<String, Boolean> deleteAccount(@ApiParam(value = "Account id for an account to be deleted:", required = true)
                                        @PathVariable Long id) throws ResourceNotFoundException {
         Account account = accountService.findAccountById(id);
