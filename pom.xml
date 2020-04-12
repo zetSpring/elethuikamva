@@ -19,11 +19,16 @@
         <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
         <java.version>11</java.version>
         <swagger.version>2.9.2</swagger.version>
+        <ojdbc.version>12.2.0.1</ojdbc.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -45,6 +50,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -68,16 +74,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.4.196</version>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/oracle/ojdbc6 -->
-        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc8</artifactId>
-            <version>12.2.0.1</version>
+            <version>${ojdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -102,7 +101,7 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.5.0</version>
+            <version>${swagger.version}</version>
         </dependency>
     </dependencies>
     <build>
@@ -118,6 +117,30 @@
                         <version>7.3.1</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>build-info-plugin</id>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                        <configuration>
+                            <additionalProperties>
+                                <java.version>${java.version}</java.version>
+                                <swagger.version>${swagger.version}</swagger.version>
+                                <ojdbc.version>${ojdbc.version}</ojdbc.version>
+                            </additionalProperties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.0.0</version>
             </plugin>
         </plugins>
     </build>
