@@ -2,12 +2,13 @@ package elethu.ikamva.services;
 
 import elethu.ikamva.domain.Member;
 
-import java.util.Set;
+import java.util.List;
+import java.util.Optional;
 
 public interface MemberService {
     Member createNewMember(Member member);
-    Member updateMember(Member member);
-    Set<Member> findAllMembers();
+    Optional<Member> updateMember(Member member, String investId);
+    List<Member> findAllMembers();
     void deleteMember(String investmentId);
     Member findMemberByInvestmentId(String investmentId);
     Member findMemberById(Long id);

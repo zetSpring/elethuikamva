@@ -7,9 +7,7 @@ import elethu.ikamva.services.ContactDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -35,25 +33,44 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
-    public ContactDetails findContactDetail(String contact) {
-        Optional<ContactDetails> contactDetailsOptional = contactDetailsRepository.findContactDetailsByContact(contact);
+    public List<ContactDetails> getContactDetail(String investId) {
 
-        if (!contactDetailsOptional.isPresent()) {
-            throw new ContactDetailsException("Contact: " + contact + " could not be found");
+        List<ContactDetails> contactDetailsSet = contactDetailsRepository.findAllContactsByMember(investId);
+
+        if (contactDetailsSet.isEmpty()) {
+            throw new ContactDetailsException("There are no contact numbers for customer id: " + investId );
         }
 
-        return contactDetailsOptional.get();
+        return contactDetailsSet;
     }
 
     @Override
-    public Set<ContactDetails> findAllContactDetails() {
+    public List<ContactDetails> findAllContactDetails() {
 
-        Set<ContactDetails> contactDetailsSet = new HashSet<>();
+        List<ContactDetails> contactDetailsSet = new LinkedList<>();
 
         contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetailsSet::add);
 
         return contactDetailsSet;
     }
+
+    @Override
+    public List<ContactDetails> findALlContactTypes(String type) {
+        List<ContactDetails> contactDetailsList = contactDetailsRepository.findContactDetailsByContactType(type);
+        if(contactDetailsList.isEmpty()){
+            throw new ContactDetailsException("There are no contact numbers for customer type: " + type );
+        }
+
+        return contactDetailsList;
+    }
+
+  /*  @Override
+    public List<ContactDetails> findAllByContactsById(Long Id) {
+        List<ContactDetails> contactDetails = new LinkedList<>();
+        contactDetailsRepository.findAllById(Id).iterator().forEachRemaining(contactDetails::add);
+
+        return contactDetails;
+    }*/
 
     @Override
     public Boolean isContactActive(ContactDetails contactDetails) {

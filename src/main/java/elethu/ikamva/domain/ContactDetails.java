@@ -3,6 +3,7 @@ package elethu.ikamva.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Table(name = "CONTACT_DETAILS")
+@EqualsAndHashCode(of = {""})
 public class ContactDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;

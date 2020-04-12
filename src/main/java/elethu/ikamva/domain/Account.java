@@ -39,6 +39,10 @@ public class Account implements Serializable {
     @Column(name = "ACCOUNT_TYPE", nullable = false)
     private String accountType;
 
+    @ApiModelProperty(notes = "A type of bank account (current, business, etc.)")
+    @Column(name = "BANK_NAME")
+    private String bank;
+
     @ApiModelProperty(notes = "Datetime at which the record is created the first time.")
     @Column(name = "CREATED_DATE", nullable = false)
     private Date createdDate;

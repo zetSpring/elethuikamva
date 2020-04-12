@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +23,8 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     @Autowired
     private final ContactDetailsRepository contactDetailsRepository;
+
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     //public MemberServiceImpl(MemberRepository memberRepository) {
        // this.memberRepository = memberRepository;
@@ -41,13 +43,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member updateMember(Member member) {
+    public Optional<Member> updateMember(Member member, String investId) {
         if(isMemberActive(member)){
-            memberRepository.save(member);
-        }
-        return null;
-    }
+           return memberRepository.findMemberByInvestmentId(investId)
+                   .map(newMember ->{
+                       newMember.setFirstname(member.getFirstname());
+                       newMember.setLastname(member.getLastname());
+                       newMember.setGender(member.getGender());
+                       newMember.setDob(member.getDob());
+                       newMember.setMemberIdentityNo(member.getMemberIdentityNo());
+                       //newMember.setCreatedDate(new java.sql.Timestamp(new Date().getTime()));
+                       newMember.setCorpMember(newMember.getCorpMember());
 
+                       return memberRepository.save(newMember);
+                   });
+        }
+        throw new MemberException("Member: " + investId + " has not been found to update");
+    }
     @Override
     public void deleteMember(String investmentId) {
         Member deleteMember = memberRepository.findMemberByInvestmentId(investmentId).get();
@@ -59,7 +71,7 @@ public class MemberServiceImpl implements MemberService {
             //dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
             //memberEndDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(todayEndDate.toString());
             deleteMember.setEndDate(todayEndDate);
-            updateMember(deleteMember);
+            updateMember(deleteMember, investmentId);
         }
         else
             throw new MemberException("Member: " + deleteMember.getInvestmentId() + " is already inactive or could not been found");
@@ -88,8 +100,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Set<Member> findAllMembers() {
-        Set<Member> members = new HashSet<>();
+    public List<Member> findAllMembers() {
+        List<Member> members = new LinkedList<>();
         memberRepository.findAll().iterator().forEachRemaining(members::add);
 
         return members;
