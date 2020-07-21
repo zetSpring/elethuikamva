@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Data
@@ -27,23 +29,24 @@ public class ContactDetails implements Serializable {
     @Column(name = "CONTACT_TYPE", nullable = false)
     private String contactType;
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
-    private Date createdDate;
-    @Column(name = "END_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private OffsetDateTime createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date endDate;
-    @ManyToOne(fetch = FetchType.LAZY)
+    private OffsetDateTime endDate;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnore
     @JoinColumn(name = "MEMBER_ID_FK", nullable = false)
     private Member members;
 
-    public ContactDetails(String contact, String contactType, Date createdDate, Member member) {
+    public ContactDetails(String contact, String contactType, OffsetDateTime createdDate, Member member) {
         this.contact = contact;
         this.contactType = contactType;
         this.createdDate = createdDate;
         this.members = member;
     }
 
-    public ContactDetails(Date endDate) {
+    public ContactDetails(OffsetDateTime endDate) {
         this.endDate = endDate;
     }
 }

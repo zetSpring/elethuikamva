@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MemberService {
-    Member createNewMember(Member member);
-    Optional<Member> updateMember(Member member, String investId);
-    List<Member> findAllMembers();
-    void deleteMember(String investmentId);
-    Member findMemberByInvestmentId(String investmentId);
-    Member findMemberById(Long id);
-    Boolean isMemberActive(Member member);
+    Member CreateNewMember(Member member);
+    Optional<Member> UpdateMember(Member member, String investId);
+    List<Member> FindAllMembers();
+    void DeleteMember(String investmentId);
+    Member FindMemberByInvestmentId(String investmentId);
+    Member FindMemberById(Long id);
+    Boolean IsMemberActive(Member member);
 }
 

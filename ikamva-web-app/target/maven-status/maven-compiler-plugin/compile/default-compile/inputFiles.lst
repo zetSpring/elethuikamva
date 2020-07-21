@@ -2,7 +2,6 @@
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/exception/ContactDetailsException.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/repositories/ContactDetailsRepository.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/repositories/PrivateCompanyRepository.java
-/Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/util/pdf/RenderPDF.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/services/serviceImpl/PrivateCompanyServiceImpl.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/config/Swagger2Config.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/services/serviceImpl/PaymentServiceImpl.java
@@ -19,6 +18,7 @@
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/exception/ResourceNotFoundException.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/PrivateCompany.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/services/PaymentService.java
+/Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/util/PaymentUtility.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/services/serviceImpl/CorpCompanyServiceImpl.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/exception/LoginException.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/restcontrollers/PaymentRestController.java
@@ -33,7 +33,6 @@
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/controllers/HomeController.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/TransactionType.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/CorpCompany.java
-/Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/util/excel/ReadMemberPayments.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/exception/PrivateCompanyException.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/Project.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/restcontrollers/ContactDetailsRestController.java

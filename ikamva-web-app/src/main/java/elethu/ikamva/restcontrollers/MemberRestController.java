@@ -3,12 +3,14 @@ package elethu.ikamva.restcontrollers;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.ResourceNotFoundException;
 import elethu.ikamva.services.MemberService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/v1/members")
 @RestController
+@Api(value = "Elethu Ikamva Members", description = "Operations pertaining to the details about the members of elethu ikamva.")
 public class MemberRestController {
 
     private final MemberService memberService;
@@ -17,14 +19,14 @@ public class MemberRestController {
         this.memberService = memberService;
     }
 
-//    @PostMapping
-//    Member saveMember(Member member){
-//        return memberService.saveOrUpdateMember(member);
-//    }
+    @PostMapping
+    Member CreateNewMember(@RequestBody Member member){
+        return memberService.CreateNewMember(member);
+    }
 
     @GetMapping("/")
-    List<Member> findAllMembers() throws ResourceNotFoundException {
-        List<Member> memberList = memberService.findAllMembers();
+    List<Member> FindAllMembers() throws ResourceNotFoundException {
+        List<Member> memberList = memberService.FindAllMembers();
         if(!memberList.isEmpty())
         {
             return memberList;
@@ -34,17 +36,17 @@ public class MemberRestController {
     }
 
     @GetMapping("/invest/{investId}")
-    Member findMemberByInvestId(@PathVariable String investId){
-        Member investMember = memberService.findMemberByInvestmentId(investId);
+    Member FindMemberByInvestId(@PathVariable String investId){
+        Member investMember = memberService.FindMemberByInvestmentId(investId);
 
         return investMember;
     }
 
 
     @GetMapping("/{id}")
-    Member findMember(@PathVariable Long id) throws ResourceNotFoundException{
-        Member findMem = memberService.findMemberById(id);
-        if(memberService.isMemberActive(findMem))
+    Member FindMember(@PathVariable Long id) throws ResourceNotFoundException{
+        Member findMem = memberService.FindMemberById(id);
+        if(memberService.IsMemberActive(findMem))
             return findMem;
         else
             throw new ResourceNotFoundException("Member: " + id + "could not be found.");
@@ -54,18 +56,18 @@ public class MemberRestController {
     @PutMapping("/update/{investId}")
     Member updateMember(@RequestBody Member member, @PathVariable String investId) throws ResourceNotFoundException{
 
-        Member memUpdate = memberService.findMemberByInvestmentId(investId);
-        if (memberService.isMemberActive(member)){
-            memberService.updateMember(member, investId);
+        Member memUpdate = memberService.FindMemberByInvestmentId(investId);
+        if (memberService.IsMemberActive(member)){
+            memberService.UpdateMember(member, investId);
             return memUpdate;
         }
         else
             throw new ResourceNotFoundException("Member investment id: " + investId + " could not be found for an update");
     }
 
-
-    @PutMapping("/delete/{id}")
-    void deleteMember(@PathVariable String investmentId) {
-        memberService.deleteMember(investmentId);
+    /*Delete (update end date) member*/
+    @DeleteMapping("/delete/{id}")
+    void DeleteMember(@PathVariable String investmentId) {
+        memberService.DeleteMember(investmentId);
     }
 }

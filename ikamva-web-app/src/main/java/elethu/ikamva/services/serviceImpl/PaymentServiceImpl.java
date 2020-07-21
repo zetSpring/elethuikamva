@@ -4,11 +4,11 @@ import elethu.ikamva.domain.Payment;
 import elethu.ikamva.exception.PaymentException;
 import elethu.ikamva.repositories.PaymentRepository;
 import elethu.ikamva.services.PaymentService;
+import org.springframework.boot.actuate.endpoint.web.Link;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.time.OffsetDateTime;
+import java.util.*;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -25,15 +25,15 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public void deletePayment(Payment payment) {
-        if (isPaymentActive(payment))
+    public void DeletePayment(Payment payment) {
+        if (IsPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate()))
             saveOrUpdatePayment(payment);
         else
             throw new PaymentException("Could not find payment for amount: " + payment.getAmount());
     }
 
     @Override
-    public Payment findPaymentById(Long id) {
+    public Payment FindPaymentById(Long id) {
         Optional<Payment> paymentOptional = paymentRepository.findById(id);
 
         if (!paymentOptional.isPresent()) {
@@ -43,26 +43,26 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment findPaymentByInvestId(String investmentId) {
-        Optional<Payment> paymentOptional = paymentRepository.findPaymentByInvestmentId(investmentId);
+    public List<Payment> FindPaymentByInvestId(String investmentId) {
+        List<Payment> paymentList = paymentRepository.FindPaymentByInvestmentId(investmentId);
 
-        if (!paymentOptional.isPresent()) {
-            throw new PaymentException("Payment could not be found for investment id: " + investmentId);
+        if (paymentList.isEmpty()) {
+            throw new PaymentException("This member : " + investmentId + " has no payments made. ");
         }
-        return paymentOptional.get();
+       return null;
     }
 
     @Override
-    public Set<Payment> findAllPayments() {
-        Set<Payment> payments = new HashSet<>();
+    public List<Payment> FindAllPaymentsBetween(OffsetDateTime fromDate, OffsetDateTime toDate, String memberInvestId) {
+        List<Payment> payments = new LinkedList<>();
 
-        paymentRepository.findAll().iterator().forEachRemaining(payments::add);
+        //paymentRepository.
 
         return payments;
     }
 
     @Override
-    public Boolean isPaymentActive(Payment payment) {
-        return payment.getId() != null && payment.getEndDate() == null;
+    public Boolean IsPaymentActive(double payment, String investmentID, OffsetDateTime paymentDate) {
+        return paymentRepository.CheckPayment(payment, investmentID, paymentDate);
     }
 }

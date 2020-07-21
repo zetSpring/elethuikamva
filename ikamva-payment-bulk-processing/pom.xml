@@ -11,5 +11,19 @@
 
     <artifactId>ikamva-payment-bulk-processing</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.8</version>
+        </dependency>
+        <!--<dependency>
+            <groupId>elethu.ikamva</groupId>
+            <artifactId>ikamva-web-app</artifactId>
+            <version>elethuikamva_0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>-->
+    </dependencies>
+
 
 </project>

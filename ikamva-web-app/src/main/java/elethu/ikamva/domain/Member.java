@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -9,9 +10,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.OffsetDateTime;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
@@ -35,25 +35,29 @@ public class Member implements Serializable {
     @Column(name = "MEMBER_SURNAME", nullable = false)
     private String lastname;
     @Column(name = "DATE_OF_BIRTH", nullable = false)
-    private Date dob;  /*member date of birth*/
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private OffsetDateTime dob;  /*member date of birth*/
     @Column(name = "GENDER", nullable = false)
     private String gender;
     @Lob
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Byte[] profilePic;
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
-    private Date createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private OffsetDateTime createdDate;
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private OffsetDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     private CorpCompany corpMember;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "memberPayment", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "memberPayments", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Payment> payments = new HashSet<>();
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<ContactDetails> memberContacts = new HashSet<>();
+    private List<ContactDetails> memberContacts = new LinkedList<>();
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "userMember")
     private User user;
 
@@ -62,11 +66,11 @@ public class Member implements Serializable {
         this.profilePic = profilePic;
     }
 
-    public Member(Date endDate) {
+    public Member(OffsetDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, Date dob, String gender, Date createdDate, CorpCompany corpCompany, Set<Payment> memberPayment, Set<ContactDetails> memberContacts) {
+    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, OffsetDateTime dob, String gender, OffsetDateTime createdDate, CorpCompany corpCompany, Set<Payment> memberPayment, List<ContactDetails> memberContacts) {
         this.memberIdentityNo = memberIdentityNo;
         this.investmentId = investmentId;
         this.firstname = firstname;
@@ -79,7 +83,7 @@ public class Member implements Serializable {
         this.memberContacts = memberContacts;
     }
 
-    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, Date dob, String gender, Byte[] profilePic, Date createdDate, Date endDate, CorpCompany corpCompany, Set<Payment> memberPayment, Set<ContactDetails> memberContacts) {
+    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, OffsetDateTime dob, String gender, Byte[] profilePic, OffsetDateTime createdDate, OffsetDateTime endDate, CorpCompany corpCompany, Set<Payment> memberPayment, List<ContactDetails> memberContacts) {
         this.memberIdentityNo = memberIdentityNo;
         this.investmentId = investmentId;
         this.firstname = firstname;

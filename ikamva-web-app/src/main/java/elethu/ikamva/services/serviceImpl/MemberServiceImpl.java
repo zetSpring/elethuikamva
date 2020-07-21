@@ -12,6 +12,8 @@ import org.springframework.util.CollectionUtils;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
    // }
 
     @Override
-    public Member createNewMember(Member member) {
+    public Member CreateNewMember(Member member) {
         Member savedMember = memberRepository.save(member);
         if(!CollectionUtils.isEmpty(member.getMemberContacts())){
             member.getMemberContacts().forEach(contactDetails -> {
@@ -42,8 +44,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Optional<Member> updateMember(Member member, String investId) {
-        if(isMemberActive(member)){
+    public Optional<Member> UpdateMember(Member member, String investId) {
+        if(IsMemberActive(member)){
            return memberRepository.findMemberByInvestmentId(investId)
                    .map(newMember ->{
                        newMember.setFirstname(member.getFirstname());
@@ -59,25 +61,23 @@ public class MemberServiceImpl implements MemberService {
         }
         throw new MemberException("Member: " + investId + " has not been found to update");
     }
+
+
     @Override
-    public void deleteMember(String investmentId) {
+    public void DeleteMember(String investmentId) {
         Member deleteMember = memberRepository.findMemberByInvestmentId(investmentId).get();
-        Date todayEndDate;
-        //Date memberEndDate;
-        //DateFormat dateFormat;
-        if (isMemberActive(deleteMember)) {
-            todayEndDate = new Date();
-            //dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-            //memberEndDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(todayEndDate.toString());
+        OffsetDateTime todayEndDate;
+        if (IsMemberActive(deleteMember)) {
+            todayEndDate = new Date().toInstant().atOffset(ZoneOffset.UTC);
             deleteMember.setEndDate(todayEndDate);
-            updateMember(deleteMember, investmentId);
+            UpdateMember(deleteMember, investmentId);
         }
         else
             throw new MemberException("Member: " + deleteMember.getInvestmentId() + " is already inactive or could not been found");
     }
 
     @Override
-    public Member findMemberByInvestmentId(String investmentId) {
+    public Member FindMemberByInvestmentId(String investmentId) {
         Optional<Member> memberOptional = memberRepository.findMemberByInvestmentId(investmentId);
 
         if (!memberOptional.isPresent()) {
@@ -88,7 +88,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Member findMemberById(Long id) {
+    public Member FindMemberById(Long id) {
         Optional<Member> member = memberRepository.findById(id);
 
         if (!member.isPresent()) {
@@ -99,7 +99,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Member> findAllMembers() {
+    public List<Member> FindAllMembers() {
         List<Member> members = new LinkedList<>();
         memberRepository.findAll().iterator().forEachRemaining(members::add);
 
@@ -107,7 +107,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Boolean isMemberActive(Member member) {
+    public Boolean IsMemberActive(Member member) {
         return member.getId() != null && member.getEndDate() == null;
     }
 }

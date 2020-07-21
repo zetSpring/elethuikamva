@@ -1,4 +1,5 @@
 elethu/ikamva/exception/ResourceNotFoundException.class
+elethu/ikamva/util/PaymentUtility.class
 elethu/ikamva/repositories/MemberRepository.class
 elethu/ikamva/exception/AccountException.class
 elethu/ikamva/services/PaymentService.class
@@ -12,7 +13,6 @@ elethu/ikamva/controllers/AccountUsController.class
 elethu/ikamva/services/serviceImpl/MemberServiceImpl.class
 elethu/ikamva/config/DBDataSourceConfig.class
 elethu/ikamva/controllers/ContactDetailsController.class
-elethu/ikamva/util/pdf/RenderPDF.class
 elethu/ikamva/controllers/MemberController.class
 elethu/ikamva/exception/RoleException.class
 elethu/ikamva/ElethuikamvaApplication.class
@@ -53,7 +53,6 @@ elethu/ikamva/controllers/ProjectsController.class
 elethu/ikamva/services/PrivateCompanyService.class
 elethu/ikamva/repositories/AccountRepository.class
 elethu/ikamva/repositories/PrivateCompanyRepository.class
-elethu/ikamva/util/excel/ReadMemberPayments.class
 elethu/ikamva/exception/PaymentException.class
 elethu/ikamva/restcontrollers/ContactDetailsRestController.class
 elethu/ikamva/domain/Project.class

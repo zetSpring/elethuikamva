@@ -28,7 +28,7 @@ public class AccountRestController {
     })
     @ApiOperation(value = "Find an account by identity")
     @GetMapping("/{id}")
-    ResponseEntity<Account> findAccountById(@ApiParam(value = "An id for the account number to be retrieved.", required = true)
+    ResponseEntity<Account> FindAccountById(@ApiParam(value = "An id for the account number to be retrieved.", required = true, example = "123")
                                             @PathVariable Long id) throws ResourceNotFoundException {
         Account findAccount = accountService.findAccountById(id);
         if(accountService.isAccountActive(findAccount))
@@ -36,9 +36,11 @@ public class AccountRestController {
         else
             throw new ResourceNotFoundException("Account id: '" + id + "' could not be found");
     }
+
+
     @ApiOperation(value = "Private company id for which to retrieve account account associate with it.")
     @GetMapping("/private/{id}")
-    Set<Account> findAccountByPrivateCompany(@PathVariable Long id) throws ResourceNotFoundException{
+    Set<Account> FindAccountByPrivateCompany(@PathVariable Long id) throws ResourceNotFoundException{
         Set<Account> accounts = accountService.findAccountByCompany(id);
         if(!accounts.isEmpty())
             return accountService.findAccountByCompany(id);
@@ -46,19 +48,19 @@ public class AccountRestController {
             throw new ResourceNotFoundException("There are no account to retrieve for private Company '" + id + "'");
     }
 
-    @ApiOperation(value = "Find an account by an Account Number ")
-    @GetMapping("/{accountNo}")
-    ResponseEntity<Account> findAccountByAccountNo(@Valid @PathVariable Long accountNo) throws ResourceNotFoundException{
-        Account account = accountService.findAccountByAccountNo(accountNo);
-        if(accountService.isAccountActive(account))
-            return ResponseEntity.ok().body(account);
-        else
-            throw new ResourceNotFoundException("Account number: '" + accountNo + "' could not be found.");
-    }
+//    @ApiOperation(value = "Find an account by an Account Number ")
+//    @GetMapping("/{accountNo}")
+//    ResponseEntity<Account> FindAccountByAccountNo(@Valid @PathVariable Long accountNo) throws ResourceNotFoundException{
+//        Account account = accountService.findAccountByAccountNo(accountNo);
+//        if(accountService.isAccountActive(account))
+//            return ResponseEntity.ok().body(account);
+//        else
+//            throw new ResourceNotFoundException("Account number: '" + accountNo + "' could not be found.");
+//    }
 
     @ApiOperation(value = "Find all active account numbers for Elethu Ikamva.")
     @GetMapping("/")
-    Set<Account> findAllAccounts() throws ResourceNotFoundException{
+    Set<Account> FindAllAccounts() throws ResourceNotFoundException{
         Set<Account> accountSet = accountService.findAllAccounts();
         if(!accountSet.isEmpty())
             return accountSet;
@@ -82,7 +84,7 @@ public class AccountRestController {
 
     @ApiOperation(value = "An id for the account number to be deleted.")
     @DeleteMapping("/delete/{id}")
-    Map<String, Boolean> deleteAccount(@ApiParam(value = "Account id for an account to be deleted:", required = true)
+    Map<String, Boolean> deleteAccount(@ApiParam(value = "Account id for an account to be deleted:", required = true, example = "123")
                                        @PathVariable Long id) throws ResourceNotFoundException {
         Account account = accountService.findAccountById(id);
         if(accountService.isAccountActive(account)){
