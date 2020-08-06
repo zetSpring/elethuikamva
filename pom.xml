@@ -14,7 +14,7 @@
     </parent>
     <groupId>elethu.ikamva</groupId>
     <artifactId>elethuikamva</artifactId>
-    <version>elethuikamva_0.0.1-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <name>elethuikamva</name>
     <description>Elethu Ikamva portal</description>
 
@@ -31,7 +31,7 @@
     <scm>
         <connection>scm:git:https://github.com/zetSpring/elethuikamva.git</connection>
         <url>https://github.com/zetSpring/elethuikamva</url>
-      <tag>test_release_branch</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <dependencies>
