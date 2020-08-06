@@ -16,6 +16,8 @@ HELP.md
 *.iws
 *.iml
 *.ipr
+*.ids
+*.orig
 
 ### NetBeans ###
 /nbproject/private/
@@ -27,3 +29,15 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+
+######################
+# Maven
+######################
+/log/
+.flattened-pom.xml
+
+######################
+# Directories
+######################
+/bin/
+/deploy/git
