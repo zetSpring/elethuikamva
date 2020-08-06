@@ -51,7 +51,7 @@
             <version>5.9.0</version>
         </dependency>
     </dependencies>
-<<<<<<< HEAD
+
     <build>
         <plugins>
             <plugin>
@@ -97,7 +97,6 @@
             </plugin>
         </plugins>
     </build>
-=======
 
 <!--    <dependencies>-->
 <!--        <dependency>-->
@@ -219,5 +218,4 @@
 <!--            </plugin>-->
 <!--        </plugins>-->
 <!--    </build>-->
->>>>>>> 498d9a3f2d1d58cdb26ccc8fac36cbef1d33e4a2
 </project>
