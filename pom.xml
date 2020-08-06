@@ -29,6 +29,11 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
+    <scm>
+        <connection>scm:git:https://github.com/zetSpring/elethuikamva.git</connection>
+        <url>https://github.com/zetSpring/elethuikamva</url>
+    </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
