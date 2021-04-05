@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -17,8 +18,8 @@ public class CorporateCompanyRestController {
     private CorpCompanyService corpCompanyService;
 
     @GetMapping("/corporates")
-    Set<CorpCompany> findAllCorps() throws ResourceNotFoundException {
-        Set<CorpCompany> corpCompanySet = corpCompanyService.findAllCorpCompany();
+    List<CorpCompany> findAllCorps() throws ResourceNotFoundException {
+        List<CorpCompany> corpCompanySet = corpCompanyService.findAllCorpCompany();
         if(!corpCompanySet.isEmpty()){
             return corpCompanySet;
         }else

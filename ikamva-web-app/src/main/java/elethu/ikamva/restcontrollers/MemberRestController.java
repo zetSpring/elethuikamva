@@ -4,6 +4,8 @@ import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.ResourceNotFoundException;
 import elethu.ikamva.services.MemberService;
 import io.swagger.annotations.Api;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,23 +21,22 @@ public class MemberRestController {
         this.memberService = memberService;
     }
 
-    @PostMapping
-    Member CreateNewMember(@RequestBody Member member){
-        return memberService.CreateNewMember(member);
+    @PostMapping("/add")
+    ResponseEntity<Member> CreateNewMember(@RequestBody Member member){
+        Member newMember = memberService.CreateNewMember(member);
+        return new ResponseEntity<>(newMember, HttpStatus.CREATED);
     }
 
     @GetMapping("/")
-    List<Member> FindAllMembers() throws ResourceNotFoundException {
+    @ResponseStatus(HttpStatus.OK)
+    List<Member> FindAllMembers() {
         List<Member> memberList = memberService.FindAllMembers();
-        if(!memberList.isEmpty())
-        {
-            return memberList;
-        } else {
-            throw new ResourceNotFoundException("Could not find any members to display.");
-        }
+
+        return memberList;
     }
 
     @GetMapping("/invest/{investId}")
+    @ResponseStatus(HttpStatus.OK)
     Member FindMemberByInvestId(@PathVariable String investId){
         Member investMember = memberService.FindMemberByInvestmentId(investId);
 
@@ -46,23 +47,22 @@ public class MemberRestController {
     @GetMapping("/{id}")
     Member FindMember(@PathVariable Long id) throws ResourceNotFoundException{
         Member findMem = memberService.FindMemberById(id);
-        if(memberService.IsMemberActive(findMem))
-            return findMem;
-        else
+
+        if(findMem == null){
             throw new ResourceNotFoundException("Member: " + id + "could not be found.");
+        }
+
+        return findMem;
     }
 
     /*Update members*/
     @PutMapping("/update/{investId}")
-    Member updateMember(@RequestBody Member member, @PathVariable String investId) throws ResourceNotFoundException{
+    ResponseEntity<Member> updateMember(@RequestBody Member member, @PathVariable String investId){
 
-        Member memUpdate = memberService.FindMemberByInvestmentId(investId);
-        if (memberService.IsMemberActive(member)){
-            memberService.UpdateMember(member, investId);
-            return memUpdate;
-        }
-        else
-            throw new ResourceNotFoundException("Member investment id: " + investId + " could not be found for an update");
+        Member memUpdate = memberService.UpdateMember(member);
+
+        return new ResponseEntity<>(memUpdate, HttpStatus.OK);
+
     }
 
     /*Delete (update end date) member*/

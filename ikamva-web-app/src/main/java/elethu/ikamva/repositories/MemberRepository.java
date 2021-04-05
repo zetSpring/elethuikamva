@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface MemberRepository extends CrudRepository<Member, Long> {
-    @Query("SELECT mem FROM Member mem WHERE mem.investmentId = ?1 AND mem.endDate = NULL")
+    @Query("SELECT mem FROM Member mem WHERE mem.investmentId = UPPER(?1) AND mem.endDate = NULL")
     Optional<Member> findMemberByInvestmentId(String investmentId);
     @Query("SELECT mem FROM Member mem WHERE mem.endDate = NULL")
     List<Member> findAllActiveMembers();

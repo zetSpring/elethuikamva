@@ -56,13 +56,13 @@ public class Account implements Serializable {
     @ApiModelProperty(notes = "Private company identification at which the account belongs to.")
     @JoinColumn(name = "PRIVATE_COMPANY_FK", nullable = false)
     @JsonIgnore
-    private elethu.ikamva.domain.PrivateCompany companyAccount;
+    private PrivateCompany companyAccount;
 
     public Account(Date endDate) {
         this.endDate = endDate;
     }
 
-    public Account(Long accountNo, String accountType, Date createdDate, elethu.ikamva.domain.PrivateCompany companyAccount) {
+    public Account(Long accountNo, String accountType, Date createdDate, PrivateCompany companyAccount) {
         this.accountNo = accountNo;
         this.accountType = accountType;
         this.createdDate = createdDate;

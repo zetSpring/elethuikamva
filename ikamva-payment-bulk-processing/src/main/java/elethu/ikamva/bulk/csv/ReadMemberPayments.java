@@ -13,13 +13,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-//@Component
 public class ReadMemberPayments {
 
-    //private static String fileLocation = "classpath:statements/Statement_1178891232_14.csv";
+    private final String file = "/Statement_1178891232_14.csv"; //to remove, only for testing purposes.
     PaymentUtilService paymentUtilService;
 
-    public void ReadCSVFile(String file) throws IOException {
+    public void ReadCSVFile(String fileName) throws IOException {
         try {
             Reader reader =  Files.newBufferedReader(Paths.get(file));
             CSVParser csvRecords = new CSVParser(reader, CSVFormat.DEFAULT);
@@ -30,12 +29,16 @@ public class ReadMemberPayments {
                 String reference = csvRecord.get(1);
                 double amount = Double.parseDouble(csvRecord.get(2));
                 double balance = Double.parseDouble(csvRecord.get(3));
-                String investmentID = paymentUtilService.ExtractInvestID(reference);
+                if(paymentUtilService.GetTransactionType(amount).value.equals("Credit")){
+                    System.out.println(paymentUtilService.GetTransactionType(amount).value);
+                    //reference = paymentUtilService.ExtractInvestID(reference);
+                }
+
                 System.out.println("Date: " + date + " Reference: " + reference + " Amount: " + amount + " Balance: " + balance);
             }
-
         } catch (IOException | ParseException e) {
-            System.out.println("could not find a file"+ e.getLocalizedMessage());
+            String msg = "There was a problem processing the payment csv file: " + fileName + " because " + e.getMessage();
+            System.out.println(msg);
         }
     }
 }

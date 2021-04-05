@@ -3,12 +3,15 @@ package elethu.ikamva.restcontrollers;
 import elethu.ikamva.domain.ContactDetails;
 import elethu.ikamva.services.ContactDetailsService;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/api/v1/contacts")
 @RestController
@@ -21,6 +24,11 @@ public class ContactDetailsRestController {
         this.contactDetailsService = contactDetailsService;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved contacts by invest id"),
+            @ApiResponse(code = 500, message = "Tell me something I don't know")
+    })
+    @ApiOperation("Get Contacts by Member Investment ID")
     @GetMapping("/{investId}")
     List<ContactDetails> getMemberContacts(@PathVariable String investId){
         List<ContactDetails> contactDetailsList = contactDetailsService.getContactDetail(investId);
@@ -28,6 +36,11 @@ public class ContactDetailsRestController {
         return contactDetailsList;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved contacts by type"),
+            @ApiResponse(code = 500, message = "Tell me something I don't know")
+    })
+    @ApiOperation("Get Contacts by Contact Type")
     @GetMapping("/type/{type}")
     List<ContactDetails> getMemberContactsBytype(@PathVariable String type){
         List<ContactDetails> contactDetailsList = contactDetailsService.findALlContactTypes(type);
@@ -35,6 +48,11 @@ public class ContactDetailsRestController {
         return contactDetailsList;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
+            @ApiResponse(code = 500, message = "Tell me something I don't know")
+    })
+    @ApiOperation("Get All Contacts")
     @GetMapping("/")
     List<ContactDetails> getAllMemberContacts(){
         List<ContactDetails> contactDetailsList = contactDetailsService.findAllContactDetails();
@@ -42,5 +60,20 @@ public class ContactDetailsRestController {
         return contactDetailsList;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
+            @ApiResponse(code = 500, message = "Tell me something I don't know")
+    })
+    @ApiOperation("Get All Contacts")
+    @PutMapping("/update/{investId}")
+    ResponseEntity<ContactDetails> updateContactDetail(@RequestBody ContactDetails contactDetail, @PathVariable String investId){
+        ContactDetails updateContact = contactDetailsService.updateContactDetail(contactDetail, investId);
+        return new ResponseEntity<>(updateContact, HttpStatus.ACCEPTED);
+    }
 
+    @PostMapping("/add")
+    ResponseEntity<ContactDetails> addContactDetail(@RequestBody ContactDetails contactDetails){
+        ContactDetails newContact = contactDetailsService.saveContactDetail(contactDetails);
+        return new ResponseEntity<>(newContact, HttpStatus.OK);
+    }
 }

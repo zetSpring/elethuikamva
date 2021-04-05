@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -21,8 +23,8 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     }
 
     @Override
-    public Set<CorpCompany> findAllCorpCompany() {
-        Set<CorpCompany> corpCompaniesSet = new HashSet<>();
+    public List<CorpCompany> findAllCorpCompany() {
+        List<CorpCompany> corpCompaniesSet = new LinkedList<>();
         corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompaniesSet::add);
 
         return corpCompaniesSet;

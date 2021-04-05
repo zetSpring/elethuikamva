@@ -3,13 +3,15 @@ package elethu.ikamva.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -32,36 +34,49 @@ public class Payment implements Serializable {
     private String investmentId;
     /*Date of debit or credit or transaction*/
     @Column(name = "PAYMENT_DATE", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
-    private OffsetDateTime paymentDate;
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy:HH:mm:ss")
+    private LocalDate paymentDate;
     @Column(name = "PAYMENT_END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
-    private OffsetDateTime endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy:HH:mm:ss")
+    private LocalDate endDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "DELETE_REASON")
     private String deleteReason;
     @Column(name = "PAYMENT_REFERENCE", nullable = false)
     private String paymentReference;
 
     @Column(name = "TRANSACTION_TYPE")
-    @Enumerated(value = EnumType.STRING)
+    //@Enumerated(value = EnumType.STRING)
     private TransactionType transactionType;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MEMBER_ID_FK", nullable = false)
+    @JoinColumn(name = "MEMBER_ID_FK")
     private Member memberPayments;
 
-    public Payment(OffsetDateTime endDate, String deleteReason) {
+    public Payment(LocalDate endDate, String deleteReason) {
         this.endDate = endDate;
         this.deleteReason = deleteReason;
     }
 
-    public Payment(Double amount, String investmentId, OffsetDateTime paymentDate, String paymentReference, Member memberPayments) {
+    public Payment(Double amount, String investmentId, LocalDate paymentDate, String paymentReference, Member memberPayments) {
         this.amount = amount;
         this.investmentId = investmentId;
         this.paymentDate = paymentDate;
         this.paymentReference = paymentReference;
+        this.memberPayments = memberPayments;
+    }
+
+    public Payment(Long id, Double amount, String investmentId, LocalDate paymentDate, LocalDate endDate, String deleteReason, String paymentReference, TransactionType transactionType, Member memberPayments) {
+        this.id = id;
+        this.amount = amount;
+        this.investmentId = investmentId;
+        this.paymentDate = paymentDate;
+        this.endDate = endDate;
+        this.deleteReason = deleteReason;
+        this.paymentReference = paymentReference;
+        this.transactionType = transactionType;
         this.memberPayments = memberPayments;
     }
 }

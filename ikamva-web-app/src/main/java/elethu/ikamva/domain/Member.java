@@ -1,14 +1,16 @@
 package elethu.ikamva.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Delegate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.*;
@@ -27,8 +29,8 @@ public class Member implements Serializable {
     @Column(name = "MEMBER_ID", unique = true, updatable = false, length = 10)
     private Long id;
     @Column(name = "IDENTITY_NO", nullable = false, unique = true, length = 13)
-    private Long memberIdentityNo;
-    @Column(name = "INVESTMENT_ID")
+    private Long identityNo;
+    @Column(name = "INVESTMENT_ID", nullable = false, unique = true)
     private String investmentId;
     @Column(name = "MEMBER_NAME", nullable = false)
     private String firstname;
@@ -55,8 +57,9 @@ public class Member implements Serializable {
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     private CorpCompany corpMember;
     @OneToMany(mappedBy = "memberPayments", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Payment> payments = new HashSet<>();
-    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Payment> payments = new LinkedList<>();
+    @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<ContactDetails> memberContacts = new LinkedList<>();
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "userMember")
     private User user;
@@ -70,8 +73,8 @@ public class Member implements Serializable {
         this.endDate = endDate;
     }
 
-    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, OffsetDateTime dob, String gender, OffsetDateTime createdDate, CorpCompany corpCompany, Set<Payment> memberPayment, List<ContactDetails> memberContacts) {
-        this.memberIdentityNo = memberIdentityNo;
+    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, OffsetDateTime dob, String gender, OffsetDateTime createdDate, CorpCompany corpCompany, List<Payment> memberPayment, List<ContactDetails> memberContacts) {
+        this.identityNo = memberIdentityNo;
         this.investmentId = investmentId;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -83,8 +86,8 @@ public class Member implements Serializable {
         this.memberContacts = memberContacts;
     }
 
-    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, OffsetDateTime dob, String gender, Byte[] profilePic, OffsetDateTime createdDate, OffsetDateTime endDate, CorpCompany corpCompany, Set<Payment> memberPayment, List<ContactDetails> memberContacts) {
-        this.memberIdentityNo = memberIdentityNo;
+    public Member(Long memberIdentityNo, String investmentId, String firstname, String lastname, OffsetDateTime dob, String gender, Byte[] profilePic, OffsetDateTime createdDate, OffsetDateTime endDate, CorpCompany corpCompany, List<Payment> memberPayment, List<ContactDetails> memberContacts) {
+        this.identityNo = memberIdentityNo;
         this.investmentId = investmentId;
         this.firstname = firstname;
         this.lastname = lastname;

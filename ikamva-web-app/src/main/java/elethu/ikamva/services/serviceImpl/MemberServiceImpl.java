@@ -1,5 +1,6 @@
 package elethu.ikamva.services.serviceImpl;
 
+import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.repositories.ContactDetailsRepository;
@@ -20,16 +21,11 @@ import java.util.*;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-    @Autowired
+
     private final MemberRepository memberRepository;
-    @Autowired
     private final ContactDetailsRepository contactDetailsRepository;
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-
-    //public MemberServiceImpl(MemberRepository memberRepository) {
-       // this.memberRepository = memberRepository;
-   // }
 
     @Override
     public Member CreateNewMember(Member member) {
@@ -44,47 +40,29 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Optional<Member> UpdateMember(Member member, String investId) {
-        if(IsMemberActive(member)){
-           return memberRepository.findMemberByInvestmentId(investId)
-                   .map(newMember ->{
-                       newMember.setFirstname(member.getFirstname());
-                       newMember.setLastname(member.getLastname());
-                       newMember.setGender(member.getGender());
-                       newMember.setDob(member.getDob());
-                       newMember.setMemberIdentityNo(member.getMemberIdentityNo());
-                       //newMember.setCreatedDate(new java.sql.Timestamp(new Date().getTime()));
-                       newMember.setCorpMember(newMember.getCorpMember());
-
-                       return memberRepository.save(newMember);
-                   });
+    public Member UpdateMember(Member member) {
+        Member newMember = memberRepository.findMemberById(member.getId());
+        if(newMember == null){
+            throw new MemberException("The Member invest id: " + member.getInvestmentId() + " cannot been found to update");
         }
-        throw new MemberException("Member: " + investId + " has not been found to update");
+        return memberRepository.save(member) ;
     }
 
 
     @Override
     public void DeleteMember(String investmentId) {
-        Member deleteMember = memberRepository.findMemberByInvestmentId(investmentId).get();
+        Optional<Member> memberOptional = memberRepository.findMemberByInvestmentId(investmentId);
+        Member deleteMember = memberOptional.orElseThrow(() -> new MemberException("Member:" + investmentId + " is already inactive or could not been found"));
         OffsetDateTime todayEndDate;
-        if (IsMemberActive(deleteMember)) {
-            todayEndDate = new Date().toInstant().atOffset(ZoneOffset.UTC);
-            deleteMember.setEndDate(todayEndDate);
-            UpdateMember(deleteMember, investmentId);
-        }
-        else
-            throw new MemberException("Member: " + deleteMember.getInvestmentId() + " is already inactive or could not been found");
+        todayEndDate = new Date().toInstant().atOffset(ZoneOffset.UTC);
+        deleteMember.setEndDate(todayEndDate);
+        memberRepository.save(deleteMember);
     }
 
     @Override
     public Member FindMemberByInvestmentId(String investmentId) {
-        Optional<Member> memberOptional = memberRepository.findMemberByInvestmentId(investmentId);
-
-        if (!memberOptional.isPresent()) {
-            throw new MemberException("Member: " + investmentId + " has not been found");
-        }
-
-        return memberOptional.get();
+        Optional<Member> memberOptional = memberRepository.findMemberByInvestmentId(investmentId.toUpperCase());
+        return memberOptional.orElseThrow(() -> new MemberException("Member: " + investmentId + " has not been found"));
     }
 
     @Override

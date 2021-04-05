@@ -1,5 +1,6 @@
 package elethu.ikamva.services.serviceImpl;
 
+//import elethu.ikamva.bulk.domain.Account;
 import elethu.ikamva.domain.Account;
 import elethu.ikamva.exception.AccountException;
 import elethu.ikamva.repositories.AccountRepository;

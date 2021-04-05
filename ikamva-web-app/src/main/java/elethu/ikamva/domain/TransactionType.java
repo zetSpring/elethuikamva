@@ -1,6 +1,10 @@
 package elethu.ikamva.domain;
 
 public enum TransactionType {
+    MONTHLY_CONTRIBUTION("Monthly Contribution"),
+    BANK_CHARGES("Bank Charges");
 
-    MONTHLY_CONTRIBUTION, BANK_CHARGES
+    public final String value;
+
+    TransactionType(String s){this.value = s;}
 }
