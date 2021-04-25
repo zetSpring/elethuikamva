@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -16,10 +17,10 @@ import java.util.Set;
 @Transactional
 public interface ContactDetailsRepository extends CrudRepository<ContactDetails, Long> {
 
-    @Query("SELECT contact FROM ContactDetails contact WHERE contact.contact = ?1")
-    Optional<ContactDetails> findContactDetailsByContact(String contact);
+    @Query("SELECT contact FROM ContactDetails contact WHERE contact.endDate = NULL")
+    List<ContactDetails> findAllMemberContactDetails();
     @Query("SELECT contact FROM ContactDetails contact WHERE contact.members.investmentId = ?1")
-    List<ContactDetails> findAllContactsByMember(@PathVariable String investId);
+    List<ContactDetails> findAllContactsByMemberInvestId(@PathVariable String investId);
     @Query("SELECT contact FROM ContactDetails contact WHERE UPPER(contact.contactType) = UPPER(?1)")
     List<ContactDetails> findContactDetailsByContactType(String type);
     @Query("SELECT contact FROM ContactDetails contact WHERE contact.id = ?1 AND contact.endDate = NULL")

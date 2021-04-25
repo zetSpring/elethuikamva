@@ -37,6 +37,7 @@ elethu/ikamva/exception/MemberException.class
 elethu/ikamva/config/WebMvcConfig.class
 elethu/ikamva/domain/TransactionType.class
 elethu/ikamva/services/MemberService.class
+elethu/ikamva/commons/ToCamelCase.class
 elethu/ikamva/services/serviceImpl/AccountServiceImpl.class
 elethu/ikamva/restcontrollers/MemberRestController.class
 elethu/ikamva/repositories/PaymentRepository.class
@@ -44,10 +45,12 @@ elethu/ikamva/services/AccountService.class
 elethu/ikamva/domain/ContactDetails.class
 elethu/ikamva/exception/PrivateCompanyException.class
 elethu/ikamva/controllers/ProjectController.class
+elethu/ikamva/domain/CorpCompany$CorpCompanyBuilder.class
 elethu/ikamva/services/serviceImpl/ContactDetailsServiceImpl.class
 elethu/ikamva/exception/LoginException.class
 elethu/ikamva/services/serviceImpl/PrivateCompanyServiceImpl.class
 elethu/ikamva/exception/CorpCompanyException.class
+elethu/ikamva/domain/Member$MemberBuilder.class
 elethu/ikamva/domain/Payment.class
 elethu/ikamva/services/CorpCompanyService.class
 elethu/ikamva/controllers/ProjectsController.class

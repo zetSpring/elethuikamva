@@ -8,15 +8,11 @@ import java.util.List;
 import java.util.Set;
 
 public interface PaymentService {
-    Payment saveOrUpdatePayment(Payment payment);
-
-    void DeletePayment(Long id);
-
-    Payment FindPaymentById(Long id);
-
-    List<Payment> FindPaymentByInvestId(String investmentId);
-
-    List<Payment> FindAllPaymentsBetween(LocalDate fromDate, LocalDate toDate, String memberInvestId);
-
-    Boolean IsPaymentActive(double payment, String investmentID, LocalDateTime paymentDate);
+    Payment savePayment(Payment payment);
+    Payment DeletePayment(Long id);
+    Payment findPaymentById(Long id);
+    List<Payment> findPaymentByInvestId(String investmentId);
+    List<Payment> findPaymentsBetweenDates(LocalDate fromDate, LocalDate toDate);
+    List<Payment> findMemberPaymentsBetweenDates(String memberInvestId, LocalDate fromDate, LocalDate toDate);
+    boolean IsPaymentActive(double payment, String investmentID, LocalDate paymentDate);
 }

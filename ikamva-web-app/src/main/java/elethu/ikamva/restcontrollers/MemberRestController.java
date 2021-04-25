@@ -58,16 +58,16 @@ public class MemberRestController {
     /*Update members*/
     @PutMapping("/update/{investId}")
     ResponseEntity<Member> updateMember(@RequestBody Member member, @PathVariable String investId){
-
-        Member memUpdate = memberService.UpdateMember(member);
+        Member memUpdate = memberService.UpdateMember(member, investId);
 
         return new ResponseEntity<>(memUpdate, HttpStatus.OK);
-
     }
 
     /*Delete (update end date) member*/
-    @DeleteMapping("/delete/{id}")
-    void DeleteMember(@PathVariable String investmentId) {
-        memberService.DeleteMember(investmentId);
+    @DeleteMapping("/delete/{investId}")
+    ResponseEntity<Member> DeleteMember(@PathVariable String investId) {
+        Member member = memberService.DeleteMember(investId);
+
+        return new ResponseEntity<>(member, HttpStatus.OK);
     }
 }

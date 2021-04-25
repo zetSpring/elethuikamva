@@ -3,7 +3,6 @@ package elethu.ikamva.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -35,7 +34,7 @@ public class ContactDetails implements Serializable {
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate createdDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "END_DATE")
     private LocalDate endDate;
@@ -55,7 +54,6 @@ public class ContactDetails implements Serializable {
         this.createdDate = createdDate;
         this.members = members;
     }
-
 
     public ContactDetails(Long id, String contact, ContactType contactType, String memberInvestId, LocalDate createdDate, Member members) {
         this.id = id;

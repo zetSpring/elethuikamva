@@ -2,7 +2,6 @@ package elethu.ikamva.services.serviceImpl;
 
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.ContactDetails;
-import elethu.ikamva.domain.ContactType;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.ContactDetailsException;
 import elethu.ikamva.exception.MemberException;
@@ -11,9 +10,8 @@ import elethu.ikamva.repositories.MemberRepository;
 import elethu.ikamva.services.ContactDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.util.CollectionUtils;
 import java.util.*;
-
 
 @Service
 public class ContactDetailsServiceImpl implements ContactDetailsService {
@@ -33,61 +31,61 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     public ContactDetails saveContactDetail(ContactDetails contactDetails) {
         Member member = memberRepository.findMemberByInvestmentId(contactDetails.getMemberInvestId().toUpperCase())
                 .orElseThrow(() -> new ContactDetailsException("Contact: " + contactDetails.getContact() + " is already inactive or could not be found"));
-        //contactDetails.setContactType(ContactType.CELLPHONE);
         contactDetails.setMembers(member);
-        contactDetails.setCreatedDate(dateFormatter.GetTodayDate());
+        contactDetails.setCreatedDate(dateFormatter.returnLocalDate());
 
         return contactDetailsRepository.save(contactDetails);
     }
 
     @Override
-    public void deleteContactDetails(ContactDetails contactDetails) {
-        if (contactDetailsRepository.isContactActive(contactDetails.getId())){
-            contactDetails.setEndDate(dateFormatter.GetTodayDate());
-            saveContactDetail(contactDetails);
+    public List<ContactDetails> deleteContactDetails(String investId) {
+        List<ContactDetails> contactDetails = contactDetailsRepository.findAllContactsByMemberInvestId(investId);
+
+        if(!CollectionUtils.isEmpty(contactDetails)){
+            contactDetails.forEach(memberContacts -> {
+                memberContacts.setEndDate(dateFormatter.returnLocalDate());
+                contactDetailsRepository.save(memberContacts);
+            });
         }
         else
-            throw new ContactDetailsException("Contact: " + contactDetails.getContact() + " is already inactive or could not be found");
+            throw new ContactDetailsException("Contact: " + investId + " is already inactive or could not be found");
+
+        return contactDetails;
     }
 
     @Override
-    public List<ContactDetails> getContactDetail(String investId) {
-        System.out.println("Size of set: "+contactDetailsRepository.findAllContactsByMember(investId).size());
-        List<ContactDetails> contactDetailsSet = contactDetailsRepository.findAllContactsByMember(investId.toUpperCase());
+    public List<ContactDetails> findMemberContactByInvestId(String investId) {
+        List<ContactDetails> memberContacts = contactDetailsRepository.findAllContactsByMemberInvestId(investId.toUpperCase());
 
-        if (contactDetailsSet.isEmpty()) {
+        if (memberContacts.isEmpty()) {
             throw new ContactDetailsException("There are no contact numbers for customer id: " + investId );
         }
 
-        return contactDetailsSet;
+        return memberContacts;
     }
 
     @Override
     public List<ContactDetails> findAllContactDetails() {
+        List<ContactDetails> contactDetailsList = new LinkedList<>();
+        contactDetailsRepository.findAllMemberContactDetails().iterator().forEachRemaining(contactDetailsList::add);
 
-        List<ContactDetails> contactDetailsSet = new LinkedList<>();
-
-        contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetailsSet::add);
-
-        return contactDetailsSet;
+        return contactDetailsList;
     }
 
     @Override
-    public List<ContactDetails> findALlContactTypes(String type) {
+    public List<ContactDetails> findALlContactsByContactType(String contactType) {
         List<ContactDetails> contactDetailsList = new LinkedList<>();
-        contactDetailsRepository.findContactDetailsByContactType(type).iterator().forEachRemaining(contactDetailsList::add);
+        contactDetailsRepository.findContactDetailsByContactType(contactType).iterator().forEachRemaining(contactDetailsList::add);
         if(contactDetailsList.isEmpty()){
-            throw new ContactDetailsException("There are no contact numbers for customer type: " + type );
+            throw new ContactDetailsException("There are no contact details for contact type: " + contactType );
         }
-
         return contactDetailsList;
     }
 
     @Override
     public ContactDetails updateContactDetail(ContactDetails contactDetail, String investId) throws ContactDetailsException {
         Optional<Member> memberContact = memberRepository.findMemberByInvestmentId(investId);
-        Member member = memberContact
-                .orElseThrow(() -> new MemberException("Couls not find a member: " + investId + " to update contact for: "));
+        Member member = memberContact.orElseThrow(() -> new MemberException("Couls not find a member: " + investId + " to update contact for: "));
         Optional<ContactDetails> contactDetailsOptional = contactDetailsRepository.findMemberContact(member.getId(), contactDetail.getContactType());
         ContactDetails updateContact = contactDetailsOptional.
                 orElseThrow(() -> new ContactDetailsException("Could not find a contacts to update with id: "+ contactDetail.getContactType()));
@@ -96,20 +94,4 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
         return  contactDetailsRepository.save(updateContact);
     }
-
-    public ContactType resolveContactType(String type){
-        ContactType contactType;
-        switch (type.toUpperCase()){
-            case "CELLPHONE":
-                contactType = ContactType.CELLPHONE;
-            case "EMAIL":
-                contactType = ContactType.EMAIL;
-            default:
-                contactType = ContactType.HOME_PHONE;
-
-        }
-
-        return contactType;
-    }
-
 }

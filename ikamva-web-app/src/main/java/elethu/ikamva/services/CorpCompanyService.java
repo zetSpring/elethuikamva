@@ -3,11 +3,11 @@ package elethu.ikamva.services;
 import elethu.ikamva.domain.CorpCompany;
 
 import java.util.List;
-import java.util.Set;
 
 public interface CorpCompanyService {
-    void saveOrUpdateCorpCompany(CorpCompany corpCompany);
+    CorpCompany createCorpCompany(CorpCompany newCorpCompany);
+    CorpCompany updateCorpCompany(CorpCompany updateCorpCompany);
+    CorpCompany deleteCorpCompany(Long id);
     List<CorpCompany> findAllCorpCompany();
-
-    //CorpCompany
+    CorpCompany findCorpCompany();
 }

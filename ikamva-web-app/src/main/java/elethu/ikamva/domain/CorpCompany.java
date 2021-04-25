@@ -1,15 +1,22 @@
 package elethu.ikamva.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "IKAMVA_CORPORATIVE")
 public class CorpCompany implements Serializable {
@@ -26,24 +33,35 @@ public class CorpCompany implements Serializable {
     @Column(name = "REGISTRATION_DATE", nullable = false)
     private String registeredDate;
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
-    private Date createdCreated;
+    private LocalDateTime createdDate;
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date endDate;
+    private LocalDateTime endDate;
 
-    @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL,  fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Set<PrivateCompany> corpPrivateCompany = new HashSet<>();
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "corpMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Member> memberSet = new HashSet<>();
+    private List<Member> memberSet = new LinkedList<>();
 
-    public CorpCompany(Date endDate) {
+    public CorpCompany(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public CorpCompany(String registrationNo, String corpName, String registeredDate, Date createdCreated) {
+
+    public CorpCompany(String registrationNo, String corpName, String registeredDate, LocalDateTime createdDate) {
         this.registrationNo = registrationNo;
         this.corpName = corpName;
         this.registeredDate = registeredDate;
-        this.createdCreated = createdCreated;
+        this.createdDate = createdDate;
     }
-   }
+
+    public CorpCompany(Long id, String registrationNo, String corpName, String registeredDate, LocalDateTime createdDate) {
+        this.id = id;
+        this.registrationNo = registrationNo;
+        this.corpName = corpName;
+        this.registeredDate = registeredDate;
+        this.createdDate = createdDate;
+    }
+}

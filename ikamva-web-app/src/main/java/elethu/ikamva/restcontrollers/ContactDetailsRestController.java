@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RequestMapping("/api/v1/contacts")
 @RestController
@@ -31,7 +30,7 @@ public class ContactDetailsRestController {
     @ApiOperation("Get Contacts by Member Investment ID")
     @GetMapping("/{investId}")
     List<ContactDetails> getMemberContacts(@PathVariable String investId){
-        List<ContactDetails> contactDetailsList = contactDetailsService.getContactDetail(investId);
+        List<ContactDetails> contactDetailsList = contactDetailsService.findMemberContactByInvestId(investId);
 
         return contactDetailsList;
     }
@@ -43,7 +42,7 @@ public class ContactDetailsRestController {
     @ApiOperation("Get Contacts by Contact Type")
     @GetMapping("/type/{type}")
     List<ContactDetails> getMemberContactsBytype(@PathVariable String type){
-        List<ContactDetails> contactDetailsList = contactDetailsService.findALlContactTypes(type);
+        List<ContactDetails> contactDetailsList = contactDetailsService.findALlContactsByContactType(type);
 
         return contactDetailsList;
     }
@@ -75,5 +74,15 @@ public class ContactDetailsRestController {
     ResponseEntity<ContactDetails> addContactDetail(@RequestBody ContactDetails contactDetails){
         ContactDetails newContact = contactDetailsService.saveContactDetail(contactDetails);
         return new ResponseEntity<>(newContact, HttpStatus.OK);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted all contacts"),
+            @ApiResponse(code = 500, message = "Tell me something I don't know")
+    })
+    @ApiOperation("Delete member contact details")
+    @DeleteMapping("/delete/{investId}")
+    List<ContactDetails> deleteContactDetails(@PathVariable String investId){
+        return contactDetailsService.deleteContactDetails(investId);
     }
 }

@@ -30,6 +30,7 @@
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/repositories/AccountRepository.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/User.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/config/DBDataSourceConfig.java
+/Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/commons/ToCamelCase.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/Role.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/controllers/HomeController.java
 /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/java/elethu/ikamva/domain/TransactionType.java
