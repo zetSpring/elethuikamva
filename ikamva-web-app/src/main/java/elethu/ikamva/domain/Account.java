@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -45,12 +46,12 @@ public class Account implements Serializable {
 
     @ApiModelProperty(notes = "Datetime at which the record is created the first time.")
     @Column(name = "CREATED_DATE", nullable = false)
-    private Date createdDate;
+    private LocalDate createdDate;
 
     @ApiModelProperty(notes = "Datetime at which the record is deleted from the database.")
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date endDate;
+    private LocalDate endDate;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @ApiModelProperty(notes = "Private company identification at which the account belongs to.")
@@ -58,11 +59,11 @@ public class Account implements Serializable {
     @JsonIgnore
     private PrivateCompany companyAccount;
 
-    public Account(Date endDate) {
+    public Account(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public Account(Long accountNo, String accountType, Date createdDate, PrivateCompany companyAccount) {
+    public Account(Long accountNo, String accountType, LocalDate createdDate, PrivateCompany companyAccount) {
         this.accountNo = accountNo;
         this.accountType = accountType;
         this.createdDate = createdDate;

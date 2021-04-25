@@ -6,6 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
     @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL AND acc.id = ?1")
     Optional<Account> findAccountsById(Long id);
     @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL")
-    Set<Account> findAllActiveAccounts();
-    @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL AND acc.id = ?1")
-    Set<Account> findAccountsByCompany(Long companyId);
+    List<Account> findAllActiveAccounts();
+    @Query("SELECT acc FROM Account acc WHERE acc.endDate = NULL AND acc.companyAccount.id = ?1")
+    Optional<Account> findAccountsByCompany(Long companyId);
 }
