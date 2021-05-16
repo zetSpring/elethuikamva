@@ -3,7 +3,6 @@ package elethu.ikamva.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -45,9 +43,7 @@ public class Payment implements Serializable {
     private String deleteReason;
     @Column(name = "PAYMENT_REFERENCE", nullable = false)
     private String paymentReference;
-
     @Column(name = "TRANSACTION_TYPE")
-    //@Enumerated(value = EnumType.STRING)
     private TransactionType transactionType;
 
     @JsonIgnore

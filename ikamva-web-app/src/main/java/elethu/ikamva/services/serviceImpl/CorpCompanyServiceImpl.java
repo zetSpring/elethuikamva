@@ -20,7 +20,6 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     @Override
     public CorpCompany createCorpCompany(CorpCompany newCorpCompany) {
         if(!isCorporateActive(newCorpCompany.getRegistrationNo())){
-           // CorpCompany corpCompany = newCorpCompany;
             newCorpCompany.setCreatedDate(dateFormatter.returnLocalDateTime());
             return corpCompanyRepository.save(newCorpCompany);
 

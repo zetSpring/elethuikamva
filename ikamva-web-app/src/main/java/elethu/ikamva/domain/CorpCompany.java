@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,10 +41,11 @@ public class CorpCompany implements Serializable {
 
     @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private Set<PrivateCompany> corpPrivateCompany = new HashSet<>();
+    @JsonIgnore
+    private List<PrivateCompany> corpPrivateCompany = new LinkedList<>();
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy = "corpMember", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Member> memberSet = new LinkedList<>();
+    private List<Member> memberList = new LinkedList<>();
 
     public CorpCompany(LocalDateTime endDate) {
         this.endDate = endDate;
