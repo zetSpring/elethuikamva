@@ -1,7 +1,11 @@
 package elethu.ikamva.domain;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -9,16 +13,19 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "IKAMVA_MEMBERS")
-@EqualsAndHashCode(of = {""})
-@JsonPropertyOrder({"id", "firstName", "lsatName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "payments", "user"})
+@Table(name = "IKAMVA_MEMBERS", schema = "elethu")
+@JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "payments", "totalPayments","user"})
 public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -53,12 +60,16 @@ public class Member implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
+    @ToString.Exclude
     private CorpCompany corpMember;
     @OneToMany(mappedBy = "memberPayments", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Payment> payments = new LinkedList<>();
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
+    @ToString.Exclude
     private List<ContactDetails> memberContacts = new LinkedList<>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "userMember")
     private User user;
 
@@ -97,5 +108,29 @@ public class Member implements Serializable {
         this.corpMember = corpCompany;
         this.payments = memberPayment;
         this.memberContacts = memberContacts;
+    }
+
+    public Double getTotalPayments(){
+        Double total = 0.0;
+        if(!payments.isEmpty()){
+            total = payments.stream()
+                    .filter(payment -> payment.getTransactionType().equals(TransactionType.MONTHLY_CONTRIBUTION))
+                    .map(Payment::getAmount)
+                    .reduce(0.0, Double::sum);
+        }
+        return total;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Member member = (Member) o;
+        return id != null && Objects.equals(id, member.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

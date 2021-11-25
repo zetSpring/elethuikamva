@@ -1,17 +1,20 @@
 package elethu.ikamva.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
-@Table(name = "IKAMVA_PROJECTS")
+@Table(name = "IKAMVA_PROJECTS", schema = "elethu")
 public class Project implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +34,7 @@ public class Project implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "PRIVATE_COMPANY_ID_FK", nullable = false)
+    @ToString.Exclude
     private PrivateCompany companyProjects;
 
     public Project(Date endDate) {
@@ -43,5 +47,18 @@ public class Project implements Serializable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.companyProjects = companyProjects;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Project project = (Project) o;
+        return Objects.equals(id, project.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

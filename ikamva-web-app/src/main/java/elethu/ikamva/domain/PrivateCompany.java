@@ -2,26 +2,25 @@ package elethu.ikamva.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import springfox.documentation.annotations.ApiIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "PRIVATE_COMPANIES")
+@Table(name = "PRIVATE_COMPANIES", schema = "elethu")
 @JsonPropertyOrder({"id", "companyname"})
 public class PrivateCompany implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -46,12 +45,14 @@ public class PrivateCompany implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
     private CorpCompany corpCompany;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "companyProjects")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Project> projectCompany;
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "companyAccount", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Account account;
 
     public PrivateCompany(Date endDate) {
@@ -66,5 +67,18 @@ public class PrivateCompany implements Serializable {
         this.corpCompany = corpCompany;
         this.projectCompany = projectCompany;
         this.account = account;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        PrivateCompany that = (PrivateCompany) o;
+        return id != null && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

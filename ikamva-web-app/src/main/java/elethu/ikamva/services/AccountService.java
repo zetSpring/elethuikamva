@@ -3,7 +3,6 @@ package elethu.ikamva.services;
 import elethu.ikamva.domain.Account;
 
 import java.util.List;
-import java.util.Set;
 
 public interface AccountService {
     Account saveNewAccount(Account account);

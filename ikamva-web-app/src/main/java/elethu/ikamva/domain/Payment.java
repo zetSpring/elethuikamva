@@ -3,19 +3,23 @@ package elethu.ikamva.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
-@Table(name = "MEMBER_PAYMENTS")
+@Table(name = "MEMBER_PAYMENTS", schema = "elethu")
 @EqualsAndHashCode(of = {""})
+@JsonPropertyOrder({"id", "amount", "investmentId"})
 public class Payment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -74,5 +78,18 @@ public class Payment implements Serializable {
         this.paymentReference = paymentReference;
         this.transactionType = transactionType;
         this.memberPayments = memberPayments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Payment payment = (Payment) o;
+        return id != null && Objects.equals(id, payment.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

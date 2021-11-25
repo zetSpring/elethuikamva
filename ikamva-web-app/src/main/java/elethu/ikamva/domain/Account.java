@@ -4,23 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Objects;
 
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {""})
 @Entity
-@Table(name = "IKAMVA_ACCOUNTS")
+@Table(name = "IKAMVA_ACCOUNTS", schema = "elethu")
 @ApiModel(description = "Ikamva business accounts")
 public class Account implements Serializable {
 
@@ -68,5 +67,18 @@ public class Account implements Serializable {
         this.accountType = accountType;
         this.createdDate = createdDate;
         this.companyAccount = companyAccount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        Account account = (Account) o;
+        return id != null && Objects.equals(id, account.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

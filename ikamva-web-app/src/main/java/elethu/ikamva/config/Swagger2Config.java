@@ -1,7 +1,5 @@
 package elethu.ikamva.config;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -18,7 +16,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-//@EnableWebMvc
+@EnableWebMvc
 public class Swagger2Config {
     @Bean
     public Docket apiV1(){
@@ -27,20 +25,20 @@ public class Swagger2Config {
                 .apiInfo(apiEndPointsInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("elethu.ikamva.restcontrollers"))
-                .paths(paths()) //PathSelectors.regex("/.*")
+                .paths(PathSelectors.any()) //PathSelectors.regex("/.*")
                 .build();
     }
 
-//    @Bean
-//    public WebMvcConfigurer webMvcConfigurer (){
-//        return new WebMvcConfigurer() {
-//            @Override
-//            public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//                registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-//                registry.addResourceHandler( "/webjars/**" ).addResourceLocations( "classpath:/META-INF/resources/webjars/" );
-//            }
-//        };
-//    }
+    @Bean
+    public WebMvcConfigurer webMvcConfigurer (){
+        return new WebMvcConfigurer() {
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+                registry.addResourceHandler( "/webjars/**" ).addResourceLocations( "classpath:/META-INF/resources/webjars/" );
+            }
+        };
+    }
 
     private ApiInfo apiEndPointsInfo(){
         return new ApiInfoBuilder()
@@ -53,9 +51,9 @@ public class Swagger2Config {
                 .build();
     }
 
-    private Predicate<String> paths () {
-       return Predicates.and(
-               PathSelectors.regex("/api/.*"),
-               Predicates.not(PathSelectors.regex("/error.*")));
-    }
+//    private Pre<String> paths () {
+//       return Predicates.and(
+//               PathSelectors.regex("/api/.*"),
+//               Predicates.not(PathSelectors.regex("/error.*")));
+//    }
 }
