@@ -12,7 +12,18 @@ spring:
 
   datasource:
     url: jdbc:postgresql://localhost:5432/ikamvadb
-    platform: postgres
     username: zukoyawa
     password: ^Wu3H1bE4Gr*nJxPpTME7!t
     driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
+
+
+logging:
+  file:
+    path: /logs/ikamva-elethu-application.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    elethu.ikamva.services: INFO

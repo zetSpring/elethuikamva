@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -18,7 +21,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Entity
 @Table(name = "MEMBER_PAYMENTS", schema = "elethu")
-@EqualsAndHashCode(of = {""})
 @JsonPropertyOrder({"id", "amount", "investmentId"})
 public class Payment implements Serializable {
 
@@ -35,6 +37,7 @@ public class Payment implements Serializable {
     @Column(name = "INVESTMENT_ID")
     private String investmentId;
     /*Date of debit or credit or transaction*/
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "PAYMENT_DATE", nullable = false)
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy:HH:mm:ss")
     private LocalDate paymentDate;

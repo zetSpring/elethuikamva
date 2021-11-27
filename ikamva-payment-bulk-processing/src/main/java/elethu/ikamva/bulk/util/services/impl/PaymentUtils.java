@@ -34,8 +34,8 @@ public class PaymentUtils implements PaymentUtilService {
     }
 
     @Override
-    public Boolean PaymentCheck(double payment, String investmentID, Date paymentDate) {
-        return null;
+    public boolean PaymentCheck(double payment, String investmentID, Date paymentDate) {
+        return false;
     }
 
 

@@ -27,6 +27,12 @@ public class MemberRestController {
         return new ResponseEntity<>(newMember, HttpStatus.CREATED);
     }
 
+    @PostMapping("/saveAll")
+    ResponseEntity<String> SaveAllMembers(@RequestBody List<Member> members){
+        memberService.SaveAllMembers(members);
+        return new ResponseEntity<>("Successfully saved all members", HttpStatus.CREATED);
+    }
+
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     List<Member> FindAllMembers() {

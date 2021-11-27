@@ -45,7 +45,7 @@ public class Swagger2Config {
                 .title("Elethu Ikamva REST API's")
                 .description("Elethu Ikamva Management REST API")
                 .contact(new Contact("Zuko Yawa", "wwww.notyet.africa", "zuko@email.com"))
-                .license("Test 0.1")
+                .license("Ikamva 1.0.0")
                 .licenseUrl("http://local.africa")
                 .version("1.0.0")
                 .build();

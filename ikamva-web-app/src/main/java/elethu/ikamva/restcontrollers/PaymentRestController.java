@@ -1,6 +1,7 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.Payment;
+import elethu.ikamva.exception.PaymentException;
 import elethu.ikamva.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,37 +24,49 @@ public class PaymentRestController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Payment> addPayment(@RequestBody Payment payment){
-        Payment newPayment = paymentService.savePayment(payment);
+    ResponseEntity<Payment> AddPayment(@RequestBody Payment payment) {
+        Payment newPayment = paymentService.SavePayment(payment);
         return new ResponseEntity<>(newPayment, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/savePayments")
+    ResponseEntity<String> SaveAllPayments(@RequestBody List<Payment> memberPayments) {
+        paymentService.BulkSavePayments(memberPayments);
+        return new ResponseEntity<>("Successfully stored all payments", HttpStatus.CREATED);
+    }
+
+    @PutMapping("/updatePayment/{id}")
+    ResponseEntity<Payment> UpdatePayment(@PathVariable Long id, @RequestBody Payment payment) {
+        Payment updatePayment = paymentService.UpdatePayment(id, payment);
+        return new ResponseEntity<>(updatePayment, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("search-payments/{fromDate}/{toDate}")
-    List<Payment> findPaymentsBetweenDates(@PathVariable(value = "fromDate")
+    List<Payment> FindPaymentsBetweenDates(@PathVariable(value = "fromDate")
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                            @PathVariable(value = "toDate")
-                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate){
-        return paymentService.findPaymentsBetweenDates(fromDate, toDate);
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+        return paymentService.FindPaymentsBetweenDates(fromDate, toDate);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search/{memberInvestId}/{fromDate}/{toDate}")
-    List<Payment> findMemberPaymentsBetweeDates(@RequestParam(value = "memberInvestId") String memberInvestId,
+    List<Payment> FindMemberPaymentsBetweeDates(@RequestParam(value = "memberInvestId") String memberInvestId,
                                                 @RequestParam(value = "fromDate")
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                                 @RequestParam(value = "toDate")
-                                                @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate){
-        return paymentService.findMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate);
+                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
+        return paymentService.FindMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate);
     }
 
     @GetMapping("/invest/{investmentId}")
-    List<Payment> getPaymentByInvestId(@PathVariable String investmentId){
-        return paymentService.findPaymentByInvestId(investmentId);
+    List<Payment> GetPaymentByInvestId(@PathVariable String investmentId) {
+        return paymentService.FindPaymentByInvestId(investmentId);
     }
 
     @GetMapping("/{id}")
-    Payment getPaymentById(@PathVariable Long id){
-        return paymentService.findPaymentById(id);
+    Payment GetPaymentById(@PathVariable Long id) {
+        return paymentService.FindPaymentById(id);
     }
 }

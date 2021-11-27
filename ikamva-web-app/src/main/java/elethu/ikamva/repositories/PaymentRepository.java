@@ -25,7 +25,7 @@ public interface PaymentRepository extends CrudRepository<Payment, Long> {
     List<Payment> findPaymentByPaymentType(TransactionType transType);
     @Query("SELECT pay FROM Payment pay WHERE pay.investmentId = ?1 AND pay.endDate = NULL")
     List<Payment> findAllMemberPayments(String InvestmentID);
-    @Query("SELECT pay FROM Payment pay WHERE pay.amount = ?1 and pay.investmentId = ?2 AND pay.endDate = ?3")
+    @Query("SELECT pay FROM Payment pay WHERE pay.amount = ?1 and pay.investmentId = ?2 AND pay.paymentDate = ?3")
     Optional<Payment> checkPayment(double payment, String investmentID, LocalDate paymentDate);
     @Query("SELECT pay FROM Payment pay WHERE pay.endDate = NULL AND pay.paymentDate BETWEEN ?1 AND ?2")
     List<Payment> findPaymentsBetween(LocalDate fromDate, LocalDate toDate);
