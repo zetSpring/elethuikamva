@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -68,5 +69,10 @@ public class PaymentRestController {
     @GetMapping("/{id}")
     Payment GetPaymentById(@PathVariable Long id) {
         return paymentService.FindPaymentById(id);
+    }
+
+    @PostMapping("/upload")
+    void UploadStatement(@RequestParam("file") MultipartFile file) {
+        paymentService.ProcessCSVFile(file);
     }
 }

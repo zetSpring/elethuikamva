@@ -4,21 +4,27 @@ import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.domain.Payment;
 import elethu.ikamva.domain.TransactionType;
+import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.exception.PaymentException;
 import elethu.ikamva.repositories.PaymentRepository;
 import elethu.ikamva.services.MemberService;
 import elethu.ikamva.services.PaymentService;
+import elethu.ikamva.utils.CSVPaymentProcessor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
+
 @RequiredArgsConstructor
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -46,20 +52,28 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void BulkSavePayments(List<Payment> payments) {
+        AtomicInteger successCounter = new AtomicInteger(0);
+        AtomicInteger failedCounter = new AtomicInteger(0);
         payments.forEach(payment -> {
             boolean checkPayment = IsPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate());
-            Member member = memberService.FindMemberByInvestmentId(payment.getInvestmentId());
-            if (Objects.nonNull(member) && !checkPayment) {
-                LOGGER.info("Saving payment for investment id: {} made on {} for amount of {}", payment.getInvestmentId(), payment.getPaymentDate(), payment.getAmount());
-                payment.setMemberPayments(member);
-                payment.setPaymentDate(dateFormatter.returnLocalDate(payment.getPaymentDate().toString()));
-                payment.setTransactionType(getTransationType(payment.getAmount()));
-
-                paymentRepository.save(payment);
-            } else {
-                LOGGER.error("Payment for investment id: {} with amount: {} on date: {} already exists.", payment.getInvestmentId(), payment.getAmount(), payment.getPaymentDate());
+            try {
+                Member member = memberService.FindMemberByInvestmentId(payment.getInvestmentId());
+                if (!checkPayment) {
+                    payment.setMemberPayments(member);
+                    //payment.setPaymentDate(dateFormatter.returnLocalDate(payment.getPaymentDate().toString()));
+                    payment.setTransactionType(getTransationType(payment.getAmount()));
+                    paymentRepository.save(payment);
+                    successCounter.getAndIncrement();
+                } else {
+                    LOGGER.error("Payment for investment id: {} with amount: {} on date: {} already exists.", payment.getInvestmentId(), payment.getAmount(), payment.getPaymentDate());
+                }
+            } catch (MemberException e) {
+                failedCounter.getAndIncrement();
+                LOGGER.error("Did not find member with investment id: {}", payment.getInvestmentId());
             }
         });
+        LOGGER.info("Total number of successul payments made: {}", successCounter);
+        LOGGER.info("Total number of unsuccessul payments is: {}", failedCounter);
     }
 
     @Override
@@ -136,5 +150,21 @@ public class PaymentServiceImpl implements PaymentService {
             transactionType = TransactionType.BANK_CHARGES;
         }
         return transactionType;
+    }
+
+    @Override
+    public void ProcessCSVFile(MultipartFile csvFile) {
+        LOGGER.info("ServiceInvocation::ProcessCSVFile");
+        try {
+            if (CSVPaymentProcessor.isCSVFormat(csvFile)) {
+                List<Payment> csvBulkPayments = CSVPaymentProcessor.BulkCSVFileProcessing(csvFile.getInputStream());
+                LOGGER.info("Total csv records: {}", csvBulkPayments.size());
+                BulkSavePayments(csvBulkPayments);
+            } else {
+                LOGGER.error("Error with a file type");
+            }
+        } catch (IOException e) {
+            LOGGER.info("There was a problem calling the CSV processor");
+        }
     }
 }

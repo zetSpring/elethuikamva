@@ -25,7 +25,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "IKAMVA_MEMBERS", schema = "elethu")
-@JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "payments", "totalPayments","user"})
+@JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "payments", "noOfPayments","totalPayments","user"})
 public class Member implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -110,6 +110,14 @@ public class Member implements Serializable {
         this.memberContacts = memberContacts;
     }
 
+    public int getNoOfPayments(){
+        int noOfPayments = 0;
+        if(!payments.isEmpty()){
+            noOfPayments = payments.size();
+        }
+        return noOfPayments;
+    }
+
     public Double getTotalPayments(){
         Double total = 0.0;
         if(!payments.isEmpty()){
@@ -120,6 +128,8 @@ public class Member implements Serializable {
         }
         return total;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

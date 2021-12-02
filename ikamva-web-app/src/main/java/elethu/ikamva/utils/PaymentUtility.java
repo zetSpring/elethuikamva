@@ -1,4 +1,4 @@
-package elethu.ikamva.util;
+package elethu.ikamva.utils;
 
 import elethu.ikamva.services.PaymentService;
 import org.springframework.stereotype.Component;

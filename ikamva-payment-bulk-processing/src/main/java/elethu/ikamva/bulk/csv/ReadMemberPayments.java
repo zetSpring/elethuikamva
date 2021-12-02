@@ -8,7 +8,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Map;
 
 @Slf4j
+@Component
 public class ReadMemberPayments {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReadMemberPayments.class);
     private final String file = "/Statement_1178891232_14.csv"; //to remove, only for testing purposes.

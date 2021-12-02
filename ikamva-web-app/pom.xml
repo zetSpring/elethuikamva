@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>elethuikamva</artifactId>
         <groupId>elethu.ikamva</groupId>
@@ -10,14 +11,15 @@
     <artifactId>ikamva-web-app</artifactId>
 
     <dependencies>
-<!--       <dependency>-->
-<!--            <groupId>elethu.ikamva</groupId>-->
-<!--            <artifactId>ikamva-payment-bulk-processing</artifactId>-->
-<!--            <version>1.1-SNAPSHOT</version>-->
-<!--        </dependency>-->
+        <!--       <dependency>-->
+        <!--            <groupId>elethu.ikamva</groupId>-->
+        <!--            <artifactId>ikamva-payment-bulk-processing</artifactId>-->
+        <!--            <version>1.1-SNAPSHOT</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>2.5.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -30,8 +32,8 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>2.5.6</version>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
@@ -59,7 +61,7 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
-       <dependency>
+        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>${swagger.version}</version>
@@ -70,8 +72,12 @@
             <version>1.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-csv</artifactId>
+            <version>1.8</version>
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -86,26 +92,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--                <version>2.4.3</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>build-info-plugin</id>-->
-<!--                        <goals>-->
-<!--                            <goal>build-info</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <additionalProperties>-->
-<!--                                <java.version>${java.version}</java.version>-->
-<!--                                <swagger.version>${swagger.version}</swagger.version>-->
-<!--                                <ojdbc.version>${ojdbc.version}</ojdbc.version>-->
-<!--                            </additionalProperties>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>

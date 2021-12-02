@@ -63,6 +63,13 @@ public class Payment implements Serializable {
         this.deleteReason = deleteReason;
     }
 
+    public Payment(Double amount, String investmentId, LocalDate paymentDate, String paymentReference) {
+        this.amount = amount;
+        this.investmentId = investmentId;
+        this.paymentDate = paymentDate;
+        this.paymentReference = paymentReference;
+    }
+
     public Payment(Double amount, String investmentId, LocalDate paymentDate, String paymentReference, Member memberPayments) {
         this.amount = amount;
         this.investmentId = investmentId;

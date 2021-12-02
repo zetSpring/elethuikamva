@@ -1,7 +1,13 @@
 server:
   port: 8080
-
+#-----------------------------------------------------------------------------------------------------------------------
 spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 2MB
+  #----------------------------------------------------------------------------------------------------------------------
   jpa:
     hibernate:
       ddl-auto: update
@@ -9,7 +15,7 @@ spring:
     generate-ddl: true
     show-sql: false
     open-in-view: false
-
+  #----------------------------------------------------------------------------------------------------------------------
   datasource:
     url: jdbc:postgresql://localhost:5432/ikamvadb
     username: zukoyawa
@@ -18,8 +24,7 @@ spring:
   sql:
     init:
       platform: postgres
-
-
+#-----------------------------------------------------------------------------------------------------------------------
 logging:
   file:
     path: /logs/ikamva-elethu-application.log
@@ -27,3 +32,13 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
     elethu.ikamva.services: INFO
+#-----------------------------------------------------------------------------------------------------------------------
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans, dump, env, mappings, metrics
+#-----------------------------------------------------------------------------------------------------------------------
