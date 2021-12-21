@@ -8,17 +8,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
-    private final DateFormatter dateFormatter;
 
     @Override
     public Account saveNewAccount(Account account) {
         if(!isAccountActive(account.getAccountNo())){
-            account.setCreatedDate(dateFormatter.returnLocalDate());
+            account.setCreatedDate(DateFormatter.returnLocalDate());
             return accountRepository.save(account);
         }else
             throw new AccountException("The account: " + account.getAccountNo() + " already exist");
@@ -28,7 +28,7 @@ public class AccountServiceImpl implements AccountService {
     public Account deleteAccount(Long accountNo) {
         Optional<Account> accountOptional = accountRepository.findAccountsByAccountNo(accountNo);
         var account = accountOptional.orElseThrow(() -> new AccountException("Account number: " + accountNo + " is already inactive or does not exist"));
-        account.setEndDate(dateFormatter.returnLocalDate());
+        account.setEndDate(DateFormatter.returnLocalDate());
         return  accountRepository.save(account);
     }
 
@@ -40,8 +40,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findAccountById(Long id) {
-        Optional<Account> accountOptional = accountRepository.findAccountsById(id);
-        return accountOptional.orElseThrow(() -> new AccountException("Account id: " + id + " could not be found"));
+        return accountRepository.findAccountsById(id)
+                .orElseThrow(() -> new AccountException("Account id: " + id + " could not be found"));
     }
 
     @Override
@@ -55,7 +55,14 @@ public class AccountServiceImpl implements AccountService {
         List<Account> accounts = new LinkedList<>();
         accountRepository.findAllActiveAccounts().iterator().forEachRemaining(accounts::add);
 
-        return accounts;
+        if (accounts.isEmpty()) {
+            throw new AccountException("There is no private company to add account for");
+
+        } else {
+            return accounts.stream()
+                    .filter( account -> account.getEndDate() == null)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

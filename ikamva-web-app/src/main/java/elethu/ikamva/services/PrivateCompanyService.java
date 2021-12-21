@@ -8,9 +8,9 @@ import java.util.Set;
 
 public interface PrivateCompanyService {
     PrivateCompany savePrivateCompany(PrivateCompany privateCompany);
-    PrivateCompany deletePrivateCompany(PrivateCompany privateCompany);
+    PrivateCompany deletePrivateCompany(Long id);
     PrivateCompany findPrivateCompanyById(Long id);
     PrivateCompany findPrivateCompanyByRegistration(String registrationNo);
     List<PrivateCompany> findAllPrivateCompany();
-    Boolean isPrivateCompanyActive(PrivateCompany privateCompany);
+    boolean isPrivateCompanyActive(String registrationNo);
 }

@@ -82,6 +82,15 @@ public class Member implements Serializable {
         this.endDate = endDate;
     }
 
+    public Member(Long identityNo, String investmentId, String firstName, String lastName, LocalDate dob, String gender) {
+        this.identityNo = identityNo;
+        this.investmentId = investmentId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.gender = gender;
+    }
+
     public Member(Long memberIdentityNo, String investmentId, String firstName, String lastName, LocalDate dob, String gender, OffsetDateTime createdDate, CorpCompany corpCompany, List<Payment> memberPayment, List<ContactDetails> memberContacts) {
         this.identityNo = memberIdentityNo;
         this.investmentId = investmentId;

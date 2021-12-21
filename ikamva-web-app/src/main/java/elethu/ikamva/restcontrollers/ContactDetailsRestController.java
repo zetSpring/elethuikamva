@@ -29,10 +29,8 @@ public class ContactDetailsRestController {
     })
     @ApiOperation("Get Contacts by Member Investment ID")
     @GetMapping("/{investId}")
-    List<ContactDetails> getMemberContacts(@PathVariable String investId){
-        List<ContactDetails> contactDetailsList = contactDetailsService.findMemberContactByInvestId(investId);
-
-        return contactDetailsList;
+    List<ContactDetails> getMemberContacts(@PathVariable String investId) {
+        return contactDetailsService.findMemberContactByInvestId(investId);
     }
 
     @ApiResponses(value = {
@@ -41,10 +39,8 @@ public class ContactDetailsRestController {
     })
     @ApiOperation("Get Contacts by Contact Type")
     @GetMapping("/type/{type}")
-    List<ContactDetails> getMemberContactsBytype(@PathVariable String type){
-        List<ContactDetails> contactDetailsList = contactDetailsService.findALlContactsByContactType(type);
-
-        return contactDetailsList;
+    List<ContactDetails> getMemberContactsByType(@PathVariable String type) {
+        return contactDetailsService.findALlContactsByContactType(type);
     }
 
     @ApiResponses(value = {
@@ -53,10 +49,8 @@ public class ContactDetailsRestController {
     })
     @ApiOperation("Get All Contacts")
     @GetMapping("/")
-    List<ContactDetails> getAllMemberContacts(){
-        List<ContactDetails> contactDetailsList = contactDetailsService.findAllContactDetails();
-
-        return contactDetailsList;
+    List<ContactDetails> getAllMemberContacts() {
+        return contactDetailsService.findAllContactDetails();
     }
 
     @ApiResponses(value = {
@@ -65,13 +59,13 @@ public class ContactDetailsRestController {
     })
     @ApiOperation("Get All Contacts")
     @PutMapping("/update/{investId}")
-    ResponseEntity<ContactDetails> updateContactDetail(@RequestBody ContactDetails contactDetail, @PathVariable String investId){
+    ResponseEntity<ContactDetails> updateContactDetail(@RequestBody ContactDetails contactDetail, @PathVariable String investId) {
         ContactDetails updateContact = contactDetailsService.updateContactDetail(contactDetail, investId);
         return new ResponseEntity<>(updateContact, HttpStatus.ACCEPTED);
     }
 
     @PostMapping("/add")
-    ResponseEntity<ContactDetails> addContactDetail(@RequestBody ContactDetails contactDetails){
+    ResponseEntity<ContactDetails> addContactDetail(@RequestBody ContactDetails contactDetails) {
         ContactDetails newContact = contactDetailsService.saveContactDetail(contactDetails);
         return new ResponseEntity<>(newContact, HttpStatus.OK);
     }
@@ -82,7 +76,7 @@ public class ContactDetailsRestController {
     })
     @ApiOperation("Delete member contact details")
     @DeleteMapping("/delete/{investId}")
-    List<ContactDetails> deleteContactDetails(@PathVariable String investId){
+    List<ContactDetails> deleteContactDetails(@PathVariable String investId) {
         return contactDetailsService.deleteContactDetails(investId);
     }
 }

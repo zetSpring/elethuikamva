@@ -15,6 +15,7 @@ public interface PrivateCompanyRepository extends CrudRepository<PrivateCompany,
 
     @Query("SELECT pty FROM PrivateCompany pty WHERE pty.endDate = NULL AND pty.id = ?1")
     Optional<PrivateCompany> findPrivateCompaniesById(Long companyId);
-    @Query("SELECT pty FROM PrivateCompany pty WHERE pty.endDate = NULL")
-    List<PrivateCompany> findAllPrivateCompanies();
+    Optional<PrivateCompany> findPrivateCompanyByRegistrationNo(String registrationNo);
+    @Query("SELECT pty FROM PrivateCompany pty WHERE pty.endDate = NULL AND pty.registrationNo = ?1")
+    Optional<PrivateCompany> findActivePrivateCompany(String registrationNo);
 }

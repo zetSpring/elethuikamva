@@ -11,15 +11,10 @@
     <artifactId>ikamva-web-app</artifactId>
 
     <dependencies>
-        <!--       <dependency>-->
-        <!--            <groupId>elethu.ikamva</groupId>-->
-        <!--            <artifactId>ikamva-payment-bulk-processing</artifactId>-->
-        <!--            <version>1.1-SNAPSHOT</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>2.5.6</version>
+            <version>2.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -32,7 +27,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.5.6</version>
+            <version>2.6.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

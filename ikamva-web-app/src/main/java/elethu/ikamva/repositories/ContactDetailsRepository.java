@@ -15,14 +15,10 @@ import java.util.Optional;
 @Transactional
 public interface ContactDetailsRepository extends CrudRepository<ContactDetails, Long> {
 
-    @Query("SELECT contact FROM ContactDetails contact WHERE contact.endDate = NULL")
-    List<ContactDetails> findAllMemberContactDetails();
     @Query("SELECT contact FROM ContactDetails contact WHERE contact.members.investmentId = ?1")
     List<ContactDetails> findAllContactsByMemberInvestId(@PathVariable String investId);
     @Query("SELECT contact FROM ContactDetails contact WHERE UPPER(contact.contactType) = UPPER(?1)")
     List<ContactDetails> findContactDetailsByContactType(String type);
-    @Query("SELECT contact FROM ContactDetails contact WHERE contact.id = ?1 AND contact.endDate = NULL")
-    Boolean isContactActive(Long id);
     @Query("SELECT contact FROM ContactDetails contact WHERE contact.members.id = ?1 AND contact.contactType = ?2 AND contact.endDate = NULL")
     Optional<ContactDetails> findMemberContact(Long id, ContactType contactType);
 }
