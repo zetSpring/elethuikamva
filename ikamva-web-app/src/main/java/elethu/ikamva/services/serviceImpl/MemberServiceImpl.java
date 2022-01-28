@@ -9,16 +9,19 @@ import elethu.ikamva.repositories.CorpCompanyRepository;
 import elethu.ikamva.repositories.MemberRepository;
 import elethu.ikamva.services.MemberService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.lang.reflect.Field;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -53,10 +56,15 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member UpdateMember(Member member, String memberInvestId) {
-        Optional<Member> memberOptional = memberRepository.findMemberByInvestmentId(memberInvestId);
-        Member updateMember = memberOptional.orElseThrow(() -> new MemberException("The Member invest id: " + memberInvestId + " cannot been found to update"));
+        Optional<Member> memberOptional = Optional.ofNullable(memberRepository.findMemberByInvestmentId(memberInvestId)
+                .orElseThrow(() -> new MemberException("The Member invest id: " + memberInvestId + " cannot been found to update")));
+        Member updateMember = memberOptional.get();
 
         //to redo and find better implementation
+        List<Field> fields = List.of(member.getClass().getFields());
+        for(Field f: member.getClass().getFields()){
+
+        }
         if (member.getCorpMember() != null) {
             updateMember.setCorpMember(member.getCorpMember());
         }
@@ -115,7 +123,7 @@ public class MemberServiceImpl implements MemberService {
         LOGGER.info("ServiceInvocation:DeleteMember");
         Member deleteMember = memberRepository.findMemberByInvestmentId(investmentId)
                 .orElseThrow(() -> new MemberException("Member:" + investmentId + " is already inactive or could not been found"));
-        List<ContactDetails> memberContacts = contactDetailsRepository.findAllContactsByMemberInvestId(investmentId);
+        List<ContactDetails> memberContacts = deleteMember.getMemberContacts();
         OffsetDateTime todayEndDate;
         todayEndDate = new Date().toInstant().atOffset(ZoneOffset.UTC);
         deleteMember.setEndDate(todayEndDate);

@@ -1,25 +1,29 @@
 package elethu.ikamva.services.serviceImpl;
 
 import elethu.ikamva.commons.DateFormatter;
+import elethu.ikamva.domain.ContactDetails;
+import elethu.ikamva.domain.ContactType;
 import elethu.ikamva.domain.CorpCompany;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.repositories.ContactDetailsRepository;
 import elethu.ikamva.repositories.CorpCompanyRepository;
 import elethu.ikamva.repositories.MemberRepository;
-import elethu.ikamva.services.CorpCompanyService;
-import elethu.ikamva.services.MemberService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceImplTest {
@@ -29,66 +33,135 @@ class MemberServiceImplTest {
     private ContactDetailsRepository contactDetailsRepository;
     @Mock
     private CorpCompanyRepository corpCompanyRepository;
-    private MemberService underTest;
-    //@Mock
-   // private CorpCompanyService corpCompanyService;
 
-    @BeforeEach
-    void setUp() {
-        underTest = new MemberServiceImpl(memberRepository, corpCompanyRepository, contactDetailsRepository);
+    @InjectMocks
+    private MemberServiceImpl memberService;
 
-        //CorpCompany corpCompany = new CorpCompany("1232323", "TestCorp", "2021-12-07", DateFormatter.returnLocalDateTime());
-        //corpCompanyService.createCorpCompany(corpCompany);
-    }
 
     @Test
-    void canCreateNewMember() {
+    @DisplayName("Create a Member with No Contact Details - Test")
+    void CreateNewMemberWithNoContactsTest() {
         //given
-        Member testMember = new Member(Long.parseLong("0804268523085"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), "Female");
-
+        Member member = new Member(Long.parseLong("1"), Long.parseLong("0804268523085"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), "Female");
+        List<ContactDetails> memberContacts = new ArrayList<>();
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        member.setMemberContacts(memberContacts);
         //when
-        underTest.CreateNewMember(testMember);
-
+        memberService.CreateNewMember(member);
         //then
         ArgumentCaptor<Member> memberArgumentCaptor = ArgumentCaptor.forClass(Member.class);
-
         verify(memberRepository).save(memberArgumentCaptor.capture());
         List<Member> capturedMember = memberArgumentCaptor.getAllValues();
-        assertThat(capturedMember).isEqualTo(testMember);
+        assertThat(capturedMember.get(0)).isEqualTo(member);
     }
 
     @Test
-    @Disabled
     void updateMember() {
     }
 
     @Test
-    @Disabled
     void saveAllMembers() {
+        //given
+        Member member =  new Member(1L, Long.parseLong("9010105433086"), "TM012015", "Thabo", "Mbheki", DateFormatter.returnLocalDate("2008-04-26"), "Male");
+        List<ContactDetails> memberContacts = new ArrayList<>();
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "thabo.mbeki@ikamva.com", ContactType.EMAIL, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        member.setMemberContacts(memberContacts);
+
+        Member member1 =  new Member(2L, Long.parseLong("8803254999085"), "NN012015", "Nomvula", "Nonkonyane", DateFormatter.returnLocalDate("2021-04-26"), "Female");
+        List<ContactDetails> member1Contacts = new ArrayList<>();
+        member1Contacts.add(new ContactDetails(1L, "07287654321", ContactType.CELLPHONE, "NN012015",  DateFormatter.returnLocalDate("2021-04-26")));
+        member1Contacts.add(new ContactDetails(1L, "nomvula.nonkonyane@ikamva.com", ContactType.EMAIL, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+
+        List<Member> members = new ArrayList<>();
+        members.add(member);
+        members.add(member1);
+
+        CorpCompany corpCompany = new CorpCompany(1L, "12345", "Ikamva", "2022-01-01", DateFormatter.returnLocalDateTime());
+
+        //when(memberRepository.saveAll(anyCollection())).thenReturn(members);
+        when(corpCompanyRepository.findCorpCompany()).thenReturn(Optional.of(corpCompany));
+
+        //when
+        memberService.SaveAllMembers(members);
+
+        //then
+        verify(memberRepository).save(members.get(0));
+        //assertThat()
     }
 
     @Test
-    @Disabled
     void deleteMember() {
+        //given
+        Member member =  new Member(1L, Long.parseLong("9010105433086"), "TM012015", "Thabo", "Mbheki", DateFormatter.returnLocalDate("2008-04-26"), "Male");
+        List<ContactDetails> memberContacts = new ArrayList<>();
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "thabo.mbeki@ikamva.com", ContactType.EMAIL, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        member.setMemberContacts(memberContacts);
+        when(memberRepository.findMemberByInvestmentId(anyString())).thenReturn(Optional.of(member));
+        when(memberRepository.save(any())).thenReturn(member);
+
+        //when
+        Member deleteMember = memberService.DeleteMember("TM012015");
+
+        //then
+        verify(memberRepository).save(any());
+        assertThat(deleteMember).isNotNull();
+        assertThat(deleteMember.getEndDate()).isNotNull();
+
     }
 
     @Test
-    @Disabled
+    @DisplayName("Find a Member By Investment Id - Test")
     void findMemberByInvestmentId() {
+        //Given
+        Member member = new Member(1L, Long.parseLong("0804268523085"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), "Female");
+        when(memberRepository.findMemberByInvestmentId("EY012015")).thenReturn(Optional.of(member));
+
+        //when
+        Member foundMember = memberService.FindMemberByInvestmentId("EY012015");
+
+        //then
+        verify(memberRepository).findMemberByInvestmentId("EY012015");
+        assertThat(foundMember).isNotNull();
     }
 
     @Test
-    @Disabled
-    void findMemberById() {
+    @DisplayName("Find a Member By Id - Test")
+    void FindMemberByIdTest() {
+        //given
+        Member testMember = new Member(2L, Long.parseLong("0804268523085"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), "Female");
+        when(memberRepository.findMemberById(2L)).thenReturn(Optional.of(testMember));
+
+        //when
+        Member foundMember = memberService.FindMemberById(2L);
+
+        //then
+        verify(memberRepository).findMemberById(2L);
+        assertThat(foundMember).isNotNull();
     }
 
     @Test
-    @Disabled
+    @DisplayName("Find All Members - Test")
     void findAllMembers() {
+        //given
+        Member member = new Member(1L, Long.parseLong("0804268523085"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), "Female");
+        Member member1 = new Member(2L, Long.parseLong("8507235427081"), "ZY012015", "Zuko", "Yawa", DateFormatter.returnLocalDate("2022-01-11"), "Male");
+        List<Member> members = new ArrayList<>();
+        members.add(member);
+        members.add(member1);
+        when(memberRepository.findAll()).thenReturn(members);
+
+        //when
+        List<Member> foundMembers = memberService.FindAllMembers();
+
+        //then
+        assertThat(foundMembers).hasSize(2);
+        verify(memberRepository).findAll();
     }
 
     @Test
-    @Disabled
     void isMemberActive() {
     }
 }

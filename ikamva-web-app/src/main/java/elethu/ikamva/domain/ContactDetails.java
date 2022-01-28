@@ -48,6 +48,14 @@ public class ContactDetails implements Serializable {
         this.endDate = endDate;
     }
 
+    public ContactDetails(Long id, String contact, ContactType contactType, String memberInvestId, LocalDate createdDate) {
+        this.id = id;
+        this.contact = contact;
+        this.contactType = contactType;
+        this.memberInvestId = memberInvestId;
+        this.createdDate = createdDate;
+    }
+
     public ContactDetails(String contact, ContactType contactType, String memberInvestId, LocalDate createdDate, Member members) {
         this.contact = contact;
         this.contactType = contactType;

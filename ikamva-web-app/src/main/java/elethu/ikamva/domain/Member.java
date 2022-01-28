@@ -82,7 +82,8 @@ public class Member implements Serializable {
         this.endDate = endDate;
     }
 
-    public Member(Long identityNo, String investmentId, String firstName, String lastName, LocalDate dob, String gender) {
+    public Member(Long id, Long identityNo, String investmentId, String firstName, String lastName, LocalDate dob, String gender) {
+        this.id = id;
         this.identityNo = identityNo;
         this.investmentId = investmentId;
         this.firstName = firstName;
