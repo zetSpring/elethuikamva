@@ -16,7 +16,7 @@ public class CorporateCompanyRestController {
 
     @PostMapping("/add")
     ResponseEntity<CorpCompany> addNewCorpCompany(@RequestBody CorpCompany newCorpCompany){
-        CorpCompany corpCompany = corpCompanyService.createCorpCompany(newCorpCompany);
+        CorpCompany corpCompany = corpCompanyService.saveCorpCompany(newCorpCompany);
         return new ResponseEntity<>(corpCompany, HttpStatus.CREATED);
     }
 

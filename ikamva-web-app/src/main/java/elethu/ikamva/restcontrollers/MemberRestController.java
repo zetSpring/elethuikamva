@@ -23,20 +23,20 @@ public class MemberRestController {
 
     @PostMapping("/add")
     ResponseEntity<Member> CreateNewMember(@RequestBody Member member){
-        Member newMember = memberService.CreateNewMember(member);
+        Member newMember = memberService.saveNewMember(member);
         return new ResponseEntity<>(newMember, HttpStatus.CREATED);
     }
 
     @PostMapping("/saveAll")
     ResponseEntity<String> SaveAllMembers(@RequestBody List<Member> members){
-        memberService.SaveAllMembers(members);
+        memberService.saveAllMembers(members);
         return new ResponseEntity<>("Successfully saved all members", HttpStatus.CREATED);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     List<Member> FindAllMembers() {
-        List<Member> memberList = memberService.FindAllMembers();
+        List<Member> memberList = memberService.findAllMembers();
 
         return memberList;
     }
@@ -44,7 +44,7 @@ public class MemberRestController {
     @GetMapping("/invest/{investId}")
     @ResponseStatus(HttpStatus.OK)
     Member FindMemberByInvestId(@PathVariable String investId){
-        Member investMember = memberService.FindMemberByInvestmentId(investId);
+        Member investMember = memberService.findMemberByInvestmentId(investId);
 
         return investMember;
     }
@@ -52,7 +52,7 @@ public class MemberRestController {
 
     @GetMapping("/{id}")
     Member FindMember(@PathVariable Long id) throws ResourceNotFoundException{
-        Member findMem = memberService.FindMemberById(id);
+        Member findMem = memberService.findMemberById(id);
 
         if(findMem == null){
             throw new ResourceNotFoundException("Member: " + id + "could not be found.");
@@ -62,9 +62,9 @@ public class MemberRestController {
     }
 
     /*Update members*/
-    @PutMapping("/update/{investId}")
-    ResponseEntity<Member> updateMember(@RequestBody Member member, @PathVariable String investId){
-        Member memUpdate = memberService.UpdateMember(member, investId);
+    @PutMapping("/updateMember")
+    ResponseEntity<Member> updateMember(@RequestBody Member member){
+        Member memUpdate = memberService.updateMember(member);
 
         return new ResponseEntity<>(memUpdate, HttpStatus.OK);
     }
@@ -72,7 +72,7 @@ public class MemberRestController {
     /*Delete (update end date) member*/
     @DeleteMapping("/delete/{investId}")
     ResponseEntity<Member> DeleteMember(@PathVariable String investId) {
-        Member member = memberService.DeleteMember(investId);
+        Member member = memberService.deleteMember(investId);
 
         return new ResponseEntity<>(member, HttpStatus.OK);
     }

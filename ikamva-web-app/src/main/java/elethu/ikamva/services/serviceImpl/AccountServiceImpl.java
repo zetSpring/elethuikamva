@@ -52,8 +52,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public List<Account> findAllAccounts() {
-        List<Account> accounts = new LinkedList<>();
-        accountRepository.findAllActiveAccounts().iterator().forEachRemaining(accounts::add);
+        List<Account> accounts = new ArrayList<>();
+        accountRepository.findAll().iterator().forEachRemaining(accounts::add);
 
         if (accounts.isEmpty()) {
             throw new AccountException("There is no private company to add account for");

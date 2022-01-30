@@ -17,7 +17,7 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     private final CorpCompanyRepository corpCompanyRepository;
 
     @Override
-    public CorpCompany createCorpCompany(CorpCompany newCorpCompany) {
+    public CorpCompany saveCorpCompany(CorpCompany newCorpCompany) {
         if(!isCorporateActive(newCorpCompany.getRegistrationNo())){
             newCorpCompany.setCreatedDate(DateFormatter.returnLocalDateTime());
             return corpCompanyRepository.save(newCorpCompany);
@@ -28,7 +28,12 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
 
     @Override
     public CorpCompany updateCorpCompany(CorpCompany updateCorpCompany) {
-        return null;
+        Optional<CorpCompany> updateCompany = corpCompanyRepository.findById(updateCorpCompany.getId());
+        if (updateCompany.isPresent()) {
+            return corpCompanyRepository.save(updateCorpCompany);
+        }else {
+            throw new CorpCompanyException(String.format("There is not Corporate Company found with id: %s", updateCorpCompany.getId()));
+        }
     }
 
 
@@ -42,7 +47,7 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
 
     @Override
     public List<CorpCompany> findAllCorpCompany() {
-        List<CorpCompany> corpCompanyList = new LinkedList<>();
+        List<CorpCompany> corpCompanyList = new ArrayList<>();
         corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompanyList::add);
 
         if (corpCompanyList.isEmpty()) {

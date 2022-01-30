@@ -11,7 +11,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,6 +66,16 @@ public class PrivateCompany implements Serializable {
         this.createdDate = createdDate;
         this.corpCompany = corpCompany;
         this.projectCompany = projectCompany;
+        this.account = account;
+    }
+
+    public PrivateCompany(Long id, String companyName, String registrationNo, LocalDate registeredDate, LocalDate createdDate, CorpCompany corpCompany, Account account) {
+        this.id = id;
+        this.companyName = companyName;
+        this.registrationNo = registrationNo;
+        this.registeredDate = registeredDate;
+        this.createdDate = createdDate;
+        this.corpCompany = corpCompany;
         this.account = account;
     }
 

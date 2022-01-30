@@ -9,11 +9,13 @@ import elethu.ikamva.repositories.ContactDetailsRepository;
 import elethu.ikamva.repositories.MemberRepository;
 import elethu.ikamva.services.ContactDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,7 +63,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
     @Override
     public List<ContactDetails> findAllContactDetails() {
-        List<ContactDetails> contactDetailsList = new LinkedList<>();
+        List<ContactDetails> contactDetailsList = new ArrayList<>();
         contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetailsList::add);
 
         if (!contactDetailsList.isEmpty()) {
@@ -80,7 +82,9 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
         if (contactDetailsList.isEmpty()) {
             throw new ContactDetailsException("There are no contact details for contact type: " + contactType);
         }
-        return contactDetailsList;
+        return contactDetailsList.stream()
+                .filter(contact -> contact.getEndDate() == null)
+                .collect(Collectors.toList());
     }
 
     @Override
