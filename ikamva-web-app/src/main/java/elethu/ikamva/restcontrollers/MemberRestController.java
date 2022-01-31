@@ -22,37 +22,33 @@ public class MemberRestController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Member> CreateNewMember(@RequestBody Member member){
-        Member newMember = memberService.CreateNewMember(member);
+    ResponseEntity<Member> saveNewMember(@RequestBody Member member){
+        Member newMember = memberService.saveNewMember(member);
         return new ResponseEntity<>(newMember, HttpStatus.CREATED);
     }
 
-    @PostMapping("/saveAll")
-    ResponseEntity<String> SaveAllMembers(@RequestBody List<Member> members){
-        memberService.SaveAllMembers(members);
+    @PostMapping("/save-all")
+    ResponseEntity<String> saveAllMembers(@RequestBody List<Member> members){
+        memberService.saveAllMembers(members);
         return new ResponseEntity<>("Successfully saved all members", HttpStatus.CREATED);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    List<Member> FindAllMembers() {
-        List<Member> memberList = memberService.FindAllMembers();
-
-        return memberList;
+    List<Member> findAllMembers() {
+        return memberService.findAllMembers();
     }
 
     @GetMapping("/invest/{investId}")
     @ResponseStatus(HttpStatus.OK)
-    Member FindMemberByInvestId(@PathVariable String investId){
-        Member investMember = memberService.FindMemberByInvestmentId(investId);
-
-        return investMember;
+    Member findMemberByInvestId(@PathVariable String investId){
+        return memberService.findMemberByInvestmentId(investId);
     }
 
 
     @GetMapping("/{id}")
-    Member FindMember(@PathVariable Long id) throws ResourceNotFoundException{
-        Member findMem = memberService.FindMemberById(id);
+    Member findMemberById(@PathVariable Long id) throws ResourceNotFoundException{
+        Member findMem = memberService.findMemberById(id);
 
         if(findMem == null){
             throw new ResourceNotFoundException("Member: " + id + "could not be found.");
@@ -62,17 +58,17 @@ public class MemberRestController {
     }
 
     /*Update members*/
-    @PutMapping("/update/{investId}")
-    ResponseEntity<Member> updateMember(@RequestBody Member member, @PathVariable String investId){
-        Member memUpdate = memberService.UpdateMember(member, investId);
+    @PutMapping("/update")
+    ResponseEntity<Member> updateMember(@RequestBody Member member){
+        Member memUpdate = memberService.updateMember(member);
 
         return new ResponseEntity<>(memUpdate, HttpStatus.OK);
     }
 
     /*Delete (update end date) member*/
     @DeleteMapping("/delete/{investId}")
-    ResponseEntity<Member> DeleteMember(@PathVariable String investId) {
-        Member member = memberService.DeleteMember(investId);
+    ResponseEntity<Member> deleteMember(@PathVariable String investId) {
+        Member member = memberService.deleteMember(investId);
 
         return new ResponseEntity<>(member, HttpStatus.OK);
     }

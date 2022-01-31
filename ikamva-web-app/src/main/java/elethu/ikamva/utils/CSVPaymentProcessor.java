@@ -27,7 +27,6 @@ public class CSVPaymentProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVPaymentProcessor.class);
     public static String FILETYPE = "text/csv";
-    //public static InvestmentIdExtractor investIdExtractor;
 
     public static boolean isCSVFormat(MultipartFile file) {
         return FILETYPE.equals(file.getContentType());

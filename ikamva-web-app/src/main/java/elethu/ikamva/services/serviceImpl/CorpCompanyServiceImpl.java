@@ -9,21 +9,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class CorpCompanyServiceImpl implements CorpCompanyService {
-
     private final CorpCompanyRepository corpCompanyRepository;
-    private final DateFormatter dateFormatter;
 
     @Override
-    public CorpCompany createCorpCompany(CorpCompany newCorpCompany) {
+    public CorpCompany saveCorpCompany(CorpCompany newCorpCompany) {
         if(!isCorporateActive(newCorpCompany.getRegistrationNo())){
-            newCorpCompany.setCreatedDate(dateFormatter.returnLocalDateTime());
+            newCorpCompany.setCreatedDate(DateFormatter.returnLocalDateTime());
             return corpCompanyRepository.save(newCorpCompany);
-
-            //return corpCompany;
         }else {
             throw new CorpCompanyException("The corporate company with the registration no: " + newCorpCompany.getRegistrationNo() + " already exists");
         }
@@ -31,7 +28,12 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
 
     @Override
     public CorpCompany updateCorpCompany(CorpCompany updateCorpCompany) {
-        return null;
+        Optional<CorpCompany> updateCompany = corpCompanyRepository.findById(updateCorpCompany.getId());
+        if (updateCompany.isPresent()) {
+            return corpCompanyRepository.save(updateCorpCompany);
+        }else {
+            throw new CorpCompanyException(String.format("There is not Corporate Company found with id: %s", updateCorpCompany.getId()));
+        }
     }
 
 
@@ -39,22 +41,28 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     public CorpCompany deleteCorpCompany(Long id) {
         Optional<CorpCompany> corpCompany = corpCompanyRepository.findById(id);
         CorpCompany deleteCorpCompany = corpCompany.orElseThrow(() -> new CorpCompanyException("Could not find corporate company id: " + id + " to delete."));
-        deleteCorpCompany.setEndDate(dateFormatter.returnLocalDateTime());
+        deleteCorpCompany.setEndDate(DateFormatter.returnLocalDateTime());
         return corpCompanyRepository.save(deleteCorpCompany);
     }
 
     @Override
     public List<CorpCompany> findAllCorpCompany() {
-        List<CorpCompany> corpCompaniesSet = new LinkedList<>();
-        corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompaniesSet::add);
+        List<CorpCompany> corpCompanyList = new ArrayList<>();
+        corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompanyList::add);
 
-        return corpCompaniesSet;
+        if (corpCompanyList.isEmpty()) {
+            throw new CorpCompanyException("There are no Corporate  companies found.");
+        } else {
+            return corpCompanyList.stream()
+                    .filter(corp -> corp.getEndDate() == null)
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override
     public CorpCompany findCorpCompany() {
-        Optional<CorpCompany> corpCompanyOptional = corpCompanyRepository.findCorpCompany();
-        return corpCompanyOptional.orElseThrow(() -> new CorpCompanyException("No Corporate Company could be found."));
+        return corpCompanyRepository.findCorpCompany()
+                .orElseThrow(() -> new CorpCompanyException("No Corporate Company could be found."));
     }
 
     public Boolean isCorporateActive(String companyRegistrationNo){

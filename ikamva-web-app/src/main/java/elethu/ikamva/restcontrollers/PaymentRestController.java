@@ -1,7 +1,6 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.Payment;
-import elethu.ikamva.exception.PaymentException;
 import elethu.ikamva.services.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -10,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,54 +25,54 @@ public class PaymentRestController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Payment> AddPayment(@RequestBody Payment payment) {
-        Payment newPayment = paymentService.SavePayment(payment);
+    ResponseEntity<Payment> addPayment(@RequestBody Payment payment) {
+        Payment newPayment = paymentService.savePayment(payment);
         return new ResponseEntity<>(newPayment, HttpStatus.CREATED);
     }
 
-    @PostMapping("/savePayments")
-    ResponseEntity<String> SaveAllPayments(@RequestBody List<Payment> memberPayments) {
-        paymentService.BulkSavePayments(memberPayments);
-        return new ResponseEntity<>("Successfully stored all payments", HttpStatus.CREATED);
+    @PostMapping("/save-payments")
+    ResponseEntity<String> saveAllPayments(@RequestBody List<Payment> memberPayments) {
+        paymentService.bulkSavePayments(memberPayments);
+        return new ResponseEntity<>("Successfully saved all payments", HttpStatus.CREATED);
     }
 
-    @PutMapping("/updatePayment/{id}")
-    ResponseEntity<Payment> UpdatePayment(@PathVariable Long id, @RequestBody Payment payment) {
-        Payment updatePayment = paymentService.UpdatePayment(id, payment);
+    @PutMapping("/update")
+    ResponseEntity<Payment> updatePayment(@RequestBody Payment payment) {
+        Payment updatePayment = paymentService.updatePayment(payment);
         return new ResponseEntity<>(updatePayment, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("search-payments/{fromDate}/{toDate}")
-    List<Payment> FindPaymentsBetweenDates(@PathVariable(value = "fromDate")
+    List<Payment> findPaymentsBetweenDates(@PathVariable(value = "fromDate")
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                            @PathVariable(value = "toDate")
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-        return paymentService.FindPaymentsBetweenDates(fromDate, toDate);
+        return paymentService.findPaymentsBetweenDates(fromDate, toDate);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search/{memberInvestId}/{fromDate}/{toDate}")
-    List<Payment> FindMemberPaymentsBetweeDates(@RequestParam(value = "memberInvestId") String memberInvestId,
-                                                @RequestParam(value = "fromDate")
+    List<Payment> findMemberPaymentsBetweenDates(@PathVariable String memberInvestId,
+                                                @PathVariable(value = "fromDate")
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-                                                @RequestParam(value = "toDate")
+                                                @PathVariable(value = "toDate")
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-        return paymentService.FindMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate);
+        return paymentService.findMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate);
     }
 
     @GetMapping("/invest/{investmentId}")
-    List<Payment> GetPaymentByInvestId(@PathVariable String investmentId) {
-        return paymentService.FindPaymentByInvestId(investmentId);
+    List<Payment> getPaymentByInvestId(@PathVariable String investmentId) {
+        return paymentService.findPaymentByInvestId(investmentId);
     }
 
     @GetMapping("/{id}")
-    Payment GetPaymentById(@PathVariable Long id) {
-        return paymentService.FindPaymentById(id);
+    Payment getPaymentById(@PathVariable Long id) {
+        return paymentService.findPaymentById(id);
     }
 
     @PostMapping("/upload")
-    void UploadStatement(@RequestParam("file") MultipartFile file) {
-        paymentService.ProcessCSVFile(file);
+    void uploadStatement(@RequestParam("file") MultipartFile file) throws FileNotFoundException {
+        paymentService.processCSVFile(file);
     }
 }

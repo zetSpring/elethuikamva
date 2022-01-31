@@ -8,31 +8,28 @@ import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.repositories.ContactDetailsRepository;
 import elethu.ikamva.repositories.MemberRepository;
 import elethu.ikamva.services.ContactDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ContactDetailsServiceImpl implements ContactDetailsService {
-
     private final ContactDetailsRepository contactDetailsRepository;
     private final MemberRepository memberRepository;
-    private final DateFormatter dateFormatter;
-
-    @Autowired
-    public ContactDetailsServiceImpl(ContactDetailsRepository contactDetailsRepository, MemberRepository memberRepository, DateFormatter dateFormatter) {
-        this.contactDetailsRepository = contactDetailsRepository;
-        this.memberRepository = memberRepository;
-        this.dateFormatter = dateFormatter;
-    }
 
     @Override
     public ContactDetails saveContactDetail(ContactDetails contactDetails) {
         Member member = memberRepository.findMemberByInvestmentId(contactDetails.getMemberInvestId().toUpperCase())
-                .orElseThrow(() -> new ContactDetailsException("Contact: " + contactDetails.getContact() + " is already inactive or could not be found"));
+                .orElseThrow(() -> new ContactDetailsException(String.format("Could not find member with investment id %s to add contacts too.", contactDetails.getMemberInvestId())));
         contactDetails.setMembers(member);
-        contactDetails.setCreatedDate(dateFormatter.returnLocalDate());
+        contactDetails.setCreatedDate(DateFormatter.returnLocalDate());
 
         return contactDetailsRepository.save(contactDetails);
     }
@@ -40,17 +37,17 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     @Override
     public List<ContactDetails> deleteContactDetails(String investId) {
         List<ContactDetails> contactDetails = contactDetailsRepository.findAllContactsByMemberInvestId(investId);
-
-        if(!CollectionUtils.isEmpty(contactDetails)){
+        if (!CollectionUtils.isEmpty(contactDetails)) {
             contactDetails.forEach(memberContacts -> {
-                memberContacts.setEndDate(dateFormatter.returnLocalDate());
+                memberContacts.setEndDate(DateFormatter.returnLocalDate());
                 contactDetailsRepository.save(memberContacts);
             });
-        }
-        else
+        } else
             throw new ContactDetailsException("Contact: " + investId + " is already inactive or could not be found");
 
-        return contactDetails;
+        return contactDetails.stream()
+                .filter(contacts -> contacts.getEndDate() != null)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -58,28 +55,36 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
         List<ContactDetails> memberContacts = contactDetailsRepository.findAllContactsByMemberInvestId(investId.toUpperCase());
 
         if (memberContacts.isEmpty()) {
-            throw new ContactDetailsException("There are no contact numbers for customer id: " + investId );
+            throw new ContactDetailsException("There are no contact numbers for customer id: " + investId);
+        } else {
+            return memberContacts;
         }
-
-        return memberContacts;
     }
 
     @Override
     public List<ContactDetails> findAllContactDetails() {
-        List<ContactDetails> contactDetailsList = new LinkedList<>();
-        contactDetailsRepository.findAllMemberContactDetails().iterator().forEachRemaining(contactDetailsList::add);
+        List<ContactDetails> contactDetailsList = new ArrayList<>();
+        contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetailsList::add);
 
-        return contactDetailsList;
+        if (!contactDetailsList.isEmpty()) {
+            return contactDetailsList.stream()
+                    .filter(contacts -> contacts.getEndDate() == null)
+                    .collect(Collectors.toList());
+        } else {
+            throw new ContactDetailsException("There are no contact details found");
+        }
     }
 
     @Override
     public List<ContactDetails> findALlContactsByContactType(String contactType) {
         List<ContactDetails> contactDetailsList = new LinkedList<>();
         contactDetailsRepository.findContactDetailsByContactType(contactType).iterator().forEachRemaining(contactDetailsList::add);
-        if(contactDetailsList.isEmpty()){
-            throw new ContactDetailsException("There are no contact details for contact type: " + contactType );
+        if (contactDetailsList.isEmpty()) {
+            throw new ContactDetailsException("There are no contact details for contact type: " + contactType);
         }
-        return contactDetailsList;
+        return contactDetailsList.stream()
+                .filter(contact -> contact.getEndDate() == null)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -88,10 +93,10 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
         Member member = memberContact.orElseThrow(() -> new MemberException("Couls not find a member: " + investId + " to update contact for: "));
         Optional<ContactDetails> contactDetailsOptional = contactDetailsRepository.findMemberContact(member.getId(), contactDetail.getContactType());
         ContactDetails updateContact = contactDetailsOptional.
-                orElseThrow(() -> new ContactDetailsException("Could not find a contacts to update with id: "+ contactDetail.getContactType()));
+                orElseThrow(() -> new ContactDetailsException("Could not find a contacts to update with id: " + contactDetail.getContactType()));
 
         updateContact.setContact(contactDetail.getContact());
 
-        return  contactDetailsRepository.save(updateContact);
+        return contactDetailsRepository.save(updateContact);
     }
 }

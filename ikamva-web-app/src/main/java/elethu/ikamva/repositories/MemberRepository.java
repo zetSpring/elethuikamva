@@ -14,8 +14,6 @@ import java.util.Optional;
 public interface MemberRepository extends CrudRepository<Member, Long> {
     @Query("SELECT mem FROM Member mem WHERE mem.investmentId = UPPER(?1) AND mem.endDate = NULL")
     Optional<Member> findMemberByInvestmentId(String investmentId);
-    @Query("SELECT mem FROM Member mem WHERE mem.endDate = NULL")
-    List<Member> findAllActiveMembers();
     @Query("SELECT mem FROM Member mem WHERE mem.id = ?1 AND mem.endDate = NULL")
-    Member findMemberById(Long id);
+    Optional<Member> findMemberById(Long id);
 }

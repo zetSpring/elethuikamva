@@ -5,13 +5,13 @@ import elethu.ikamva.domain.Member;
 import java.util.List;
 
 public interface MemberService {
-    Member CreateNewMember(Member member);
-    void SaveAllMembers(List<Member> members);
-    Member UpdateMember(Member member, String memberInvestId);
-    List<Member> FindAllMembers();
-    Member DeleteMember(String investmentId);
-    Member FindMemberByInvestmentId(String investmentId);
-    Member FindMemberById(Long id);
-    boolean IsMemberActive(String memberInvestId);
+    Member saveNewMember(Member member);
+    void saveAllMembers(List<Member> members);
+    Member updateMember(Member member);
+    List<Member> findAllMembers();
+    Member deleteMember(String investmentId);
+    Member findMemberByInvestmentId(String investmentId);
+    Member findMemberById(Long id);
+    boolean isMemberActive(String memberInvestId);
 }
 

@@ -10,7 +10,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,13 +33,13 @@ public class PrivateCompany implements Serializable {
     @Column(name = "REGISTRATION_NO", unique = true)
     private String registrationNo;
     @Column(name = "REGISTRATION_DATE")
-    private Date registeredDate;
+    private LocalDate registeredDate;
     @Column(name = "CREATED_DATE", nullable = false)
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date createdDate;
+    private LocalDate createdDate;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "END_DATE")
-    private Date endDate;
+    private LocalDate endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -55,17 +55,27 @@ public class PrivateCompany implements Serializable {
     @ToString.Exclude
     private Account account;
 
-    public PrivateCompany(Date endDate) {
+    public PrivateCompany(LocalDate endDate) {
         this.endDate = endDate;
     }
 
-    public PrivateCompany(String companyName, String registrationNo, Date registeredDate, Date createdDate, CorpCompany corpCompany, List<Project> projectCompany, Account account) {
+    public PrivateCompany(String companyName, String registrationNo, LocalDate registeredDate, LocalDate createdDate, CorpCompany corpCompany, List<Project> projectCompany, Account account) {
         this.companyName = companyName;
         this.registrationNo = registrationNo;
         this.registeredDate = registeredDate;
         this.createdDate = createdDate;
         this.corpCompany = corpCompany;
         this.projectCompany = projectCompany;
+        this.account = account;
+    }
+
+    public PrivateCompany(Long id, String companyName, String registrationNo, LocalDate registeredDate, LocalDate createdDate, CorpCompany corpCompany, Account account) {
+        this.id = id;
+        this.companyName = companyName;
+        this.registrationNo = registrationNo;
+        this.registeredDate = registeredDate;
+        this.createdDate = createdDate;
+        this.corpCompany = corpCompany;
         this.account = account;
     }
 

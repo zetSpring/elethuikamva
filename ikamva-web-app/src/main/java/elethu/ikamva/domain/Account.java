@@ -69,6 +69,14 @@ public class Account implements Serializable {
         this.companyAccount = companyAccount;
     }
 
+    public Account(Long id, Long accountNo, String accountType, LocalDate createdDate, PrivateCompany companyAccount) {
+        this.accountNo = accountNo;
+        this.accountType = accountType;
+        this.createdDate = createdDate;
+        this.companyAccount = companyAccount;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
