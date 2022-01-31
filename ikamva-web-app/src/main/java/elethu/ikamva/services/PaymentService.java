@@ -10,7 +10,7 @@ import java.util.List;
 public interface PaymentService {
     Payment savePayment(Payment payment);
     Payment deletePayment(Long id);
-    Payment updatePayment(Long paymentId, Payment payment);
+    Payment updatePayment(Payment payment);
     Payment findPaymentById(Long id);
     void bulkSavePayments(List<Payment> payments);
     List<Payment> findPaymentByInvestId(String investmentId);

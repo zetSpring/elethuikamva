@@ -111,7 +111,7 @@ class PaymentServiceImplTest {
         when(paymentRepository.save(any(Payment.class))).thenReturn(newPayment);
 
         //when
-        Payment updatePayment = paymentService.updatePayment(1L, newPayment);
+        Payment updatePayment = paymentService.updatePayment(newPayment);
 
         //then
         then(paymentRepository).should(atLeastOnce()).findPaymentById(anyLong());
@@ -244,7 +244,7 @@ class PaymentServiceImplTest {
     @Test
     void updatePaymentNotFoundExceptionTest() {
         //when - then
-        assertThrows(PaymentException.class, () -> paymentService.updatePayment(1L, payment));
+        assertThrows(PaymentException.class, () -> paymentService.updatePayment(payment));
     }
 
     @Test

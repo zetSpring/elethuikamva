@@ -25,26 +25,26 @@ public class PaymentRestController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Payment> AddPayment(@RequestBody Payment payment) {
+    ResponseEntity<Payment> addPayment(@RequestBody Payment payment) {
         Payment newPayment = paymentService.savePayment(payment);
         return new ResponseEntity<>(newPayment, HttpStatus.CREATED);
     }
 
-    @PostMapping("/savePayments")
-    ResponseEntity<String> SaveAllPayments(@RequestBody List<Payment> memberPayments) {
+    @PostMapping("/save-payments")
+    ResponseEntity<String> saveAllPayments(@RequestBody List<Payment> memberPayments) {
         paymentService.bulkSavePayments(memberPayments);
-        return new ResponseEntity<>("Successfully stored all payments", HttpStatus.CREATED);
+        return new ResponseEntity<>("Successfully saved all payments", HttpStatus.CREATED);
     }
 
-    @PutMapping("/updatePayment/{id}")
-    ResponseEntity<Payment> UpdatePayment(@PathVariable Long id, @RequestBody Payment payment) {
-        Payment updatePayment = paymentService.updatePayment(id, payment);
+    @PutMapping("/update")
+    ResponseEntity<Payment> updatePayment(@RequestBody Payment payment) {
+        Payment updatePayment = paymentService.updatePayment(payment);
         return new ResponseEntity<>(updatePayment, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("search-payments/{fromDate}/{toDate}")
-    List<Payment> FindPaymentsBetweenDates(@PathVariable(value = "fromDate")
+    List<Payment> findPaymentsBetweenDates(@PathVariable(value = "fromDate")
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                            @PathVariable(value = "toDate")
                                            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
@@ -53,26 +53,26 @@ public class PaymentRestController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search/{memberInvestId}/{fromDate}/{toDate}")
-    List<Payment> FindMemberPaymentsBetweeDates(@RequestParam(value = "memberInvestId") String memberInvestId,
-                                                @RequestParam(value = "fromDate")
+    List<Payment> findMemberPaymentsBetweenDates(@PathVariable String memberInvestId,
+                                                @PathVariable(value = "fromDate")
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-                                                @RequestParam(value = "toDate")
+                                                @PathVariable(value = "toDate")
                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
         return paymentService.findMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate);
     }
 
     @GetMapping("/invest/{investmentId}")
-    List<Payment> GetPaymentByInvestId(@PathVariable String investmentId) {
+    List<Payment> getPaymentByInvestId(@PathVariable String investmentId) {
         return paymentService.findPaymentByInvestId(investmentId);
     }
 
     @GetMapping("/{id}")
-    Payment GetPaymentById(@PathVariable Long id) {
+    Payment getPaymentById(@PathVariable Long id) {
         return paymentService.findPaymentById(id);
     }
 
     @PostMapping("/upload")
-    void UploadStatement(@RequestParam("file") MultipartFile file) throws FileNotFoundException {
+    void uploadStatement(@RequestParam("file") MultipartFile file) throws FileNotFoundException {
         paymentService.processCSVFile(file);
     }
 }

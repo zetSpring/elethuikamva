@@ -27,8 +27,8 @@ import java.util.Objects;
 @Table(name = "IKAMVA_MEMBERS", schema = "elethu")
 @JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "payments", "noOfPayments","totalPayments","user"})
 public class Member implements Serializable {
-
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "MEMBER_ID", unique = true, updatable = false, length = 10)

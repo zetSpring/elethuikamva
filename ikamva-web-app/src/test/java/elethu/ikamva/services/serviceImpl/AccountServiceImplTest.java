@@ -159,6 +159,4 @@ class AccountServiceImplTest {
         //then
         verify(accountRepository).findAll();
     }
-
-
 }

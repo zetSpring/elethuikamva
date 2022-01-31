@@ -45,18 +45,22 @@ public class MemberServiceImpl implements MemberService {
                 });
             }
             return memberRepository.save(nemMember);
-        } else {
+        } else { //not throw an error when a member exists.
             throw new MemberException(String.format("Member with investment id: %s already exists", nemMember.getInvestmentId()));
         }
     }
 
     @Override
     public Member updateMember(Member member) {
-        memberRepository.findById(member.getId())
-                .orElseThrow(() -> new MemberException("The Member invest id: " + member.getInvestmentId() + " cannot been found to update"));
-        member.setGender(IdentityNumberUtility.getMemberGender(member.getIdentityNo().toString().substring(6, 10)));
-        member.setDob(IdentityNumberUtility.getDateOfBirth(member.getIdentityNo().toString().substring(0, 6)));
-        return memberRepository.save(member);
+        if(isMemberActive(member.getInvestmentId())){
+            memberRepository.findById(member.getId())
+                    .orElseThrow(() -> new MemberException("The Member invest id: " + member.getInvestmentId() + " cannot been found to update"));
+            member.setGender(IdentityNumberUtility.getMemberGender(member.getIdentityNo().toString().substring(6, 10)));
+            member.setDob(IdentityNumberUtility.getDateOfBirth(member.getIdentityNo().toString().substring(0, 6)));
+            return memberRepository.save(member);
+        } else {
+            throw new MemberException(String.format("Member with %s investment id does not exist to update", member.getInvestmentId()));
+        }
     }
 
     @Override

@@ -34,11 +34,12 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment savePayment(Payment payment) {
-        if (!isPaymentActive(payment.getAmount(), payment.getInvestmentId(), DateFormatter.returnLocalDate(payment.getPaymentDate().toString()))) {
+        if (!isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate())) {
             Member member = memberService.findMemberByInvestmentId(payment.getInvestmentId());
             if (Objects.nonNull(member)) {
                 payment.setMemberPayments(member);
                 payment.setTransactionType(getTransactionType(payment.getAmount()));
+                payment.setPaymentDate(DateFormatter.returnLocalDate(payment.getPaymentDate().toString()));
             } else {
                 throw new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", could not add new payment for: " + payment.getInvestmentId());
             }
@@ -76,15 +77,14 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Payment updatePayment(Long paymentId, Payment payment) {
-        Payment updatePayment = paymentRepository.findPaymentById(paymentId).orElseThrow(() ->
-                new PaymentException(String.format("member with id: %d does not exist cannot update payment", paymentId)));
-        updatePayment.setPaymentDate(payment.getPaymentDate());
-        updatePayment.setTransactionType(getTransactionType(payment.getAmount()));
-        updatePayment.setPaymentReference(payment.getPaymentReference());
-        updatePayment.setInvestmentId(payment.getInvestmentId());
-        updatePayment.setAmount(payment.getAmount());
-        return paymentRepository.save(updatePayment);
+    public Payment updatePayment(Payment payment) {
+        paymentRepository.findPaymentById(payment.getId()).orElseThrow(() ->
+                new PaymentException(String.format("Payment with id: %d does not exist, cannot update payment", payment.getId())));
+        if(isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate())){
+            return paymentRepository.save(payment);
+        } else {
+            throw new PaymentException(String.format("Payment of amount: %s, for member: %s, on the date: %s does not exist, cannot update", payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate()));
+        }
     }
 
     @Override
@@ -98,8 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment findPaymentById(Long id) {
-        Optional<Payment> paymentOptional = paymentRepository.findPaymentById(id);
-        return paymentOptional.orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for payment id: " + id));
+        return paymentRepository.findPaymentById(id).orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for payment id: " + id));
     }
 
     @Override

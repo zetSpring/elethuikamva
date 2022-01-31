@@ -1,0 +1,245 @@
+{
+	"info": {
+		"_postman_id": "d4b2c4ef-95bf-4f37-8ad9-d0b169cc14a3",
+		"name": "Elethu-Ikamva-Collecton",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "Get All Members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Member By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Member By Invest Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/invest/LG012015",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"invest",
+								"LG012015"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save New Member",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"Zuko\",\n\t\"lastName\": \"Yawa\",\n\t\"investmentId\": \"ZY012015\",\n\t\"gender\": \"M\",\n\t\"identityNo\": \"8507235407281\",\n\t\"dob\": \" 1985-07-23\",\n\t\"memberContacts\": [\n        {\n            \"contact\": \"czyawa@gmail.com\",\n            \"contactType\": \"EMAIL\"\n        },\n\t{\n\t    \"contact\": \"0829303866\",\n\t    \"contactType\": \"CELLPHONE\"\n\t}]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Multiple New Members",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"Zuko\",\n\t\"lastName\": \"Yawa\",\n\t\"investmentId\": \"ZY012015\",\n\t\"gender\": \"M\",\n\t\"identityNo\": \"8507235407281\",\n\t\"dob\": \" 1985-07-23\",\n\t\"memberContacts\": [\n        {\n            \"contact\": \"czyawa@gmail.com\",\n            \"contactType\": \"EMAIL\"\n        },\n\t{\n\t    \"contact\": \"0829303866\",\n\t    \"contactType\": \"CELLPHONE\"\n\t}]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Member",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/delete/MM012015",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"delete",
+								"MM012015"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Member",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 8,\n    \"firstName\": \"Mmeli\",\n    \"lastName\": \"Mnyani\",\n    \"investmentId\": \"MM012015\",\n    \"dob\": \"1990-06-21\",\n    \"identityNo\": 9006216168086,\n    \"gender\": \"M\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/members/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payments",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"amount\":\"1100.0\",\n    \"investmentId\":\"LG012015\",\n    \"paymentDate\":\"2020-02-28\",\n    \"paymentReference\":\"LG012015\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"add"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Contacts",
+			"item": []
+		},
+		{
+			"name": "Accounts",
+			"item": []
+		},
+		{
+			"name": "Companies",
+			"item": []
+		}
+	]
+}

@@ -22,36 +22,32 @@ public class MemberRestController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Member> CreateNewMember(@RequestBody Member member){
+    ResponseEntity<Member> saveNewMember(@RequestBody Member member){
         Member newMember = memberService.saveNewMember(member);
         return new ResponseEntity<>(newMember, HttpStatus.CREATED);
     }
 
-    @PostMapping("/saveAll")
-    ResponseEntity<String> SaveAllMembers(@RequestBody List<Member> members){
+    @PostMapping("/save-all")
+    ResponseEntity<String> saveAllMembers(@RequestBody List<Member> members){
         memberService.saveAllMembers(members);
         return new ResponseEntity<>("Successfully saved all members", HttpStatus.CREATED);
     }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    List<Member> FindAllMembers() {
-        List<Member> memberList = memberService.findAllMembers();
-
-        return memberList;
+    List<Member> findAllMembers() {
+        return memberService.findAllMembers();
     }
 
     @GetMapping("/invest/{investId}")
     @ResponseStatus(HttpStatus.OK)
-    Member FindMemberByInvestId(@PathVariable String investId){
-        Member investMember = memberService.findMemberByInvestmentId(investId);
-
-        return investMember;
+    Member findMemberByInvestId(@PathVariable String investId){
+        return memberService.findMemberByInvestmentId(investId);
     }
 
 
     @GetMapping("/{id}")
-    Member FindMember(@PathVariable Long id) throws ResourceNotFoundException{
+    Member findMemberById(@PathVariable Long id) throws ResourceNotFoundException{
         Member findMem = memberService.findMemberById(id);
 
         if(findMem == null){
@@ -62,7 +58,7 @@ public class MemberRestController {
     }
 
     /*Update members*/
-    @PutMapping("/updateMember")
+    @PutMapping("/update")
     ResponseEntity<Member> updateMember(@RequestBody Member member){
         Member memUpdate = memberService.updateMember(member);
 
@@ -71,7 +67,7 @@ public class MemberRestController {
 
     /*Delete (update end date) member*/
     @DeleteMapping("/delete/{investId}")
-    ResponseEntity<Member> DeleteMember(@PathVariable String investId) {
+    ResponseEntity<Member> deleteMember(@PathVariable String investId) {
         Member member = memberService.deleteMember(investId);
 
         return new ResponseEntity<>(member, HttpStatus.OK);
