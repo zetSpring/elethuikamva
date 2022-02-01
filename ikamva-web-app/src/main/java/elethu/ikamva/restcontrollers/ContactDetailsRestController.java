@@ -58,13 +58,13 @@ public class ContactDetailsRestController {
             @ApiResponse(code = 500, message = "Tell me something I don't know")
     })
     @ApiOperation("Get All Contacts")
-    @PutMapping("/update/{investId}")
-    ResponseEntity<ContactDetails> updateContactDetail(@RequestBody ContactDetails contactDetail, @PathVariable String investId) {
-        ContactDetails updateContact = contactDetailsService.updateContactDetail(contactDetail, investId);
+    @PutMapping("/update")
+    ResponseEntity<ContactDetails> updateContactDetail(@RequestBody ContactDetails contactDetail) {
+        ContactDetails updateContact = contactDetailsService.updateContactDetail(contactDetail);
         return new ResponseEntity<>(updateContact, HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/save")
     ResponseEntity<ContactDetails> addContactDetail(@RequestBody ContactDetails contactDetails) {
         ContactDetails newContact = contactDetailsService.saveContactDetail(contactDetails);
         return new ResponseEntity<>(newContact, HttpStatus.OK);
@@ -75,8 +75,14 @@ public class ContactDetailsRestController {
             @ApiResponse(code = 500, message = "Tell me something I don't know")
     })
     @ApiOperation("Delete member contact details")
-    @DeleteMapping("/delete/{investId}")
-    List<ContactDetails> deleteContactDetails(@PathVariable String investId) {
+    @DeleteMapping("/delete-all/{investId}")
+    List<ContactDetails> deleteAllMemberContacts(@PathVariable String investId) {
         return contactDetailsService.deleteContactDetails(investId);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    ResponseEntity<ContactDetails> deleteContactDetailById(@PathVariable Long id) {
+        ContactDetails deleteContact = contactDetailsService.deleteContactById(id);
+        return new ResponseEntity<>(deleteContact, HttpStatus.OK);
     }
 }

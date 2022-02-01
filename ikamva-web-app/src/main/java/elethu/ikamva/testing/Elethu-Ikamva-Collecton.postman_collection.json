@@ -197,7 +197,7 @@
 			"name": "Payments",
 			"item": [
 				{
-					"name": "New Request",
+					"name": "Add Payment",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -226,20 +226,707 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Add Multiple Payments",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"amount\": \"1100.0\",\n        \"investmentId\": \"LG012015\",\n        \"paymentDate\": \"2020-02-28\",\n        \"paymentReference\": \"LG012015\"\n    },\n    {\n        \"amount\": \"1100.0\",\n        \"investmentId\": \"LG012015\",\n        \"paymentDate\": \"2020-02-28\",\n        \"paymentReference\": \"LG012015\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/save-payments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"save-payments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Payment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1000,\n    \"amount\": 1100.50,\n    \"investmentId\": \"EM012015\",\n    \"paymentDate\": \"2020-02-06\",\n    \"paymentReference\": \"EM012015\",\n    \"transactionType\": \"MONTHLY_CONTRIBUTION\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search For All Payments Between Dates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/search-payments/2020-01-01/2021-01-31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"search-payments",
+								"2020-01-01",
+								"2021-01-31"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Member Payments Between Dates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/search/ZY012015/2019-01-01/2021-01-31",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"search",
+								"ZY012015",
+								"2019-01-01",
+								"2021-01-31"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Member Payments By Invest Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/26",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"26"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search A Payment By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/invest/MM012015",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"invest",
+								"MM012015"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save Payments From Bank Statement",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/src/main/resources/statements/Statement_1178891232_14.csv"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/payments/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"payments",
+								"upload"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
 			"name": "Contacts",
-			"item": []
+			"item": [
+				{
+					"name": "Get Contacts For Member By Invest Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/ZY012015",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								"ZY012015"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Members Contacts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Contacts For By Type Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/type/cellphone",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								"type",
+								"cellphone"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Member Contact",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contact\": \"czyawa@gmail.com\",\n    \"contactType\": \"EMAIL\",\n    \"memberInvestId\": \"ZY012015\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Save New Member Contact",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contact\": \"czyawa.test@gmail.com\",\n    \"contactType\": \"EMAIL\",\n    \"memberInvestId\": \"ZY012015\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/save",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								"save"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete All Member Contacts By InvestId",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contact\": \"czyawa.test@gmail.com\",\n    \"contactType\": \"EMAIL\",\n    \"memberInvestId\": \"ZY012015\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/delete-all/ZY012015",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								"delete-all",
+								"ZY012015"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Member Contacts By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"contact\": \"czyawa.test@gmail.com\",\n    \"contactType\": \"EMAIL\",\n    \"memberInvestId\": \"ZY012015\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/contacts/delete/10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"contacts",
+								"delete",
+								"10"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Accounts",
-			"item": []
+			"item": [
+				{
+					"name": "Find All Ikamva Accounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Ikamva Account by Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Ikamva Account For Private Company",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account/12345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Ikamva Account By Account No",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/account/12345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"account",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Ikamva Account By Account No Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNo\": 0,\n    \"accountType\": \"string\",\n    \"bank\": \"string\",\n    \"createdDate\": \"2022-02-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNo\": 0,\n    \"accountType\": \"string\",\n    \"bank\": \"string\",\n    \"createdDate\": \"2022-02-01\",\n    \"endDate\": \"2022-02-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/12345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Account By Account No",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNo\": 0,\n    \"accountType\": \"string\",\n    \"bank\": \"string\",\n    \"createdDate\": \"2022-02-01\",\n    \"endDate\": \"2022-02-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/accounts/delete/12345",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"accounts",
+								"delete",
+								"12345"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "Companies",
-			"item": []
+			"item": [
+				{
+					"name": "Find All Private Companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/private-company/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"private-company",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Private Company By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/private-company/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"private-company",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All Corp Companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/company/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"company",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete  Corp Company",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/company/123",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"company",
+								"123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Ne Corp Company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"registrationNo\": \"string\",\n    \"corpName\": \"string\",\n    \"registeredDate\": \"string\",\n    \"createdDate\": \"2022-02-01T22:11:06.454Z\",\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/company/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"company",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }

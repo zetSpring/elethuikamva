@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -31,9 +32,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member saveNewMember(Member nemMember) {
-        if (isMemberActive(nemMember.getInvestmentId())) {
+        LOGGER.info("ServiceInvocation - MemberService.saveNewMember");
+        if (!isMemberActive(nemMember.getInvestmentId())) {
             LOGGER.info("Member with a member investment id {} does not exist, will create", nemMember.getInvestmentId());
-            String gender = IdentityNumberUtility.getMemberGender(nemMember.getIdentityNo().toString().substring(6, 10));
+            var gender = IdentityNumberUtility.getMemberGender(nemMember.getIdentityNo().toString().substring(6, 10));
             nemMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
             nemMember.setDob(IdentityNumberUtility.getDateOfBirth(nemMember.getIdentityNo().toString().substring(0, 6)));
             nemMember.setGender(gender);
@@ -45,34 +47,44 @@ public class MemberServiceImpl implements MemberService {
                 });
             }
             return memberRepository.save(nemMember);
-        } else { //not throw an error when a member exists.
-            throw new MemberException(String.format("Member with investment id: %s already exists", nemMember.getInvestmentId()));
+        } else {
+            return updateMember(nemMember);
         }
     }
 
     @Override
-    public Member updateMember(Member member) {
-        if(isMemberActive(member.getInvestmentId())){
-            memberRepository.findById(member.getId())
-                    .orElseThrow(() -> new MemberException("The Member invest id: " + member.getInvestmentId() + " cannot been found to update"));
-            member.setGender(IdentityNumberUtility.getMemberGender(member.getIdentityNo().toString().substring(6, 10)));
-            member.setDob(IdentityNumberUtility.getDateOfBirth(member.getIdentityNo().toString().substring(0, 6)));
-            return memberRepository.save(member);
-        } else {
-            throw new MemberException(String.format("Member with %s investment id does not exist to update", member.getInvestmentId()));
+    public Member updateMember(Member updateMember) {
+        LOGGER.info("ServiceInvocation - MemberService.updateMember");
+        var member = memberRepository.findById(updateMember.getId())
+                .orElseThrow(() -> new MemberException(String.format("Member with investment id: %s does not exist to update.", updateMember.getInvestmentId())));
+
+        if (Objects.nonNull(member.getEndDate())) {
+            updateMember.setGender(IdentityNumberUtility.getMemberGender(updateMember.getIdentityNo().toString().substring(6, 10)));
+            updateMember.setDob(IdentityNumberUtility.getDateOfBirth(updateMember.getIdentityNo().toString().substring(0, 6)));
+
+            updateMember.setEndDate(null);
+            updateMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
+            if (!CollectionUtils.isEmpty(updateMember.getMemberContacts())) {
+                updateMember.getMemberContacts().forEach(contact -> {
+                    contact.setCreatedDate(DateFormatter.returnLocalDate());
+                    contact.setEndDate(null);
+                    contact.setMembers(updateMember);
+                });
+            }
         }
+        return memberRepository.save(updateMember);
     }
 
     @Override
     public void saveAllMembers(List<Member> members) {
-        LOGGER.info("ServiceInvocation:SaveAllMembers");
+        LOGGER.info("ServiceInvocation::saveAllMembers");
         members.forEach(this::saveNewMember);
     }
 
     @Override
     public Member deleteMember(String investmentId) {
-        LOGGER.info("ServiceInvocation:DeleteMember");
-        Member deleteMember = memberRepository.findMemberByInvestmentId(investmentId)
+        LOGGER.info("ServiceInvocation - MemberService::deleteMember");
+        var deleteMember = memberRepository.findMemberByInvestmentId(investmentId)
                 .orElseThrow(() -> new MemberException("Member:" + investmentId + " is already inactive or could not been found"));
         List<ContactDetails> memberContacts = deleteMember.getMemberContacts();
         deleteMember.setEndDate(DateFormatter.returnLocalDateTime());
@@ -87,18 +99,21 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member findMemberByInvestmentId(String investmentId) {
+        LOGGER.info("ServiceInvocation - MemberService::findMemberByInvestmentId");
         return memberRepository.findMemberByInvestmentId(investmentId.toUpperCase())
                 .orElseThrow(() -> new MemberException(String.format("Member with investment id: %s has not been found", investmentId)));
     }
 
     @Override
     public Member findMemberById(Long id) {
+        LOGGER.info("ServiceInvocation - MemberService::findMemberById");
         return memberRepository.findMemberById(id)
                 .orElseThrow(() -> new MemberException(String.format("Member with id: %d has not been found", id)));
     }
 
     @Override
     public List<Member> findAllMembers() {
+        LOGGER.info("ServiceInvocation - MemberService::findAllMembers");
         List<Member> members = new LinkedList<>();
         memberRepository.findAll().iterator().forEachRemaining(members::add);
 
@@ -113,6 +128,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public boolean isMemberActive(String memberInvestId) {
-        return memberRepository.findMemberByInvestmentId(memberInvestId).isEmpty();
+        LOGGER.info("ServiceInvocation - MemberService::isMemberActive");
+        return memberRepository.findMemberByInvestmentId(memberInvestId).isPresent();
     }
 }

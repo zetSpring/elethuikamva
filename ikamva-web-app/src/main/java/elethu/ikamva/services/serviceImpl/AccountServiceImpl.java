@@ -25,11 +25,20 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account deleteAccount(Long accountNo) {
-        Optional<Account> accountOptional = accountRepository.findAccountsByAccountNo(accountNo);
-        var account = accountOptional.orElseThrow(() -> new AccountException("Account number: " + accountNo + " is already inactive or does not exist"));
-        account.setEndDate(DateFormatter.returnLocalDate());
-        return  accountRepository.save(account);
+    public Account deleteAccountByAccountNo(Long accountNo) {
+       var deleteAccount = accountRepository.findAccountsByAccountNo(accountNo)
+                .orElseThrow(() -> new AccountException("Account number: " + accountNo + " is already inactive or does not exist"));
+
+        deleteAccount.setEndDate(DateFormatter.returnLocalDate());
+        return  accountRepository.save(deleteAccount);
+    }
+
+    @Override
+    public Account deleteAccountById(Long id) {
+        var deleteAccount = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountException("Account with id: " + id + " is already inactive or does not exist"));
+        deleteAccount.setEndDate(DateFormatter.returnLocalDate());
+        return  accountRepository.save(deleteAccount);
     }
 
     @Override

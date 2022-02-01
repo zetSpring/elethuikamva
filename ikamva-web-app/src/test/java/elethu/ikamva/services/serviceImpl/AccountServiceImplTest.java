@@ -61,19 +61,37 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void deleteAccount() {
+    void deleteAccountByAccountNo() {
         //given
         given(accountRepository.save(any())).willReturn(account);
         given(accountRepository.findAccountsByAccountNo(anyLong())).willReturn(Optional.of(account));
 
         //when
-        Account deleteAccount = accountService.deleteAccount(123456789L);
+        Account deleteAccount = accountService.deleteAccountByAccountNo(123456789L);
 
         //then
         then(accountRepository).should(atLeastOnce()).findAccountsByAccountNo(anyLong());
         then(accountRepository).should(atLeastOnce()).save(any());
         verifyNoMoreInteractions(accountRepository);
         assertThat(deleteAccount).isNotNull();
+        assertThat(deleteAccount.getEndDate()).isEqualTo(DateFormatter.returnLocalDate());
+    }
+
+    @Test
+    void deleteAccountByIdNo() {
+        //given
+        given(accountRepository.save(any())).willReturn(account);
+        given(accountRepository.findById(anyLong())).willReturn(Optional.of(account));
+
+        //when
+        Account deleteAccount = accountService.deleteAccountById(1L);
+
+        //then
+        then(accountRepository).should(atLeastOnce()).findById(anyLong());
+        then(accountRepository).should(atLeastOnce()).save(any());
+        verifyNoMoreInteractions(accountRepository);
+        assertThat(deleteAccount).isNotNull();
+        assertThat(deleteAccount.getEndDate()).isEqualTo(DateFormatter.returnLocalDate());
     }
 
     @Test

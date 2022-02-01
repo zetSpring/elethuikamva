@@ -23,7 +23,7 @@ public class AccountRestController {
             @ApiResponse(code = 500, message = "Tell me something I don't know")
     })
     @ApiOperation(value = "Find an account by identity")
-    @GetMapping("/find/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Account> FindAccountById(@ApiParam(value = "An id for the account number to be retrieved.", required = true, example = "123")
                                             @PathVariable Long id) {
         var findAccount = accountService.findAccountById(id);
@@ -67,10 +67,20 @@ public class AccountRestController {
 //    }
 
     @ApiOperation(value = "An id for the account number to be deleted.")
-    @DeleteMapping("/delete/{id}")
-    ResponseEntity<Account> deleteAccount(@ApiParam(value = "Account id for an account to be deleted:", required = true, example = "123")
-                                       @PathVariable Long companyId)  {
-        var account = accountService.deleteAccount(companyId);
+    @DeleteMapping("/delete/{accountNo}")
+    ResponseEntity<Account> deleteAccountByAccountNo(@ApiParam(value = "Account id for an account to be deleted:", required = true, example = "123")
+                                          @PathVariable Long accountNo )  {
+        var account = accountService.deleteAccountByAccountNo(accountNo);
+
+        return new ResponseEntity<>(account, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "An id for the account number to be deleted.")
+    @DeleteMapping("/{id}")
+    ResponseEntity<Account> deleteAccountById(@ApiParam(value = "Account id for an account to be deleted:", required = true, example = "123")
+                                                     @PathVariable Long id )  {
+        var account = accountService.deleteAccountById(id);
+
         return new ResponseEntity<>(account, HttpStatus.OK);
     }
 }

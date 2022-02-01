@@ -24,7 +24,7 @@ public class PrivateCompanyRestController {
        return new ResponseEntity<>(privateAccount, HttpStatus.OK);
     }
 
-    @GetMapping("/find-all")
+    @GetMapping("/")
     List<PrivateCompany> findAllPrivateCompanies(){
         return privateCompanyService.findAllPrivateCompany();
     }

@@ -69,22 +69,18 @@ public class PaymentServiceImpl implements PaymentService {
             } catch (MemberException e) {
                 failedCounter.getAndIncrement();
                 LOGGER.error("Did not find member with investment id: {}", payment.getInvestmentId());
-                throw new MemberException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", there is already a a similar payment on the same day fot the same member: " + payment.getInvestmentId());
             }
         });
         LOGGER.info("Total number of successul payments made: {}", successCounter);
-        LOGGER.info("Total number of unsuccessul payments is: {}", failedCounter);
+        LOGGER.info("Total number of unsuccessful payments is: {}", failedCounter);
     }
 
     @Override
     public Payment updatePayment(Payment payment) {
         paymentRepository.findPaymentById(payment.getId()).orElseThrow(() ->
                 new PaymentException(String.format("Payment with id: %d does not exist, cannot update payment", payment.getId())));
-        if(isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate())){
-            return paymentRepository.save(payment);
-        } else {
-            throw new PaymentException(String.format("Payment of amount: %s, for member: %s, on the date: %s does not exist, cannot update", payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate()));
-        }
+
+        return paymentRepository.save(payment);
     }
 
     @Override
@@ -146,7 +142,7 @@ public class PaymentServiceImpl implements PaymentService {
             if (CSVPaymentProcessor.isCSVFormat(csvFile)) {
                 List<Payment> csvBulkPayments = CSVPaymentProcessor.BulkCSVFileProcessing(csvFile.getInputStream());
                 LOGGER.info("Total csv records: {}", csvBulkPayments.size());
-                bulkSavePayments(csvBulkPayments);
+                this.bulkSavePayments(csvBulkPayments);
             } else {
                 LOGGER.error("Error with a file type");
                 throw new FileNotFoundException("The file uploaded is not a CSV file, please correct and upload again");

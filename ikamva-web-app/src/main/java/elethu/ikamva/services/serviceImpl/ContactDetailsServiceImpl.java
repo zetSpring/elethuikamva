@@ -35,6 +35,15 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    public ContactDetails deleteContactById(Long id) throws ContactDetailsException {
+        ContactDetails contact = contactDetailsRepository.findById(id)
+                .orElseThrow(() -> new ContactDetailsException(String.format("Could not find contact with id: %s to delete.", id)));
+        contact.setEndDate(DateFormatter.returnLocalDate());
+
+        return contactDetailsRepository.save(contact);
+    }
+
+    @Override
     public List<ContactDetails> deleteContactDetails(String investId) {
         List<ContactDetails> contactDetails = contactDetailsRepository.findAllContactsByMemberInvestId(investId);
         if (!CollectionUtils.isEmpty(contactDetails)) {
@@ -88,9 +97,9 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
-    public ContactDetails updateContactDetail(ContactDetails contactDetail, String investId) throws ContactDetailsException {
-        Optional<Member> memberContact = memberRepository.findMemberByInvestmentId(investId);
-        Member member = memberContact.orElseThrow(() -> new MemberException("Couls not find a member: " + investId + " to update contact for: "));
+    public ContactDetails updateContactDetail(ContactDetails contactDetail) throws ContactDetailsException {
+        Optional<Member> memberContact = memberRepository.findMemberByInvestmentId(contactDetail.getMemberInvestId());
+        Member member = memberContact.orElseThrow(() -> new MemberException("Couls not find a member: " + contactDetail.getMemberInvestId() + " to update contact for: "));
         Optional<ContactDetails> contactDetailsOptional = contactDetailsRepository.findMemberContact(member.getId(), contactDetail.getContactType());
         ContactDetails updateContact = contactDetailsOptional.
                 orElseThrow(() -> new ContactDetailsException("Could not find a contacts to update with id: " + contactDetail.getContactType()));

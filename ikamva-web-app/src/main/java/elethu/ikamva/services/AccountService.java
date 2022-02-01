@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface AccountService {
     Account saveNewAccount(Account account);
-    Account deleteAccount(Long accountNo);
+    Account deleteAccountByAccountNo(Long accountNo);
+    Account deleteAccountById(Long id);
     Account findAccountById(Long id);
     Account findAccountByAccountNo(Long account);
     Account findAccountByCompany(Long id);

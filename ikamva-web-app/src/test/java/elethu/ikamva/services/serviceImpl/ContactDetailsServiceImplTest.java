@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
@@ -121,17 +122,22 @@ class ContactDetailsServiceImplTest {
         assertThat(contacts).hasSize(2);
     }
 
-//    @Test
-//    @DisplayName("Find Member Contact Details By Member Invest Id - Test")
-//    void findMemberContactByInvestIdThrows() {
-//        //given
-//        given(contactDetailsRepository.findAllContactsByMemberInvestId("SH012015")).willThrow(new ContactDetailsException("There are no contact numbers for customer id: SH012015"));
-//
-//        //then
-//        assertThrows(ContactDetailsException.class, () -> contactDetailsService.findMemberContactByInvestId("SH012015"));
-//
-//        then(contactDetailsRepository).should().findAllContactsByMemberInvestId("SH012015");
-//    }
+    @Test
+    @DisplayName("Delete Contact Detail By Id - Test")
+    void deleteContactById() {
+        //given
+        given(contactDetailsRepository.findById(anyLong())).willReturn(Optional.of(phoneContact));
+        given(contactDetailsRepository.save(any(ContactDetails.class))).willReturn(phoneContact);
+
+        //when
+        ContactDetails deleteContact = contactDetailsService.deleteContactById(phoneContact.getId());
+
+        //then
+        verify(contactDetailsRepository).findById(anyLong());
+        assertThat(deleteContact).isNotNull();
+        assertThat(deleteContact.getEndDate()).isNotNull();
+        assertThat(deleteContact.getEndDate()).isEqualTo(DateFormatter.returnLocalDate());
+    }
 
     @Test
     void findAllContactDetails() {
@@ -169,7 +175,7 @@ class ContactDetailsServiceImplTest {
         when(contactDetailsRepository.save(any())).thenReturn(updateEmailContact);
 
         //when
-        ContactDetails updateContactDetail = contactDetailsService.updateContactDetail(updateEmailContact, "KK012015");
+        ContactDetails updateContactDetail = contactDetailsService.updateContactDetail(updateEmailContact);
 
         //then
         then(contactDetailsRepository).should(atLeastOnce()).findMemberContact(anyLong(), any());

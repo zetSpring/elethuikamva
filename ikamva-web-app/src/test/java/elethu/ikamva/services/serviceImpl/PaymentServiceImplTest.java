@@ -107,17 +107,18 @@ class PaymentServiceImplTest {
     @Test
     void updatePayment() {
         //given
+        Payment updatePayment = new Payment(1L, 1500.0d, "KK012015", DateFormatter.returnLocalDate().minusDays(1), "KK012015", TransactionType.MONTHLY_CONTRIBUTION, member);
         when(paymentRepository.findPaymentById(anyLong())).thenReturn(Optional.ofNullable(payment));
-        when(paymentRepository.save(any(Payment.class))).thenReturn(newPayment);
+        when(paymentRepository.save(any(Payment.class))).thenReturn(updatePayment);
 
         //when
-        Payment updatePayment = paymentService.updatePayment(newPayment);
+        Payment updatedPayment = paymentService.updatePayment(updatePayment);
 
         //then
         then(paymentRepository).should(atLeastOnce()).findPaymentById(anyLong());
         then(paymentRepository).should(atLeastOnce()).save(any());
-        assertThat(updatePayment).isNotNull();
-        assertThat(updatePayment).isEqualTo(newPayment);
+        assertThat(updatedPayment).isNotNull();
+        assertThat(updatedPayment).isEqualTo(payment);
     }
 
     @Test
