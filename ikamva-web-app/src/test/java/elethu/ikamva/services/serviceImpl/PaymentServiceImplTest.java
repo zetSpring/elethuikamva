@@ -294,8 +294,6 @@ class PaymentServiceImplTest {
         bulkPayments.add(newPayment);
         when(memberService.findMemberByInvestmentId(anyString())).thenThrow(new MemberException("Booooom"));
 
-        assertThrows(MemberException.class, () -> paymentService.bulkSavePayments(bulkPayments));
-
-        then(memberService).should().findMemberByInvestmentId(anyString());
+        paymentService.bulkSavePayments(bulkPayments);
     }
 }
