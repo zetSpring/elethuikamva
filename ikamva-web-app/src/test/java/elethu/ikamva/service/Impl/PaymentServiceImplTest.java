@@ -292,12 +292,14 @@ class PaymentServiceImplTest {
     @Test
     @DisplayName("Finding No Private Companies Expection (Empty List) - Test")
     void bulkSaveCatchBlockThrowsException(){
+        //given
         List<Payment> bulkPayments = new ArrayList<>();
         Payment newPayment = new Payment(2L, 1500.0d, "KK012015", DateFormatter.returnLocalDate(), DateFormatter.returnLocalDateTime(), "KK012015", TransactionType.MONTHLY_CONTRIBUTION, member);
         bulkPayments.add(payment);
         bulkPayments.add(newPayment);
         when(memberService.findMemberByInvestmentId(anyString())).thenThrow(new MemberException("Booooom"));
 
+        //when - then
         paymentService.bulkSavePayments(bulkPayments);
     }
 }
