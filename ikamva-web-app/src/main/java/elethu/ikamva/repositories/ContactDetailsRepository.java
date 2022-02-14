@@ -1,7 +1,7 @@
 package elethu.ikamva.repositories;
 
 import elethu.ikamva.domain.ContactDetails;
-import elethu.ikamva.domain.ContactType;
+import elethu.ikamva.domain.enums.ContactType;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

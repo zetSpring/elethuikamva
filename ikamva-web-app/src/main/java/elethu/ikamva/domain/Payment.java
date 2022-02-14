@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import elethu.ikamva.domain.enums.TransactionType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import org.hibernate.Hibernate;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Getter
@@ -36,15 +38,22 @@ public class Payment implements Serializable {
     /*Member Investment Id*/
     @Column(name = "INVESTMENT_ID")
     private String investmentId;
+
     /*Date of debit or credit or transaction*/
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @Column(name = "PAYMENT_DATE", nullable = false)
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy:HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate paymentDate;
+
+    /*Date of debit or credit or transaction*/
+    @Column(name = "CREATED_DATE", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDateTime createdDate;
+
     @Column(name = "PAYMENT_END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MMM-yyyy:HH:mm:ss")
     private LocalDate endDate;
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "DELETE_REASON")
     private String deleteReason;
@@ -74,16 +83,17 @@ public class Payment implements Serializable {
         this.amount = amount;
         this.investmentId = investmentId;
         this.paymentDate = paymentDate;
+        this.createdDate = createdDate;
         this.paymentReference = paymentReference;
         this.memberPayments = memberPayments;
     }
 
-    public Payment(Long id, Double amount, String investmentId, LocalDate paymentDate, String paymentReference, TransactionType transactionType, Member memberPayments) {
+    public Payment(Long id, Double amount, String investmentId, LocalDate paymentDate, LocalDateTime createdDate, String paymentReference, TransactionType transactionType, Member memberPayments) {
         this.id = id;
         this.amount = amount;
         this.investmentId = investmentId;
         this.paymentDate = paymentDate;
-        this.deleteReason = deleteReason;
+        this.createdDate =createdDate;
         this.paymentReference = paymentReference;
         this.transactionType = transactionType;
         this.memberPayments = memberPayments;

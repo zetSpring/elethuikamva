@@ -25,7 +25,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Entity
 @Table(name = "IKAMVA_MEMBERS", schema = "elethu")
-@JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "payments", "noOfPayments","totalPayments","user"})
+@JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "user"})
 public class Member implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -62,15 +62,16 @@ public class Member implements Serializable {
     @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
     @ToString.Exclude
     private CorpCompany corpMember;
+    @JsonIgnore
     @OneToMany(mappedBy = "memberPayments", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Payment> payments = new LinkedList<>();
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     private List<ContactDetails> memberContacts = new LinkedList<>();
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "userMember")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "userMember")
+    @ToString.Exclude
     private User user;
 
     /*update profile picture*/
@@ -104,27 +105,6 @@ public class Member implements Serializable {
         this.payments = memberPayment;
         this.memberContacts = memberContacts;
     }
-
-    public int getNoOfPayments(){
-        int noOfPayments = 0;
-        if(!payments.isEmpty()){
-            noOfPayments = payments.size();
-        }
-        return noOfPayments;
-    }
-
-    public Double getTotalPayments(){
-        Double total = 0.0;
-        if(!payments.isEmpty()){
-            total = payments.stream()
-                    .filter(payment -> payment.getTransactionType().equals(TransactionType.MONTHLY_CONTRIBUTION))
-                    .map(Payment::getAmount)
-                    .reduce(0.0, Double::sum);
-        }
-        return total;
-    }
-
-
 
     @Override
     public boolean equals(Object o) {

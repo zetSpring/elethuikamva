@@ -3,6 +3,7 @@ package elethu.ikamva.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import elethu.ikamva.domain.enums.ContactType;
 import lombok.*;
 import org.hibernate.Hibernate;
 

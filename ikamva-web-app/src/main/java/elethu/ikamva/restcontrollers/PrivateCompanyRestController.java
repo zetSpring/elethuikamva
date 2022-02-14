@@ -1,7 +1,7 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.PrivateCompany;
-import elethu.ikamva.services.PrivateCompanyService;
+import elethu.ikamva.service.PrivateCompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

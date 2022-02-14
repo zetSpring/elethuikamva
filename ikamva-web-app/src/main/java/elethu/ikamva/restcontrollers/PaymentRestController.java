@@ -1,9 +1,11 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.Payment;
-import elethu.ikamva.services.PaymentService;
+import elethu.ikamva.service.PaymentService;
+import elethu.ikamva.view.PaymentView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/payments")
 public class PaymentRestController {
-
     private final PaymentService paymentService;
 
     @Autowired
@@ -44,26 +45,42 @@ public class PaymentRestController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("search-payments/{fromDate}/{toDate}")
-    List<Payment> findPaymentsBetweenDates(@PathVariable(value = "fromDate")
-                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-                                           @PathVariable(value = "toDate")
-                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-        return paymentService.findPaymentsBetweenDates(fromDate, toDate);
+    ResponseEntity<PaymentView> findPaymentsBetweenDates(@PathVariable(value = "fromDate")
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+                                                         @PathVariable(value = "toDate")
+                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+                                                         @RequestParam(defaultValue = "0") Integer pageNo,
+                                                         @RequestParam(defaultValue = "10") Integer pageSize,
+                                                         @RequestParam(defaultValue = "id") String sortBy) {
+
+        PaymentView paymentsBetweenDates = paymentService.findPaymentsBetweenDates(fromDate, toDate, pageNo, pageSize, sortBy);
+        return new ResponseEntity<>(paymentsBetweenDates, new HttpHeaders(), HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search/{memberInvestId}/{fromDate}/{toDate}")
-    List<Payment> findMemberPaymentsBetweenDates(@PathVariable String memberInvestId,
-                                                @PathVariable(value = "fromDate")
-                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
-                                                @PathVariable(value = "toDate")
-                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate) {
-        return paymentService.findMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate);
+    ResponseEntity<PaymentView> findMemberPaymentsBetweenDates(@PathVariable String memberInvestId,
+                                                               @PathVariable(value = "fromDate")
+                                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
+                                                               @PathVariable(value = "toDate")
+                                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
+                                                               @RequestParam(defaultValue = "0") Integer pageNo,
+                                                               @RequestParam(defaultValue = "10") Integer pageSize,
+                                                               @RequestParam(defaultValue = "id") String sortBy) {
+
+        PaymentView memberPaymentsBetweenDates = paymentService.findMemberPaymentsBetweenDates(memberInvestId, fromDate, toDate, pageNo, pageSize, sortBy);
+        return new ResponseEntity<>(memberPaymentsBetweenDates, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/invest/{investmentId}")
-    List<Payment> getPaymentByInvestId(@PathVariable String investmentId) {
-        return paymentService.findPaymentByInvestId(investmentId);
+    ResponseEntity<PaymentView> getPaymentsByInvestId(@PathVariable String investmentId,
+                                                      @RequestParam(defaultValue = "0") Integer pageNo,
+                                                      @RequestParam(defaultValue = "10") Integer pageSize,
+                                                      @RequestParam(defaultValue = "id") String sortBy) {
+
+        PaymentView paymentsByInvestId = paymentService.findPaymentByInvestId(investmentId, pageNo, pageSize, sortBy);
+
+        return new ResponseEntity<>(paymentsByInvestId, new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

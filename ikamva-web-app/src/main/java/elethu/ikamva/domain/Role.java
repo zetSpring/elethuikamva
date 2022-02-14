@@ -1,15 +1,14 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Getter
 @Setter
@@ -26,13 +25,21 @@ public class Role implements Serializable {
     @Column(name = "ROLE_DESCRIPTION", unique = true, nullable = false)
     private String roleDescription;
     @Column(name = "CREATED_DATE", nullable = false)
-    private Date createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private LocalDateTime createdDate;
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private LocalDateTime endDate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")
-    private Set<User> userRoles = new HashSet<>();
+    public Role(Long id, String roleDescription) {
+        this.id = id;
+        this.roleDescription = roleDescription;
+    }
+
+    @ManyToMany(mappedBy = "roles")
+    @ToString.Exclude
+    private List<User> users = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

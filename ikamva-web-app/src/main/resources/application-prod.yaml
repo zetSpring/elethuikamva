@@ -1,0 +1,65 @@
+#-----------------------------------------------------------------------------------------------------------------------
+server:
+  port: 8080
+#-----------------------------------------------------------------------------------------------------------------------
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2MB
+      max-request-size: 2MB
+  #---------------------------------------------------------------------------------------------------------------------
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: true
+    show-sql: false
+    open-in-view: false
+  #---------------------------------------------------------------------------------------------------------------------
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ikamvadb
+    username: zukoyawa
+    password: ^Wu3H1bE4Gr*nJxPpTME7!t
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: czyawa@gmail.com
+    password: Xk29QYYTd8MM%7A&87gPsdc
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+        transport: smtp
+    protocol: smtp
+#-----------------------------------------------------------------------------------------------------------------------
+logging:
+  file:
+    path: /logs/ikamva-elethu-application.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    elethu.ikamva.services: DEBUG
+#-----------------------------------------------------------------------------------------------------------------------
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: info, health, beans, dump, env, mappings, metrics
+#-----------------------------------------------------------------------------------------------------------------------
+#security:
+#  oauth2:
+#    resource:
+#      filter-order: 3

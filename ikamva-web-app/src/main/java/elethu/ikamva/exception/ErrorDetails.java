@@ -1,5 +1,7 @@
 package elethu.ikamva.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class ErrorDetails {
@@ -14,6 +16,7 @@ public class ErrorDetails {
         this.details = details;
     }
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     public Date getTimestamp() {
         return timestamp;
     }

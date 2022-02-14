@@ -1,7 +1,7 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.Account;
-import elethu.ikamva.services.AccountService;
+import elethu.ikamva.service.AccountService;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
