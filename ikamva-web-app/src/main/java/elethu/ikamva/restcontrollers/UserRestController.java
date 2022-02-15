@@ -21,7 +21,7 @@ public class UserRestController {
         return new ResponseEntity<>(userService.findUserByUsername(username), HttpStatus.FOUND);
     }
 
-    @GetMapping
+    @GetMapping("/")
     ResponseEntity<List<User>> findAllUsers() {
         return new ResponseEntity<>(userService.findAllUsers(), HttpStatus.FOUND);
     }

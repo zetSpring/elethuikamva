@@ -29,7 +29,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: czyawa@gmail.com
-    password: Xk29QYYTd8MM%7A&87gPsdc
+    password: TBC
     properties:
       mail:
         smtp:

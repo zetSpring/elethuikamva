@@ -69,9 +69,11 @@ public class Member implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
     private List<ContactDetails> memberContacts = new LinkedList<>();
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "userMember")
+
     @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "userMember")
     private User user;
 
     /*update profile picture*/
