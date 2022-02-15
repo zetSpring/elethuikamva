@@ -37,7 +37,7 @@ public class Role implements Serializable {
         this.roleDescription = roleDescription;
     }
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany
     @ToString.Exclude
     private List<User> users = new ArrayList<>();
 
