@@ -53,6 +53,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> findAllRoles() {
-        return roleRepository.findAll().stream().filter(role -> Objects.nonNull(role.getEndDate())).collect(Collectors.toList());
+        return roleRepository.findAll()
+                .stream().filter(role -> Objects.isNull(role.getEndDate()))
+                .collect(Collectors.toList());
     }
 }

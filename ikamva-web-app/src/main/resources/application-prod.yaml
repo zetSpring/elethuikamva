@@ -15,16 +15,21 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     generate-ddl: true
     show-sql: false
-    open-in-view: false
+    #open-in-view: false
+    properties:
+      hibernate:
+        default_schema: elethu
   #---------------------------------------------------------------------------------------------------------------------
   datasource:
     url: jdbc:postgresql://localhost:5432/ikamvadb
     username: zukoyawa
     password: ^Wu3H1bE4Gr*nJxPpTME7!t
     driver-class-name: org.postgresql.Driver
+  #---------------------------------------------------------------------------------------------------------------------
   sql:
     init:
       platform: postgres
+  #---------------------------------------------------------------------------------------------------------------------
   mail:
     host: smtp.gmail.com
     port: 587
@@ -54,12 +59,9 @@ management:
   endpoint:
     health:
       show-details: always
+#-----------------------------------------------------------------------------------------------------------------------
   endpoints:
     web:
       exposure:
         include: info, health, beans, dump, env, mappings, metrics
 #-----------------------------------------------------------------------------------------------------------------------
-#security:
-#  oauth2:
-#    resource:
-#      filter-order: 3

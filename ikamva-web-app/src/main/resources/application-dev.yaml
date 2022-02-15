@@ -15,7 +15,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     generate-ddl: true
     show-sql: false
-    open-in-view: false
+    #open-in-view: false
     properties:
       hibernate:
         default_schema: elethu
@@ -63,14 +63,11 @@ management:
     web:
       exposure:
         include: "*"
+#-----------------------------------------------------------------------------------------------------------------------
 info:
   app:
     name: "Elethu Ikamva Portal"
 #-----------------------------------------------------------------------------------------------------------------------
-#security:
-#  oauth2:
-#    resource:
-#      filter-order: 3
 
 
 
