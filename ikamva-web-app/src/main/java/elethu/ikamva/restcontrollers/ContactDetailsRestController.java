@@ -1,7 +1,7 @@
 package elethu.ikamva.restcontrollers;
 
 import elethu.ikamva.domain.ContactDetails;
-import elethu.ikamva.services.ContactDetailsService;
+import elethu.ikamva.service.ContactDetailsService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @Api(value = "Ikamva account ", description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
 public class ContactDetailsRestController {
-
     ContactDetailsService contactDetailsService;
 
     public ContactDetailsRestController(ContactDetailsService contactDetailsService) {

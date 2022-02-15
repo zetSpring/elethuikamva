@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
@@ -36,9 +37,11 @@ public class CorpCompany implements Serializable {
     @Column(name = "REGISTRATION_DATE", nullable = false)
     private String registeredDate;
     @Column(name = "CREATED_DATE", nullable = false, updatable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
     private LocalDateTime createdDate;
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
     private LocalDateTime endDate;
 
     @OneToMany(mappedBy = "corpCompany", cascade = CascadeType.ALL,  fetch = FetchType.LAZY)

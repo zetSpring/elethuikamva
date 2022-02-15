@@ -1,40 +1,59 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Objects;
 
+@Entity
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
-@Table(name = "IKAMVA_USERS", schema = "elethu")
+@Table(name = "USERS_ACCOUNTS", schema = "elethu")
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "USER_ID", unique = true, nullable = false, length = 10, updatable = false)
     private Long id;
-    @Column(name = "USERNAME", nullable = false, unique = true)
+    @Column(name = "USERNAME", unique = true, nullable = false, updatable = false)
     private String username;
     @Column(name = "PASSWORD", nullable = false, unique = true)
     private String password;
     @Column(name = "CREATED_DATE", nullable = false)
-    private Date createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private LocalDateTime createdDate;
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Date endDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private LocalDateTime endDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROLE_ID_FK", nullable = false)
-    @ToString.Exclude
-    private Role role;
+    public User(Long id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "USER_ROLES", joinColumns = {@JoinColumn(name = "user_id")},
+                inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    private Collection<Role> roles = new ArrayList<>();
+
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "MEMBER_ID_PK", nullable = false)
     private Member userMember;

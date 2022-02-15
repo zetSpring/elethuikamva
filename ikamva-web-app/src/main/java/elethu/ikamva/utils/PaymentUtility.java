@@ -1,6 +1,6 @@
 package elethu.ikamva.utils;
 
-import elethu.ikamva.services.PaymentService;
+import elethu.ikamva.service.PaymentService;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;

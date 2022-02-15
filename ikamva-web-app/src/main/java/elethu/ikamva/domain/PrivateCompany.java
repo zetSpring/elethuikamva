@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -11,6 +12,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,13 +35,19 @@ public class PrivateCompany implements Serializable {
     @Column(name = "REGISTRATION_NO", unique = true)
     private String registrationNo;
     @Column(name = "REGISTRATION_DATE")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
     private LocalDate registeredDate;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @Column(name = "CREATED_DATE", nullable = false)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private LocalDate createdDate;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private LocalDateTime createdDate;
+
     @Column(name = "END_DATE")
-    private LocalDate endDate;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JoinColumn(name = "CORPORATE_ID_FK", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    private LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -47,6 +55,7 @@ public class PrivateCompany implements Serializable {
     @JsonIgnore
     @ToString.Exclude
     private CorpCompany corpCompany;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "companyProjects")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<Project> projectCompany;
@@ -55,11 +64,11 @@ public class PrivateCompany implements Serializable {
     @ToString.Exclude
     private Account account;
 
-    public PrivateCompany(LocalDate endDate) {
+    public PrivateCompany(LocalDateTime endDate) {
         this.endDate = endDate;
     }
 
-    public PrivateCompany(String companyName, String registrationNo, LocalDate registeredDate, LocalDate createdDate, CorpCompany corpCompany, List<Project> projectCompany, Account account) {
+    public PrivateCompany(String companyName, String registrationNo, LocalDate registeredDate, LocalDateTime createdDate, CorpCompany corpCompany, List<Project> projectCompany, Account account) {
         this.companyName = companyName;
         this.registrationNo = registrationNo;
         this.registeredDate = registeredDate;
@@ -69,7 +78,7 @@ public class PrivateCompany implements Serializable {
         this.account = account;
     }
 
-    public PrivateCompany(Long id, String companyName, String registrationNo, LocalDate registeredDate, LocalDate createdDate, CorpCompany corpCompany, Account account) {
+    public PrivateCompany(Long id, String companyName, String registrationNo, LocalDate registeredDate, LocalDateTime createdDate, CorpCompany corpCompany, Account account) {
         this.id = id;
         this.companyName = companyName;
         this.registrationNo = registrationNo;

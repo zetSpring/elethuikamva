@@ -1,5 +1,6 @@
 package elethu.ikamva.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
@@ -43,13 +44,16 @@ public class Account implements Serializable {
     @Column(name = "BANK_NAME")
     private String bank;
 
-    @ApiModelProperty(notes = "Datetime at which the record is created the first time.")
     @Column(name = "CREATED_DATE", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    @ApiModelProperty(notes = "Datetime at which the record is created the first time.")
     private LocalDate createdDate;
 
-    @ApiModelProperty(notes = "Datetime at which the record is deleted from the database.")
+
     @Column(name = "END_DATE")
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    @ApiModelProperty(notes = "Datetime at which the record is deleted from the database.")
     private LocalDate endDate;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
