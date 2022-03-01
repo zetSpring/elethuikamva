@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/v1/contacts")
+@RequestMapping("/contacts")
 @RestController
 @Api(value = "Ikamva account ", description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
 public class ContactDetailsRestController {

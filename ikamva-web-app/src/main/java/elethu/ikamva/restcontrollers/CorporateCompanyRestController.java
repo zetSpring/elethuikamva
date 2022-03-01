@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/company")
+@RequestMapping("/company")
 public class CorporateCompanyRestController {
     private final CorpCompanyService corpCompanyService;
 

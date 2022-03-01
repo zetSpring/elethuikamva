@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/private-company")
+@RequestMapping("/private-company")
 @RestController
 public class PrivateCompanyRestController {
     private final PrivateCompanyService privateCompanyService;

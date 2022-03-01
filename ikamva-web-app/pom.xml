@@ -99,7 +99,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.5</version>
+            <version>1.6.6</version>
         </dependency>
         <dependency>
             <groupId>elethu.ikamva</groupId>
@@ -115,7 +115,7 @@
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>1.6.4</version>
+            <version>1.6.5</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
