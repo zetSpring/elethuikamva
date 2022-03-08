@@ -29,9 +29,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role updateRole(Role role) {
-        var foundRole = Optional.ofNullable(roleRepository.findRoleByRoleDescription(role.getRoleDescription()))
+        var foundRole = (roleRepository.findById(role.getId()))
                 .orElseThrow(() -> new RoleException("Could not find a role to update"));
-        role.setId(foundRole.getId());
+        foundRole.setRoleDescription(role.getRoleDescription());
 
         return roleRepository.save(role);
     }

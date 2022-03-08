@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -35,10 +36,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/v1/login/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/v1/login/**", "/user/token/refresh/**").permitAll();
         http.authorizeRequests().antMatchers(GET, "/api/v1/members/**").hasAnyAuthority("USER");
         http.authorizeRequests().antMatchers(GET, "/h2-console/**").hasAnyAuthority("SYS_ADMIN");
         http.authorizeRequests().antMatchers(GET, "/api/v1/statistics/**").hasAnyAuthority("SYS_ADMIN");
+        http.authorizeRequests().antMatchers(GET, "/api/v1/payments/**").hasAnyAuthority("SYS_ADMIN");
+        http.authorizeRequests().antMatchers(POST, "/api/v1/payments/upload/**").hasAnyAuthority("SYS_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

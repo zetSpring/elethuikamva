@@ -18,10 +18,10 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
 
     @Override
     public CorpCompany saveCorpCompany(CorpCompany newCorpCompany) {
-        if(!isCorporateActive(newCorpCompany.getRegistrationNo())){
+        if (!isCorporateActive(newCorpCompany.getRegistrationNo())) {
             newCorpCompany.setCreatedDate(DateFormatter.returnLocalDateTime());
             return corpCompanyRepository.save(newCorpCompany);
-        }else {
+        } else {
             throw new CorpCompanyException("The corporate company with the registration no: " + newCorpCompany.getRegistrationNo() + " already exists");
         }
     }
@@ -31,7 +31,7 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
         Optional<CorpCompany> updateCompany = corpCompanyRepository.findById(updateCorpCompany.getId());
         if (updateCompany.isPresent()) {
             return corpCompanyRepository.save(updateCorpCompany);
-        }else {
+        } else {
             throw new CorpCompanyException(String.format("There is not Corporate Company found with id: %s", updateCorpCompany.getId()));
         }
     }
@@ -65,7 +65,7 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
                 .orElseThrow(() -> new CorpCompanyException("No Corporate Company could be found."));
     }
 
-    public Boolean isCorporateActive(String companyRegistrationNo){
+    public Boolean isCorporateActive(String companyRegistrationNo) {
         return corpCompanyRepository.findCorpCompanyByRegistrationNo(companyRegistrationNo).isPresent();
     }
 }
