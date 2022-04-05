@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class CSVPaymentProcessor {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVPaymentProcessor.class);
     public static String FILETYPE = "text/csv";
 
