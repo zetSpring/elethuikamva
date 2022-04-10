@@ -26,7 +26,7 @@ public class MailServiceImpl implements MailService {
     public void sendEmail(Mail mail) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
-        try{
+        try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setSubject(mail.getSubject());
             mimeMessageHelper.setFrom(new InternetAddress(mail.getFrom(), "zuko.yawa@gmail.com"));
@@ -37,7 +37,7 @@ public class MailServiceImpl implements MailService {
         } catch (MessagingException ex) {
             LOGGER.info("There was an error sending an mail to email address: {}, because", mail.getTo());
             throw new MessagingException(String.format("Mail service Error: %s", ex.getMessage()));
-        }catch (UnsupportedEncodingException e){
+        } catch (UnsupportedEncodingException e) {
             LOGGER.info("Mail Service UnsupportedEncodingException: {}, because", mail.getTo());
         }
     }

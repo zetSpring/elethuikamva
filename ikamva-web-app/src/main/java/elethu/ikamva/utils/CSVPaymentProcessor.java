@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class CSVPaymentProcessor {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVPaymentProcessor.class);
     public static String FILETYPE = "text/csv";
 
@@ -38,7 +37,7 @@ public class CSVPaymentProcessor {
 
             return csvParser.getRecords().stream()
                     .filter(d -> Double.parseDouble(d.get(2)) > 15.0)
-                    .map(d -> new Payment(Double.parseDouble(d.get(2)), InvestmentIdExtractor.ExtractInvestID(d.get(1)), DateFormatter.csvDateExtract(d.get(0)), d.get(1)))
+                    .map(d -> new Payment(Double.parseDouble(d.get(2)), InvestmentIdExtractor.extractInvestID(d.get(1)), DateFormatter.csvDateExtract(d.get(0)), d.get(1)))
                     .sorted(Comparator.comparing(Payment::getInvestmentId))
                     .collect(Collectors.toList());
         } catch (IOException e) {

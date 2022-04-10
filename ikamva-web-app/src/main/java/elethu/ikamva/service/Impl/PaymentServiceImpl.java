@@ -104,7 +104,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentView findPaymentByInvestId(String investmentId, int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo-1, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo - 1, pageSize, Sort.by(sortBy));
         Page<Payment> memberPaymentList = paymentRepository.findPaymentByInvestmentId(investmentId, paging);
 
         return paymentView(memberPaymentList);
@@ -158,11 +158,11 @@ public class PaymentServiceImpl implements PaymentService {
         return transactionType;
     }
 
-    private PaymentView paymentView(Page<Payment> payments){
+    private PaymentView paymentView(Page<Payment> payments) {
         PaymentView paymentView = new PaymentView();
 
         paymentView.setPayments(payments.getContent());
-        paymentView.setPage(String.format("%s of %s",payments.getNumber()+1, payments.getTotalPages()));
+        paymentView.setPage(String.format("%s of %s", payments.getNumber() + 1, payments.getTotalPages()));
         paymentView.setSize(payments.getSize());
         var totalAmountPerPage = payments.getContent().stream()
                 .filter(payment -> payment.getTransactionType().equals(TransactionType.MONTHLY_CONTRIBUTION))
@@ -175,7 +175,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private List<Payment> returnPayments(Page<Payment> payments) {
-        if(payments.hasContent()){
+        if (payments.hasContent()) {
             return payments.getContent();
         } else {
             return new ArrayList<>();

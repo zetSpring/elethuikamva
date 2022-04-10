@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-@RequestMapping("/api/v1/accounts")
+@RequestMapping("/accounts")
 @RestController
 @Api(value = "Elethu Ikamva Investment", description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
 public class AccountRestController {

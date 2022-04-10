@@ -12,7 +12,7 @@ import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
-public class MailConfiguration {
+public class MailConfig {
     //dependency injection
     private final Environment env;
 

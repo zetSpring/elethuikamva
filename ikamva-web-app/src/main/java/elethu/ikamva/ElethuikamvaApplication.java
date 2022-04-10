@@ -30,9 +30,17 @@ public class ElethuikamvaApplication {
             List<Member> members = new ArrayList<>();
             members.add(new Member(null, Long.parseLong("8507235427081"), "ZY012015", "Zuko", "Yawa", DateFormatter.returnLocalDate(), "Male"));
             members.add(new Member(null, Long.parseLong("8606235917081"), "SM012015", "Siphamandla", "Mnyani", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("8601155950089"), "CM012015", "Chuma", "Mketo", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("9003285877085"), "LG012015", "Lusizo", "Ngqiba", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("8707050199084"), "NT012015", "Nomaxabiso", "Tata", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("9006216168086"), "MM012015", "Mmeli", "Mnyani", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("8211095735085"), "BN012015", "Bonginkosi", "Ngcaweni", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("8208237501084"), "LWG012015", "Lwandile", "Gagela ", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("7911245300083"), "SG012015", "Simphiwe", "Gxashe", DateFormatter.returnLocalDate(), "Male"));
+            members.add(new Member(null, Long.parseLong("8903165773083"), "XP012015", "Xolisani", "Pato", DateFormatter.returnLocalDate(), "Male"));
             memberService.saveAllMembers(members);
 
-            paymentService.savePayment(new Payment(1500.0d, "ZY012015", DateFormatter.returnLocalDate().minusDays(10), "ZY012015"));
+            //paymentService.savePayment(new Payment(1500.0d, "ZY012015", DateFormatter.returnLocalDate().minusDays(10), "ZY012015"));
 
             userService.registerUser(new User(null, "ZY012015", "password"));
             userService.registerUser(new User(null, "SM012015", "password"));

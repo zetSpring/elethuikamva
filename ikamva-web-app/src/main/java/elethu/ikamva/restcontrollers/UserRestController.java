@@ -2,21 +2,26 @@ package elethu.ikamva.restcontrollers;
 
 
 import elethu.ikamva.domain.User;
+import elethu.ikamva.service.IkamvaTokensService;
 import elethu.ikamva.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/user")
 public class UserRestController {
     private final UserService userService;
+    private final IkamvaTokensService tokensService;
 
-    @GetMapping("find/{username}")
+    @GetMapping("/find/{username}")
     ResponseEntity<User> findUserByUsername(@PathVariable String username) {
         return new ResponseEntity<>(userService.findUserByUsername(username), HttpStatus.FOUND);
     }
@@ -36,8 +41,13 @@ public class UserRestController {
         return new ResponseEntity<>(userService.addRoleToUser(username, roleDescription), HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     ResponseEntity<User> updateUser(@RequestBody User user) {
         return new ResponseEntity<>(userService.updateUser(user), HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/token/refresh")
+    public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        tokensService.getAccessToken(request, response);
     }
 }

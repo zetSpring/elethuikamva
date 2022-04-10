@@ -4,7 +4,6 @@ import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.User;
 import elethu.ikamva.exception.UserException;
 import elethu.ikamva.repositories.UserRepository;
-import elethu.ikamva.service.ContactDetailsService;
 import elethu.ikamva.service.MemberService;
 import elethu.ikamva.service.RoleService;
 import elethu.ikamva.service.UserService;
@@ -31,7 +30,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final MemberService memberService;
-    private final ContactDetailsService contactService;
     private final RoleService roleService;
 
     @Override
@@ -40,12 +38,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new UserException("Could not find user to authenticate"));
 
         log.info("User found on the database: {}", username);
-
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleDescription())));
-        }else {
+            user.getRoles().forEach(role ->
+                    authorities.add(new SimpleGrantedAuthority(role.getRoleDescription())));
+        } else {
             log.info("The user has no roles, cannot authenticate.");
         }
 
@@ -59,9 +57,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         newUser.setCreatedDate(DateFormatter.returnLocalDateTime());
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
-//        if(!CollectionUtils.isEmpty(newUser.getRole())) {
-//            newUser.getRole().forEach(role -> {
-//
+//        if (!CollectionUtils.isEmpty(newUser.getRoles())) {
+//            newUser.getRoles().forEach(role -> {
+//                this.addRoleToUser(newUser.getUsername(), role.getRoleDescription());
 //            });
 //        }
 
@@ -73,7 +71,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void deleteUser(Long id) {
         var user = userRepository.findById(id).orElseThrow(() ->
                 new UserException(String.format("User with id %s was not found, please correct.", id)));
-
         log.info("User with an id: {} was found and will be deleted", id);
 
         user.setEndDate(DateFormatter.returnLocalDateTime());
@@ -81,21 +78,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User addRoleToUser(String username, String role) {
+    public User addRoleToUser(String username, String roleDescription) {
         var user = Optional.ofNullable(userRepository.findUserByUsername(username))
                 .orElseThrow(() -> new UserException(String.format("Could not find a user with username: %s", username)));
-        var foundRole = roleService.findUserByRoleDescription(role);
+        var role = roleService.findUserByRoleDescription(roleDescription);
+        user.getRoles().add(role);
+        log.info("Adding role: {} to user: {} current roles: {}", roleDescription, username, user.getRoles());
 
-        user.getRoles().add(foundRole);
-
-        log.info("Adding role: {} to user: {} current roles: {}", role, username, user.getRoles());
         return userRepository.save(user);
     }
 
     @Override
     public User updateUser(User user) {
-        return Optional.ofNullable(userRepository.findUserByUsername(user.getUsername()))
-                .orElseThrow(() -> new UserException(String.format("Could not find user: %s to update.", user.getUsername())));
+        return userRepository.save(user);
     }
 
     @Override
