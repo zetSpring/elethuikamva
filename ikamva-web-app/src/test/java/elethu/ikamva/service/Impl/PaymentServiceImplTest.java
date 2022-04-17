@@ -3,6 +3,7 @@ package elethu.ikamva.service.Impl;
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.domain.Payment;
+import elethu.ikamva.domain.enums.Gender;
 import elethu.ikamva.domain.enums.TransactionType;
 import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.exception.PaymentException;
@@ -53,7 +54,7 @@ class PaymentServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        member = new Member(1L, Long.parseLong("0804268523085"), "KK012015", "Emihle", "Yawa", DateFormatter.returnLocalDate(), "Female");
+        member = new Member(1L, Long.parseLong("0804268523085"), "KK012015", "Emihle", "Yawa", DateFormatter.returnLocalDate(), Gender.FEMALE);
         payment = new Payment(1L, 1000.0d, "KK012015", DateFormatter.returnLocalDate().minusDays(1), DateFormatter.returnLocalDateTime(), "KK012015", TransactionType.MONTHLY_CONTRIBUTION, member);
         newPayment = new Payment(2L, 1500.0d, "KK012015", DateFormatter.returnLocalDate().minusDays(10), DateFormatter.returnLocalDateTime(), "KK012015", TransactionType.MONTHLY_CONTRIBUTION, member);
     }

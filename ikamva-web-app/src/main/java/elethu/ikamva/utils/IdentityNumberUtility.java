@@ -1,5 +1,6 @@
 package elethu.ikamva.utils;
 
+import elethu.ikamva.domain.enums.Gender;
 import elethu.ikamva.exception.MemberException;
 
 import java.time.LocalDate;
@@ -10,12 +11,12 @@ import java.time.temporal.ChronoField;
 import java.util.Objects;
 
 public class IdentityNumberUtility {
-    public static String getMemberGender(String genderNumbers) {
+    public static Gender getMemberGender(String genderNumbers) {
         if (Objects.isNull(genderNumbers) || genderNumbers.length() != 4) {
             throw new MemberException("The gender id numbers provided are invalid");
         }
 
-        return Long.parseLong(genderNumbers) >= 5000 ? "M" : "F";
+        return Long.parseLong(genderNumbers) >= 5000 ? Gender.MALE : Gender.FEMALE;
     }
 
     public static LocalDate getDateOfBirth(String identityDob){

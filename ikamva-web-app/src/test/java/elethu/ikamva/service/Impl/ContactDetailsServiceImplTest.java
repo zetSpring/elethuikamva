@@ -4,6 +4,7 @@ import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.ContactDetails;
 import elethu.ikamva.domain.enums.ContactType;
 import elethu.ikamva.domain.Member;
+import elethu.ikamva.domain.enums.Gender;
 import elethu.ikamva.exception.ContactDetailsException;
 import elethu.ikamva.repositories.ContactDetailsRepository;
 import elethu.ikamva.repositories.MemberRepository;
@@ -168,7 +169,7 @@ class ContactDetailsServiceImplTest {
     @Test
     void updateContactDetail() {
         //given
-        Member member = new Member(1L, Long.parseLong("0804268523085"), "KK012015", "Emihle", "Yawa", DateFormatter.returnLocalDate(createdDate), "Female");
+        Member member = new Member(1L, Long.parseLong("0804268523085"), "KK012015", "Emihle", "Yawa", DateFormatter.returnLocalDate(createdDate), Gender.MALE);
         ContactDetails updateEmailContact = new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "KK012015", DateFormatter.returnLocalDate(createdDate));
         when(memberRepository.findMemberByInvestmentId(anyString())).thenReturn(Optional.of(member));
         when(contactDetailsRepository.findMemberContact(anyLong(), any())).thenReturn(Optional.of(emailContact));
