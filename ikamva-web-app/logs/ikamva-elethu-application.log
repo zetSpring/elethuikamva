@@ -1,0 +1,73 @@
+2022-04-30 23:18:35 [restartedMain] INFO  e.ikamva.ElethuikamvaApplication - Starting ElethuikamvaApplication using Java 17.0.1 on Zukos-MacBook-Pro-2.local with PID 28074 (/Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app/target/classes started by zukoyawa in /Users/zukoyawa/IdeaProjects/elethuikamva/ikamva-web-app)
+2022-04-30 23:18:35 [restartedMain] INFO  e.ikamva.ElethuikamvaApplication - The following profiles are active: dev
+2022-04-30 23:18:35 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-04-30 23:18:35 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 127 ms. Found 8 JPA repository interfaces.
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'errorChannel' has been explicitly defined. Therefore, a default PublishSubscribeChannel will be created.
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.i.c.DefaultConfiguringBeanFactoryPostProcessor - No bean named 'integrationHeaderChannelRegistry' has been explicitly defined. Therefore, a default DefaultHeaderChannelRegistry will be created.
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'org.springframework.integration.config.IntegrationManagementConfiguration' of type [org.springframework.integration.config.IntegrationManagementConfiguration] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'integrationChannelResolver' of type [org.springframework.integration.support.channel.BeanFactoryChannelResolver] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'integrationDisposableAutoCreatedBeans' of type [org.springframework.integration.config.annotation.Disposables] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-04-30 23:18:36 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-04-30 23:18:36 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.55]
+2022-04-30 23:18:36 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api/v1] - Initializing Spring embedded WebApplicationContext
+2022-04-30 23:18:36 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1486 ms
+2022-04-30 23:18:37 [restartedMain] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-04-30 23:18:37 [restartedMain] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.32.Final
+2022-04-30 23:18:37 [restartedMain] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-04-30 23:18:37 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2022-04-30 23:18:37 [restartedMain] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2022-04-30 23:18:37 [restartedMain] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2022-04-30 23:18:37 [restartedMain] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-04-30 23:18:37 [restartedMain] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-04-30 23:18:38 [restartedMain] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-04-30 23:18:38 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@743526, org.springframework.security.web.context.SecurityContextPersistenceFilter@4bf88130, org.springframework.security.web.header.HeaderWriterFilter@725013b, org.springframework.security.web.authentication.logout.LogoutFilter@59bb32ae, elethu.ikamva.filter.CustomAuthorizationFilter@10f6c031, elethu.ikamva.filter.CustomAuthenticationFilter@5e7527d0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@7a3f72b5, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@4cb33b21, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@600ddbc3, org.springframework.security.web.session.SessionManagementFilter@2911b0a7, org.springframework.security.web.access.ExceptionTranslationFilter@6fb4b639, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@74d54cce]
+2022-04-30 23:18:39 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2022-04-30 23:18:39 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 15 endpoint(s) beneath base path '/actuator'
+2022-04-30 23:18:39 [restartedMain] INFO  o.s.i.endpoint.EventDrivenConsumer - Adding {logging-channel-adapter:_org.springframework.integration.errorLogger} as a subscriber to the 'errorChannel' channel
+2022-04-30 23:18:39 [restartedMain] INFO  o.s.i.c.PublishSubscribeChannel - Channel 'application.errorChannel' has 1 subscriber(s).
+2022-04-30 23:18:39 [restartedMain] INFO  o.s.i.endpoint.EventDrivenConsumer - started bean '_org.springframework.integration.errorLogger'
+2022-04-30 23:18:39 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/api/v1'
+2022-04-30 23:18:39 [restartedMain] INFO  e.ikamva.ElethuikamvaApplication - Started ElethuikamvaApplication in 4.219 seconds (JVM running for 4.551)
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation::saveAllMembers
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id ZY012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id SM012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id CM012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id LG012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id NT012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id MM012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id BN012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id LWG012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id SG012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService.saveNewMember
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::isMemberActive
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - Member with a member investment id XP012015 does not exist, will create
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::findMemberByInvestmentId
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.UserServiceImpl - Created the user with username: ZY012015
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.MemberServiceImpl - ServiceInvocation - MemberService::findMemberByInvestmentId
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.UserServiceImpl - Created the user with username: SM012015
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.RoleServiceImpl - Creating the role with role description: USER
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.RoleServiceImpl - Creating the role with role description: SYS_ADMIN
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.UserServiceImpl - Adding role: USER to user: ZY012015 current roles: [Role(id=14, roleDescription=USER, createdDate=2022-04-30T23:18:39.614438, endDate=null)]
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.UserServiceImpl - Adding role: SYS_ADMIN to user: ZY012015 current roles: [Role(id=14, roleDescription=USER, createdDate=2022-04-30T23:18:39.614438, endDate=null), Role(id=15, roleDescription=SYS_ADMIN, createdDate=2022-04-30T23:18:39.617421, endDate=null)]
+2022-04-30 23:18:39 [restartedMain] INFO  e.i.service.Impl.UserServiceImpl - Adding role: USER to user: SM012015 current roles: [Role(id=14, roleDescription=USER, createdDate=2022-04-30T23:18:39.614438, endDate=null)]

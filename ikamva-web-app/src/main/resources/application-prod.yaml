@@ -46,11 +46,13 @@ spring:
 #-----------------------------------------------------------------------------------------------------------------------
 logging:
   file:
-    path: /logs/ikamva-elethu-application.log
+    name: /ikamva-elethu-application.log
+    path: src/main/resources/logs
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   level:
-    elethu.ikamva.services: DEBUG
+    elethu.ikamva.services: ERROR
 #-----------------------------------------------------------------------------------------------------------------------
 management:
   endpoint:
