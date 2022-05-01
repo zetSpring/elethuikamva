@@ -1,4 +1,4 @@
-package elethu.ikamva.restcontrollers;
+package elethu.ikamva.controllers;
 
 import elethu.ikamva.domain.Mail;
 import elethu.ikamva.service.MailService;

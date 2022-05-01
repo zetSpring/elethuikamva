@@ -1,8 +1,6 @@
-package elethu.ikamva.restcontrollers;
+package elethu.ikamva.controllers;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class CorporateCompanyRestControllerTest {
 

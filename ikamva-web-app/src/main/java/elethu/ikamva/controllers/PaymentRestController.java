@@ -1,4 +1,4 @@
-package elethu.ikamva.restcontrollers;
+package elethu.ikamva.controllers;
 
 import elethu.ikamva.domain.Payment;
 import elethu.ikamva.service.PaymentService;

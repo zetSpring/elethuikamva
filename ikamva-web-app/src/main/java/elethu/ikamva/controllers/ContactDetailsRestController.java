@@ -1,4 +1,4 @@
-package elethu.ikamva.restcontrollers;
+package elethu.ikamva.controllers;
 
 import elethu.ikamva.domain.ContactDetails;
 import elethu.ikamva.service.ContactDetailsService;

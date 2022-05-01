@@ -1,4 +1,4 @@
-package elethu.ikamva.restcontrollers;
+package elethu.ikamva.controllers;
 
 import elethu.ikamva.domain.CorpCompany;
 import elethu.ikamva.service.CorpCompanyService;
