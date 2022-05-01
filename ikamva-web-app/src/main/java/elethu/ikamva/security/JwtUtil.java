@@ -26,9 +26,7 @@ public class JwtUtil {
         String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        stream(roles).forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role));
-        });
+        stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
 
         return new UsernamePasswordAuthenticationToken(username, null, authorities);
     }
@@ -42,10 +40,14 @@ public class JwtUtil {
         List<String> roles;
         if (Objects.nonNull(user)) {
             username = user.getUsername();
-            roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+            roles = user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toList());
         } else {
             username = ikamvaUser.getUsername();
-            roles = ikamvaUser.getRoles().stream().map(Role::getRoleDescription).collect(Collectors.toList());
+            roles = ikamvaUser.getRoles().stream()
+                    .map(Role::getRoleDescription)
+                    .collect(Collectors.toList());
         }
 
         return JWT.create()

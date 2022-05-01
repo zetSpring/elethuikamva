@@ -2,7 +2,7 @@ package elethu.ikamva.domain.enums;
 
 public enum Gender {
     MALE("Male"),
-    FEMALE("FEMALE");
+    FEMALE("Female");
 
     public final String value;
 
