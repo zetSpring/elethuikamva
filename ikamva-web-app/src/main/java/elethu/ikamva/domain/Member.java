@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import elethu.ikamva.domain.enums.Gender;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.LazyCollection;
@@ -45,7 +46,7 @@ public class Member implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dob;  /*member date of birth*/
     @Column(name = "GENDER", nullable = false)
-    private String gender;
+    private Gender gender;
     @Lob
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Byte[] profilePic;
@@ -85,7 +86,7 @@ public class Member implements Serializable {
         this.endDate = endDate;
     }
 
-    public Member(Long id, Long identityNo, String investmentId, String firstName, String lastName, LocalDate dob, String gender) {
+    public Member(Long id, Long identityNo, String investmentId, String firstName, String lastName, LocalDate dob, Gender gender) {
         this.id = id;
         this.identityNo = identityNo;
         this.investmentId = investmentId;
@@ -95,7 +96,7 @@ public class Member implements Serializable {
         this.gender = gender;
     }
 
-    public Member(Long memberIdentityNo, String investmentId, String firstName, String lastName, LocalDate dob, String gender, LocalDateTime createdDate, CorpCompany corpCompany, List<Payment> memberPayment, List<ContactDetails> memberContacts) {
+    public Member(Long memberIdentityNo, String investmentId, String firstName, String lastName, LocalDate dob, Gender gender, LocalDateTime createdDate, CorpCompany corpCompany, List<Payment> memberPayment, List<ContactDetails> memberContacts) {
         this.identityNo = memberIdentityNo;
         this.investmentId = investmentId;
         this.firstName = firstName;

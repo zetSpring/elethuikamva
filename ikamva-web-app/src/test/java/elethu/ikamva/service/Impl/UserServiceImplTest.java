@@ -4,6 +4,7 @@ import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.domain.Role;
 import elethu.ikamva.domain.User;
+import elethu.ikamva.domain.enums.Gender;
 import elethu.ikamva.repositories.UserRepository;
 import elethu.ikamva.service.MemberService;
 import elethu.ikamva.service.RoleService;
@@ -51,7 +52,7 @@ class UserServiceImplTest {
     void setUp() {
         role = new Role(1L, "USER");
         user = new User(1L, "User", "password");
-        member = new Member(1L, Long.parseLong("1006145427081"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), "Female");
+        member = new Member(1L, Long.parseLong("1006145427081"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), Gender.FEMALE);
     }
 
     @Test

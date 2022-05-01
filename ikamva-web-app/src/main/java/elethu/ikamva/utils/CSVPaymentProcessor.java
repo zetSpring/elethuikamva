@@ -31,7 +31,7 @@ public class CSVPaymentProcessor {
         return FILETYPE.equals(file.getContentType());
     }
 
-    public static List<Payment> BulkCSVFileProcessing(InputStream inputStream) {
+    public static List<Payment> bulkCSVFileProcessing(InputStream inputStream) {
         try (BufferedReader fileReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withHeader("Transaction Date", "Reference No", "Amount", "Balance"));) {
 

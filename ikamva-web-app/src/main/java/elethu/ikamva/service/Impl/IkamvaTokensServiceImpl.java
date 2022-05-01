@@ -35,6 +35,9 @@ public class IkamvaTokensServiceImpl implements IkamvaTokensService {
                 var jwtExpireDate = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
                 var access_token = JwtUtil.generateToken(null, user, request.getRequestURL().toString(), jwtExpireDate);
 
+                log.info("JWT Expire Date: {}", jwtExpireDate);
+                //log.info("JWT Refresh Expire Date: {}", jwtRefreshExpireDate);
+
                 JwtUtil.setTokenResponse(response, access_token, refresh_token);
             } catch (Exception e) {
                 JwtUtil.setAuthorizationError(response, e);

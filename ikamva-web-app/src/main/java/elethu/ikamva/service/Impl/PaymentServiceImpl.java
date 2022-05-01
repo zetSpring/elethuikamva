@@ -137,7 +137,7 @@ public class PaymentServiceImpl implements PaymentService {
         LOGGER.info("ServiceInvocation::ProcessCSVFile");
         try {
             if (CSVPaymentProcessor.isCSVFormat(csvFile)) {
-                List<Payment> csvBulkPayments = CSVPaymentProcessor.BulkCSVFileProcessing(csvFile.getInputStream());
+                List<Payment> csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
                 LOGGER.info("Total csv records: {}", csvBulkPayments.size());
                 this.bulkSavePayments(csvBulkPayments);
             } else {

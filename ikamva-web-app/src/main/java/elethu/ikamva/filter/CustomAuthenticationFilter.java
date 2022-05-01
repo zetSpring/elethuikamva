@@ -37,6 +37,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         var jwtExpireDate = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
         var jwtRefreshExpireDate = new Date(System.currentTimeMillis() + 120 * 60 * 1000);
+        log.info("JWT Expire Date: {}", jwtExpireDate);
+        log.info("JWT Refresh Expire Date: {}", jwtRefreshExpireDate);
         var user = (User) authentication.getPrincipal();
         var access_token = JwtUtil.generateToken(user, null, request.getRequestURL().toString(), jwtExpireDate);
         var refresh_token = JwtUtil.generateToken(user, null, request.getRequestURL().toString(), jwtRefreshExpireDate);
