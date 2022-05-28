@@ -119,11 +119,12 @@ public class MemberServiceImpl implements MemberService {
 
         if (members.isEmpty()) {
             throw new MemberException("There are no members found.");
-        } else {
-            return members.stream()
-                    .filter(member -> member.getEndDate() == null)
-                    .collect(Collectors.toList());
         }
+
+        return members.stream()
+                .filter(member -> Objects.isNull(member.getEndDate()))
+                .collect(Collectors.toList());
+
     }
 
     @Override

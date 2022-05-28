@@ -23,7 +23,7 @@ public class RoleRestController {
     }
 
     @GetMapping("/")
-    ResponseEntity<List<Role>> findAllRoles(){
+    ResponseEntity<List<Role>> findAllRoles() {
         return new ResponseEntity<>(roleService.findAllRoles(), HttpStatus.FOUND);
     }
 

@@ -25,27 +25,25 @@ public class IkamvaTokensServiceImpl implements IkamvaTokensService {
     public void getAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        if (Objects.nonNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-            try {
-                String refresh_token = JwtUtil.retrieveToken(authorizationHeader);
-                var decodedJWT = JwtUtil.decodeJWT(refresh_token);
-                var username = decodedJWT.getSubject();
-                var user = userService.findUserByUsername(username);
-
-                var jwtExpireDate = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
-                var access_token = JwtUtil.generateToken(null, user, request.getRequestURL().toString(), jwtExpireDate);
-
-                log.info("JWT Expire Date: {}", jwtExpireDate);
-                //log.info("JWT Refresh Expire Date: {}", jwtRefreshExpireDate);
-
-                JwtUtil.setTokenResponse(response, access_token, refresh_token);
-            } catch (Exception e) {
-                JwtUtil.setAuthorizationError(response, e);
-            }
-
-        } else {
+        if (Objects.isNull(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
             throw new RuntimeException("Authorization header is missing");
         }
 
+        try {
+            String refresh_token = JwtUtil.retrieveToken(authorizationHeader);
+            var decodedJWT = JwtUtil.decodeJWT(refresh_token);
+            var username = decodedJWT.getSubject();
+            var user = userService.findUserByUsername(username);
+
+            var jwtExpireDate = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
+            var access_token = JwtUtil.generateToken(null, user, request.getRequestURL().toString(), jwtExpireDate);
+
+            log.info("JWT Expire Date: {}", jwtExpireDate);
+            //log.info("JWT Refresh Expire Date: {}", jwtRefreshExpireDate);
+
+            JwtUtil.setTokenResponse(response, access_token, refresh_token);
+        } catch (Exception e) {
+            JwtUtil.setAuthorizationError(response, e);
+        }
     }
 }

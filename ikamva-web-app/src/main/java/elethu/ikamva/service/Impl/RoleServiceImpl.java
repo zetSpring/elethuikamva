@@ -29,7 +29,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role updateRole(Role role) {
-        var foundRole = (roleRepository.findById(role.getId()))
+        var foundRole = roleRepository.findById(role.getId())
                 .orElseThrow(() -> new RoleException("Could not find a role to update"));
         foundRole.setRoleDescription(role.getRoleDescription());
 

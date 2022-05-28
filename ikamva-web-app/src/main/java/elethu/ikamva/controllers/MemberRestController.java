@@ -21,13 +21,13 @@ public class MemberRestController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Member> saveNewMember(@RequestBody Member member){
+    ResponseEntity<Member> saveNewMember(@RequestBody Member member) {
         Member newMember = memberService.saveNewMember(member);
         return new ResponseEntity<>(newMember, HttpStatus.CREATED);
     }
 
     @PostMapping("/save-all")
-    ResponseEntity<String> saveAllMembers(@RequestBody List<Member> members){
+    ResponseEntity<String> saveAllMembers(@RequestBody List<Member> members) {
         memberService.saveAllMembers(members);
         return new ResponseEntity<>("Successfully saved all members", HttpStatus.CREATED);
     }
@@ -40,16 +40,16 @@ public class MemberRestController {
 
     @GetMapping("/invest/{investId}")
     @ResponseStatus(HttpStatus.OK)
-    Member findMemberByInvestId(@PathVariable String investId){
+    Member findMemberByInvestId(@PathVariable String investId) {
         return memberService.findMemberByInvestmentId(investId);
     }
 
 
     @GetMapping("/{id}")
-    Member findMemberById(@PathVariable Long id) throws ResourceNotFoundException{
+    Member findMemberById(@PathVariable Long id) throws ResourceNotFoundException {
         Member findMem = memberService.findMemberById(id);
 
-        if(findMem == null){
+        if (findMem == null) {
             throw new ResourceNotFoundException("Member: " + id + "could not be found.");
         }
 
@@ -58,7 +58,7 @@ public class MemberRestController {
 
     /*Update members*/
     @PutMapping("/update")
-    ResponseEntity<Member> updateMember(@RequestBody Member member){
+    ResponseEntity<Member> updateMember(@RequestBody Member member) {
         Member memUpdate = memberService.updateMember(member);
 
         return new ResponseEntity<>(memUpdate, HttpStatus.OK);

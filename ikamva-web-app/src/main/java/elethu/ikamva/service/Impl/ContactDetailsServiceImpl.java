@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,14 +42,15 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
     @Override
     public List<ContactDetails> deleteContactDetails(String investId) {
-        List<ContactDetails> contactDetails = contactDetailsRepository.findAllContactsByMemberInvestId(investId);
-        if (!CollectionUtils.isEmpty(contactDetails)) {
-            contactDetails.forEach(memberContacts -> {
-                memberContacts.setEndDate(DateFormatter.returnLocalDate());
-                contactDetailsRepository.save(memberContacts);
-            });
-        } else
-            throw new ContactDetailsException("Contact: " + investId + " is already inactive or could not be found");
+        var contactDetails = contactDetailsRepository.findAllContactsByMemberInvestId(investId);
+        if (CollectionUtils.isEmpty(contactDetails)) {
+            throw new ContactDetailsException(String.format("Contact: %s is already inactive or could not be found", investId));
+        }
+
+        contactDetails.forEach(memberContacts -> {
+            memberContacts.setEndDate(DateFormatter.returnLocalDate());
+            contactDetailsRepository.save(memberContacts);
+        });
 
         return contactDetails.stream()
                 .filter(contacts -> contacts.getEndDate() != null)
@@ -65,32 +63,33 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
         if (memberContacts.isEmpty()) {
             throw new ContactDetailsException("There are no contact numbers for customer id: " + investId);
-        } else {
-            return memberContacts;
         }
+
+        return memberContacts;
     }
 
     @Override
     public List<ContactDetails> findAllContactDetails() {
-        List<ContactDetails> contactDetailsList = new ArrayList<>();
-        contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetailsList::add);
+        List<ContactDetails> contactDetails = new ArrayList<>();
+        contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetails::add);
 
-        if (!contactDetailsList.isEmpty()) {
-            return contactDetailsList.stream()
-                    .filter(contacts -> contacts.getEndDate() == null)
-                    .collect(Collectors.toList());
-        } else {
-            throw new ContactDetailsException("There are no contact details found");
+        if (contactDetails.isEmpty()) {
+            throw new ContactDetailsException("There were no contact details found");
         }
+
+        return contactDetails.stream()
+                .filter(contact -> Objects.isNull(contact.getEndDate()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<ContactDetails> findALlContactsByContactType(String contactType) {
-        List<ContactDetails> contactDetailsList = new LinkedList<>();
-        contactDetailsRepository.findContactDetailsByContactType(contactType).iterator().forEachRemaining(contactDetailsList::add);
+        var contactDetailsList = contactDetailsRepository.findContactDetailsByContactType(contactType);
+
         if (contactDetailsList.isEmpty()) {
             throw new ContactDetailsException("There are no contact details for contact type: " + contactType);
         }
+
         return contactDetailsList.stream()
                 .filter(contact -> contact.getEndDate() == null)
                 .collect(Collectors.toList());
@@ -98,11 +97,12 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
     @Override
     public ContactDetails updateContactDetail(ContactDetails contactDetail) throws ContactDetailsException {
-        Optional<Member> memberContact = memberRepository.findMemberByInvestmentId(contactDetail.getMemberInvestId());
-        Member member = memberContact.orElseThrow(() -> new MemberException("Couls not find a member: " + contactDetail.getMemberInvestId() + " to update contact for: "));
-        Optional<ContactDetails> contactDetailsOptional = contactDetailsRepository.findMemberContact(member.getId(), contactDetail.getContactType());
-        ContactDetails updateContact = contactDetailsOptional.
-                orElseThrow(() -> new ContactDetailsException("Could not find a contacts to update with id: " + contactDetail.getContactType()));
+        Member member = memberRepository.findMemberByInvestmentId(contactDetail.getMemberInvestId())
+                .orElseThrow(() -> new MemberException("Couls not find a member: " + contactDetail.getMemberInvestId() + " to update contact for: "));
+
+        ContactDetails updateContact = contactDetailsRepository.findMemberContact(member.getId(), contactDetail.getContactType())
+                .orElseThrow(() -> new ContactDetailsException("Could not find a contacts to update with id: " + contactDetail.getContactType()));
+
 
         updateContact.setContact(contactDetail.getContact());
 

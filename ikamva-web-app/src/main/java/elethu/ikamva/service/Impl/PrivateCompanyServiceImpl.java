@@ -19,11 +19,11 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
 
     @Override
     public PrivateCompany savePrivateCompany(PrivateCompany privateCompany) {
-        if (!isPrivateCompanyActive(privateCompany.getRegistrationNo())) {
-            return privateCompanyRepository.save(privateCompany);
-        } else {
-            throw new PrivateCompanyException(String.format("private company with registration %s already exists.", privateCompany.getRegistrationNo()));
+        if (isPrivateCompanyActive(privateCompany.getRegistrationNo())) {
+            throw new PrivateCompanyException(String.format("Private company with registration %s already exists.", privateCompany.getRegistrationNo()));
         }
+
+        return privateCompanyRepository.save(privateCompany);
     }
 
     @Override
@@ -31,6 +31,7 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
         PrivateCompany deletePtyCompany = privateCompanyRepository.findPrivateCompaniesById(id)
                 .orElseThrow(() -> new PrivateCompanyException(String.format("Could not find pty company with id %d to delete", id)));
         deletePtyCompany.setEndDate(DateFormatter.returnLocalDateTime());
+
         return privateCompanyRepository.save(deletePtyCompany);
     }
 
@@ -50,13 +51,14 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
     public List<PrivateCompany> findAllPrivateCompany() {
         List<PrivateCompany> privateCompanies = new ArrayList<>();
         privateCompanyRepository.findAll().iterator().forEachRemaining(privateCompanies::add);
-        if (!privateCompanies.isEmpty()) {
-            return privateCompanies.stream()
-                    .filter(pty -> pty.getEndDate() == null)
-                    .collect(Collectors.toList());
-        } else {
-            throw new PrivateCompanyException("There were no private companies found please, please add some.");
+
+        if (privateCompanies.isEmpty()) {
+            throw new PrivateCompanyException("There were no private companies found.");
         }
+
+        return privateCompanies.stream()
+                .filter(pty -> pty.getEndDate() == null)
+                .collect(Collectors.toList());
     }
 
     @Override

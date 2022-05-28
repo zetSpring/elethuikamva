@@ -1,4 +1,5 @@
 package elethu.ikamva.service.Impl;
+
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Account;
 import elethu.ikamva.exception.AccountException;
@@ -17,20 +18,20 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account saveNewAccount(Account account) {
-        if(!isAccountActive(account.getAccountNo())){
+        if (!isAccountActive(account.getAccountNo())) {
             account.setCreatedDate(DateFormatter.returnLocalDate());
             return accountRepository.save(account);
-        }else
+        } else
             throw new AccountException("The account: " + account.getAccountNo() + " already exist");
     }
 
     @Override
     public Account deleteAccountByAccountNo(Long accountNo) {
-       var deleteAccount = accountRepository.findAccountsByAccountNo(accountNo)
+        var deleteAccount = accountRepository.findAccountsByAccountNo(accountNo)
                 .orElseThrow(() -> new AccountException("Account number: " + accountNo + " is already inactive or does not exist"));
 
         deleteAccount.setEndDate(DateFormatter.returnLocalDate());
-        return  accountRepository.save(deleteAccount);
+        return accountRepository.save(deleteAccount);
     }
 
     @Override
@@ -38,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
         var deleteAccount = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountException("Account with id: " + id + " is already inactive or does not exist"));
         deleteAccount.setEndDate(DateFormatter.returnLocalDate());
-        return  accountRepository.save(deleteAccount);
+        return accountRepository.save(deleteAccount);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class AccountServiceImpl implements AccountService {
 
         } else {
             return accounts.stream()
-                    .filter( account -> account.getEndDate() == null)
+                    .filter(account -> account.getEndDate() == null)
                     .collect(Collectors.toList());
         }
     }

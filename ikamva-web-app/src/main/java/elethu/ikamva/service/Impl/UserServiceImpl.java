@@ -101,6 +101,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public List<User> findAllUsers() {
-        return userRepository.findAll().stream().filter(user -> Objects.isNull(user.getEndDate())).collect(Collectors.toList());
+        return userRepository.findAll()
+                .stream()
+                .filter(user -> Objects.isNull(user.getEndDate()))
+                .collect(Collectors.toList());
     }
 }

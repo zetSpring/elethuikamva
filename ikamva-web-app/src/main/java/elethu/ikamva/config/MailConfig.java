@@ -15,7 +15,6 @@ import java.util.Properties;
 public class MailConfig {
     //dependency injection
     private final Environment env;
-
     @Bean
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

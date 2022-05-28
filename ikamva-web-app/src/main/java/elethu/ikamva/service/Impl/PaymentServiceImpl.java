@@ -26,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
@@ -39,19 +41,19 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment savePayment(Payment payment) {
-        if (!isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate())) {
-            Member member = memberService.findMemberByInvestmentId(payment.getInvestmentId());
-            if (Objects.nonNull(member)) {
-                payment.setMemberPayments(member);
-                payment.setTransactionType(getTransactionType(payment.getAmount()));
-                payment.setCreatedDate(DateFormatter.returnLocalDateTime());
-            } else {
-                throw new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", could not add new payment for: " + payment.getInvestmentId());
-            }
-
-            return paymentRepository.save(payment);
-        } else
+        if (isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate())) {
             throw new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", there is already a a similar payment on the same day fot the same member: " + payment.getInvestmentId());
+        }
+
+        Member member = Optional.of(memberService.findMemberByInvestmentId(payment.getInvestmentId()))
+                .orElseThrow(() ->
+                        new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", could not add new payment for:: " + payment.getInvestmentId()));
+
+        payment.setMemberPayments(member);
+        payment.setTransactionType(getTransactionType(payment.getAmount()));
+        payment.setCreatedDate(DateFormatter.returnLocalDateTime());
+
+        return paymentRepository.save(payment);
     }
 
     @Override
@@ -59,17 +61,18 @@ public class PaymentServiceImpl implements PaymentService {
         AtomicInteger successCounter = new AtomicInteger(0);
         AtomicInteger failedCounter = new AtomicInteger(0);
         payments.forEach(payment -> {
-            boolean checkPayment = isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate());
+            boolean paymentExists = isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate());
             try {
                 Member member = memberService.findMemberByInvestmentId(payment.getInvestmentId());
-                if (!checkPayment) {
+                if (paymentExists) {
+                    LOGGER.error("Payment for investment id: {} with amount: {} on date: {} already exists.", payment.getInvestmentId()
+                            , payment.getAmount(), payment.getPaymentDate());
+                } else {
                     payment.setMemberPayments(member);
                     payment.setCreatedDate(DateFormatter.returnLocalDateTime());
                     payment.setTransactionType(getTransactionType(payment.getAmount()));
                     paymentRepository.save(payment);
                     successCounter.getAndIncrement();
-                } else {
-                    LOGGER.error("Payment for investment id: {} with amount: {} on date: {} already exists.", payment.getInvestmentId(), payment.getAmount(), payment.getPaymentDate());
                 }
             } catch (MemberException e) {
                 failedCounter.getAndIncrement();
@@ -90,8 +93,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment deletePayment(Long id) {
-        Optional<Payment> paymentOptional = paymentRepository.findById(id);
-        Payment pay = paymentOptional.orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for with id: " + id));
+        Payment pay = paymentRepository.findById(id)
+                .orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for with id: " + id));
+
         pay.setEndDate(DateFormatter.returnLocalDate());
 
         return paymentRepository.save(pay);
@@ -99,7 +103,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment findPaymentById(Long id) {
-        return paymentRepository.findPaymentById(id).orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for payment id: " + id));
+        return paymentRepository.findPaymentById(id)
+                .orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for payment id: " + id));
     }
 
     @Override
@@ -136,14 +141,14 @@ public class PaymentServiceImpl implements PaymentService {
     public void processCSVFile(MultipartFile csvFile) {
         LOGGER.info("ServiceInvocation::ProcessCSVFile");
         try {
-            if (CSVPaymentProcessor.isCSVFormat(csvFile)) {
-                List<Payment> csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
-                LOGGER.info("Total csv records: {}", csvBulkPayments.size());
-                this.bulkSavePayments(csvBulkPayments);
-            } else {
+            if (!CSVPaymentProcessor.isCSVFormat(csvFile) || csvFile.isEmpty()) {
                 LOGGER.error("Error with a file type");
                 throw new FileNotFoundException("The file uploaded is not a CSV file, please correct and upload again");
             }
+
+            List<Payment> csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
+            LOGGER.info("Total csv records: {}", csvBulkPayments.size());
+            this.bulkSavePayments(csvBulkPayments);
         } catch (IOException e) {
             LOGGER.info("There was a problem with the usre of the CSV processor");
             throw new PaymentException("There was a problem processing uploaded file, please make sure its a csv file.");
@@ -151,11 +156,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private TransactionType getTransactionType(double amount) {
-        TransactionType transactionType = TransactionType.BANK_CHARGES;
-        if (amount > 0) {
-            transactionType = TransactionType.MONTHLY_CONTRIBUTION;
-        }
-        return transactionType;
+        return amount > 0 ? TransactionType.MONTHLY_CONTRIBUTION : TransactionType.BANK_CHARGES;
     }
 
     private PaymentView paymentView(Page<Payment> payments) {
@@ -164,12 +165,13 @@ public class PaymentServiceImpl implements PaymentService {
         paymentView.setPayments(payments.getContent());
         paymentView.setPage(String.format("%s of %s", payments.getNumber() + 1, payments.getTotalPages()));
         paymentView.setSize(payments.getSize());
-        var totalAmountPerPage = payments.getContent().stream()
+        var pageTotal = payments.getContent()
+                .stream()
                 .filter(payment -> payment.getTransactionType().equals(TransactionType.MONTHLY_CONTRIBUTION))
                 .map(Payment::getAmount)
                 .reduce(0.0, Double::sum);
 
-        paymentView.setTotal(totalAmountPerPage);
+        paymentView.setTotal(pageTotal);
 
         return paymentView;
     }
