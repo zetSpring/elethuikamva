@@ -9,31 +9,41 @@ import elethu.ikamva.repositories.ContactDetailsRepository;
 import elethu.ikamva.repositories.MemberRepository;
 import elethu.ikamva.service.ContactDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ContactDetailsServiceImpl implements ContactDetailsService {
-    private final ContactDetailsRepository contactDetailsRepository;
     private final MemberRepository memberRepository;
+    private final ContactDetailsRepository contactDetailsRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(ContactDetailsServiceImpl.class);
 
     @Override
     public ContactDetails saveContactDetail(ContactDetails contactDetails) {
-        Member member = memberRepository.findMemberByInvestmentId(contactDetails.getMemberInvestId().toUpperCase())
-                .orElseThrow(() -> new ContactDetailsException(String.format("Could not find member with investment id %s to add contacts too.", contactDetails.getMemberInvestId())));
+        LOGGER.info("Service Invoccation::{}", getClass().getSimpleName());
+        var investId = contactDetails.getMemberInvestId().toUpperCase();
+        var member = memberRepository.findMemberByInvestmentId(investId)
+                .orElseThrow(() -> new ContactDetailsException(String.format("Could not find member with investment id %s to add contacts too.", investId)));
         contactDetails.setMembers(member);
         contactDetails.setCreatedDate(DateFormatter.returnLocalDate());
-
+        
+        LOGGER.info("Saving contact details for member: {}", investId);
         return contactDetailsRepository.save(contactDetails);
     }
 
     @Override
     public ContactDetails deleteContactById(Long id) throws ContactDetailsException {
-        ContactDetails contact = contactDetailsRepository.findById(id)
+        var contact = contactDetailsRepository.findById(id)
                 .orElseThrow(() -> new ContactDetailsException(String.format("Could not find contact with id: %s to delete.", id)));
         contact.setEndDate(DateFormatter.returnLocalDate());
 
@@ -59,9 +69,9 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
 
     @Override
     public List<ContactDetails> findMemberContactByInvestId(String investId) {
-        List<ContactDetails> memberContacts = contactDetailsRepository.findAllContactsByMemberInvestId(investId.toUpperCase());
+        var memberContacts = contactDetailsRepository.findAllContactsByMemberInvestId(investId.toUpperCase());
 
-        if (memberContacts.isEmpty()) {
+        if (CollectionUtils.isEmpty(memberContacts)) {
             throw new ContactDetailsException("There are no contact numbers for customer id: " + investId);
         }
 
@@ -73,8 +83,10 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
         List<ContactDetails> contactDetails = new ArrayList<>();
         contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetails::add);
 
-        if (contactDetails.isEmpty()) {
-            throw new ContactDetailsException("There were no contact details found");
+        if (CollectionUtils.isEmpty(contactDetails)) {
+            var msg = "There were no contact details found";
+            LOGGER.info(msg);
+            throw new ContactDetailsException(msg);
         }
 
         return contactDetails.stream()
@@ -87,7 +99,9 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
         var contactDetailsList = contactDetailsRepository.findContactDetailsByContactType(contactType);
 
         if (contactDetailsList.isEmpty()) {
-            throw new ContactDetailsException("There are no contact details for contact type: " + contactType);
+            var msg = String.format("There are no contact details for contact type: %s", contactType);
+            LOGGER.info(msg);
+            throw new ContactDetailsException(msg);
         }
 
         return contactDetailsList.stream()

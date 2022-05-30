@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -61,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService {
         AtomicInteger successCounter = new AtomicInteger(0);
         AtomicInteger failedCounter = new AtomicInteger(0);
         payments.forEach(payment -> {
-            boolean paymentExists = isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate());
+            var paymentExists = isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate());
             try {
                 Member member = memberService.findMemberByInvestmentId(payment.getInvestmentId());
                 if (paymentExists) {
@@ -93,9 +92,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment deletePayment(Long id) {
-        Payment pay = paymentRepository.findById(id)
+        var pay = paymentRepository.findById(id)
                 .orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for with id: " + id));
-
         pay.setEndDate(DateFormatter.returnLocalDate());
 
         return paymentRepository.save(pay);
@@ -109,16 +107,16 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentView findPaymentByInvestId(String investmentId, int pageNo, int pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo - 1, pageSize, Sort.by(sortBy));
-        Page<Payment> memberPaymentList = paymentRepository.findPaymentByInvestmentId(investmentId, paging);
+        var paging = PageRequest.of(pageNo - 1, pageSize, Sort.by(sortBy));
+        var memberPaymentList = paymentRepository.findPaymentByInvestmentId(investmentId, paging);
 
         return paymentView(memberPaymentList);
     }
 
     @Override
     public PaymentView findPaymentsBetweenDates(LocalDate fromDate, LocalDate toDate, int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Page<Payment> memberPayments = paymentRepository.findPaymentsBetween(DateFormatter.returnLocalDate(fromDate.toString()),
+        var pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        var memberPayments = paymentRepository.findPaymentsBetween(DateFormatter.returnLocalDate(fromDate.toString()),
                 DateFormatter.returnLocalDate(toDate.toString()), pageable);
 
         return paymentView(memberPayments);
@@ -126,8 +124,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentView findMemberPaymentsBetweenDates(String memberInvestId, LocalDate fromDate, LocalDate toDate, int pageNo, int pageSize, String sortBy) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
-        Page<Payment> memberPayments = paymentRepository.findPaymentsByDateRangeForMember(memberInvestId, fromDate, toDate, pageable);
+        var pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        var memberPayments = paymentRepository.findPaymentsByDateRangeForMember(memberInvestId, fromDate, toDate, pageable);
 
         return paymentView(memberPayments);
     }
@@ -146,7 +144,7 @@ public class PaymentServiceImpl implements PaymentService {
                 throw new FileNotFoundException("The file uploaded is not a CSV file, please correct and upload again");
             }
 
-            List<Payment> csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
+            var csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
             LOGGER.info("Total csv records: {}", csvBulkPayments.size());
             this.bulkSavePayments(csvBulkPayments);
         } catch (IOException e) {
@@ -177,10 +175,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private List<Payment> returnPayments(Page<Payment> payments) {
-        if (payments.hasContent()) {
-            return payments.getContent();
-        } else {
-            return new ArrayList<>();
-        }
+        return payments.hasContent() ? payments.getContent() : Collections.emptyList();
     }
 }

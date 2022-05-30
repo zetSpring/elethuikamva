@@ -1,7 +1,6 @@
 package elethu.ikamva.service.Impl;
 
 import elethu.ikamva.commons.DateFormatter;
-import elethu.ikamva.domain.ContactDetails;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.repositories.ContactDetailsRepository;
@@ -33,23 +32,25 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member saveNewMember(Member nemMember) {
         LOGGER.info("ServiceInvocation - MemberService.saveNewMember");
-        if (!isMemberActive(nemMember.getInvestmentId())) {
-            LOGGER.info("Member with a member investment id {} does not exist, will create", nemMember.getInvestmentId());
-            var gender = IdentityNumberUtility.getMemberGender(nemMember.getIdentityNo().toString().substring(6, 10));
-            nemMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
-            nemMember.setDob(IdentityNumberUtility.getDateOfBirth(nemMember.getIdentityNo().toString().substring(0, 6)));
-            nemMember.setGender(gender);
-            nemMember.setCreatedDate(DateFormatter.returnLocalDateTime());
-            if (!CollectionUtils.isEmpty(nemMember.getMemberContacts())) {
-                nemMember.getMemberContacts().forEach(contact -> {
-                    contact.setCreatedDate(DateFormatter.returnLocalDate());
-                    contact.setMembers(nemMember);
-                });
-            }
-            return memberRepository.save(nemMember);
-        } else {
+
+        if (isMemberActive(nemMember.getInvestmentId())) {
             return updateMember(nemMember);
         }
+
+        LOGGER.info("Member with a member investment id {} does not exist, will create", nemMember.getInvestmentId());
+        var gender = IdentityNumberUtility.getMemberGender(nemMember.getIdentityNo().toString().substring(6, 10));
+        var dob = IdentityNumberUtility.getDateOfBirth(nemMember.getIdentityNo().toString().substring(0, 6));
+        nemMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
+        nemMember.setDob(dob);
+        nemMember.setGender(gender);
+        nemMember.setCreatedDate(DateFormatter.returnLocalDateTime());
+        if (!CollectionUtils.isEmpty(nemMember.getMemberContacts())) {
+            nemMember.getMemberContacts().forEach(contact -> {
+                contact.setCreatedDate(DateFormatter.returnLocalDate());
+                contact.setMembers(nemMember);
+            });
+        }
+        return memberRepository.save(nemMember);
     }
 
     @Override
@@ -58,20 +59,20 @@ public class MemberServiceImpl implements MemberService {
         var member = memberRepository.findById(updateMember.getId())
                 .orElseThrow(() -> new MemberException(String.format("Member with investment id: %s does not exist to update.", updateMember.getInvestmentId())));
 
-        if (Objects.nonNull(member.getEndDate())) {
-            updateMember.setGender(IdentityNumberUtility.getMemberGender(updateMember.getIdentityNo().toString().substring(6, 10)));
-            updateMember.setDob(IdentityNumberUtility.getDateOfBirth(updateMember.getIdentityNo().toString().substring(0, 6)));
-
-            updateMember.setEndDate(null);
-            updateMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
-            if (!CollectionUtils.isEmpty(updateMember.getMemberContacts())) {
-                updateMember.getMemberContacts().forEach(contact -> {
-                    contact.setCreatedDate(DateFormatter.returnLocalDate());
-                    contact.setEndDate(null);
-                    contact.setMembers(updateMember);
-                });
-            }
+        var gender = IdentityNumberUtility.getMemberGender(updateMember.getIdentityNo().toString().substring(6, 10));
+        var dob = IdentityNumberUtility.getDateOfBirth(updateMember.getIdentityNo().toString().substring(0, 6));
+        updateMember.setGender(gender);
+        updateMember.setDob(dob);
+        updateMember.setEndDate(null);
+        updateMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
+        if (!CollectionUtils.isEmpty(updateMember.getMemberContacts())) {
+            updateMember.getMemberContacts().forEach(contact -> {
+                contact.setCreatedDate(DateFormatter.returnLocalDate());
+                contact.setEndDate(null);
+                contact.setMembers(updateMember);
+            });
         }
+
         return memberRepository.save(updateMember);
     }
 
@@ -86,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
         LOGGER.info("ServiceInvocation - MemberService::deleteMember");
         var deleteMember = memberRepository.findMemberByInvestmentId(investmentId)
                 .orElseThrow(() -> new MemberException("Member:" + investmentId + " is already inactive or could not been found"));
-        List<ContactDetails> memberContacts = deleteMember.getMemberContacts();
+        var memberContacts = deleteMember.getMemberContacts();
         deleteMember.setEndDate(DateFormatter.returnLocalDateTime());
         if (!CollectionUtils.isEmpty(memberContacts)) {
             memberContacts.forEach(contactDetails -> {
@@ -117,14 +118,13 @@ public class MemberServiceImpl implements MemberService {
         List<Member> members = new LinkedList<>();
         memberRepository.findAll().iterator().forEachRemaining(members::add);
 
-        if (members.isEmpty()) {
+        if (CollectionUtils.isEmpty(members)) {
             throw new MemberException("There are no members found.");
         }
 
         return members.stream()
                 .filter(member -> Objects.isNull(member.getEndDate()))
                 .collect(Collectors.toList());
-
     }
 
     @Override

@@ -50,7 +50,7 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
         corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompanyList::add);
 
         if (corpCompanyList.isEmpty()) {
-            throw new CorpCompanyException("There are no Corporate  companies found.");
+            throw new CorpCompanyException("There are no corporate companies found.");
         }
 
         return corpCompanyList.stream()
