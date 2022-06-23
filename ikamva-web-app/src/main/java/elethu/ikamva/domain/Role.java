@@ -1,6 +1,7 @@
 package elethu.ikamva.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -39,6 +40,7 @@ public class Role implements Serializable {
 
     @ManyToMany
     @ToString.Exclude
+    @JsonIgnore
     private List<User> users = new ArrayList<>();
 
     @Override

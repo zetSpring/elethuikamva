@@ -47,8 +47,8 @@ class MemberServiceImplTest {
         //given
         Member member = new Member(1L, Long.parseLong("1006145427081"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), Gender.FEMALE);
         List<ContactDetails> memberContacts = new ArrayList<>();
-        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
-        memberContacts.add(new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015", DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015", DateFormatter.returnLocalDate("2008-04-26")));
         member.setMemberContacts(memberContacts);
         when(corpCompanyRepository.findCorpCompany()).thenReturn(Optional.of(new CorpCompany(1L, "12345", "Elethu Ikamva", "2022-01-01", DateFormatter.returnLocalDateTime())));
         when(memberRepository.save(any())).thenReturn(member);
@@ -70,15 +70,15 @@ class MemberServiceImplTest {
         //given
         Member member = new Member(1L, Long.parseLong("1006145427081"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), Gender.FEMALE);
         List<ContactDetails> memberContacts = new ArrayList<>();
-        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
-        memberContacts.add(new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015", DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015", DateFormatter.returnLocalDate("2008-04-26")));
         member.setMemberContacts(memberContacts);
 
         Member existingMember = new Member(1L, Long.parseLong("1006145427081"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), Gender.FEMALE);
         existingMember.setEndDate(DateFormatter.returnLocalDateTime());
         List<ContactDetails> existingMemberContacts = new ArrayList<>();
-        existingMemberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
-        existingMemberContacts.add(new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        existingMemberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "EY012015", DateFormatter.returnLocalDate("2008-04-26")));
+        existingMemberContacts.add(new ContactDetails(2L, "emihle.yawa@ikamva.com", ContactType.EMAIL, "EY012015", DateFormatter.returnLocalDate("2008-04-26")));
         existingMember.setMemberContacts(existingMemberContacts);
 
         when(memberRepository.findMemberByInvestmentId(anyString())).thenReturn(Optional.of(existingMember));
@@ -99,13 +99,13 @@ class MemberServiceImplTest {
     }
 
 
-
     @Test
     void updateMember() {
         //given
         Member member = new Member(1L, Long.parseLong("1007238523085"), "EY012015", "Emihle", "Yawa", DateFormatter.returnLocalDate("2008-04-26"), Gender.FEMALE);
         when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member));
         when(memberRepository.save(any(Member.class))).thenReturn(member);
+        when(corpCompanyRepository.findCorpCompany()).thenReturn(Optional.of(new CorpCompany(1L, "12345", "Elethu Ikamva", "2022-01-01", DateFormatter.returnLocalDateTime())));
 
         //when
         Member updateMember = memberService.updateMember(member);
@@ -119,16 +119,16 @@ class MemberServiceImplTest {
     @Test
     void saveAllMembers() {
         //given
-        Member member =  new Member(1L, Long.parseLong("8507235427081"), "TM012015", "Thabo", "Mbheki", DateFormatter.returnLocalDate("2008-04-26"), Gender.MALE);
+        Member member = new Member(1L, Long.parseLong("8507235427081"), "TM012015", "Thabo", "Mbheki", DateFormatter.returnLocalDate("2008-04-26"), Gender.MALE);
         List<ContactDetails> memberContacts = new ArrayList<>();
-        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
-        memberContacts.add(new ContactDetails(1L, "thabo.mbeki@ikamva.com", ContactType.EMAIL, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "TM012015", DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "thabo.mbeki@ikamva.com", ContactType.EMAIL, "TM012015", DateFormatter.returnLocalDate("2008-04-26")));
         member.setMemberContacts(memberContacts);
 
-        Member member1 =  new Member(2L, Long.parseLong("85072354207081"), "NN012015", "Nomvula", "Nonkonyane", DateFormatter.returnLocalDate("2021-04-26"), Gender.FEMALE);
+        Member member1 = new Member(2L, Long.parseLong("85072354207081"), "NN012015", "Nomvula", "Nonkonyane", DateFormatter.returnLocalDate("2021-04-26"), Gender.FEMALE);
         List<ContactDetails> member1Contacts = new ArrayList<>();
-        member1Contacts.add(new ContactDetails(1L, "07287654321", ContactType.CELLPHONE, "NN012015",  DateFormatter.returnLocalDate("2021-04-26")));
-        member1Contacts.add(new ContactDetails(1L, "nomvula.nonkonyane@ikamva.com", ContactType.EMAIL, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        member1Contacts.add(new ContactDetails(1L, "07287654321", ContactType.CELLPHONE, "NN012015", DateFormatter.returnLocalDate("2021-04-26")));
+        member1Contacts.add(new ContactDetails(1L, "nomvula.nonkonyane@ikamva.com", ContactType.EMAIL, "TM012015", DateFormatter.returnLocalDate("2008-04-26")));
         member1.setMemberContacts(member1Contacts);
 
         List<Member> members = new ArrayList<>();
@@ -151,10 +151,10 @@ class MemberServiceImplTest {
     @Test
     void deleteMember() {
         //given
-        Member member =  new Member(1L, Long.parseLong("9010105433086"), "TM012015", "Thabo", "Mbheki", DateFormatter.returnLocalDate("2008-04-26"), Gender.MALE);
+        Member member = new Member(1L, Long.parseLong("9010105433086"), "TM012015", "Thabo", "Mbheki", DateFormatter.returnLocalDate("2008-04-26"), Gender.MALE);
         List<ContactDetails> memberContacts = new ArrayList<>();
-        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
-        memberContacts.add(new ContactDetails(1L, "thabo.mbeki@ikamva.com", ContactType.EMAIL, "TM012015",  DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "0712345678", ContactType.CELLPHONE, "TM012015", DateFormatter.returnLocalDate("2008-04-26")));
+        memberContacts.add(new ContactDetails(1L, "thabo.mbeki@ikamva.com", ContactType.EMAIL, "TM012015", DateFormatter.returnLocalDate("2008-04-26")));
         member.setMemberContacts(memberContacts);
         when(memberRepository.findMemberByInvestmentId(anyString())).thenReturn(Optional.of(member));
         when(memberRepository.save(any())).thenReturn(member);
@@ -219,7 +219,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("Find All Member Empty List Throws Exception - Test")
-    void findAllMembersThrowsException(){
+    void findAllMembersThrowsException() {
         //given
         List<Member> emptyMembers = new ArrayList<>();
         when(memberRepository.findAll()).thenReturn(emptyMembers);

@@ -64,7 +64,7 @@ public class PaymentRestController {
                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fromDate,
                                                                @PathVariable(value = "toDate")
                                                                @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate toDate,
-                                                               @RequestParam(defaultValue = "0") Integer pageNo,
+                                                               @RequestParam(defaultValue = "1") Integer pageNo,
                                                                @RequestParam(defaultValue = "10") Integer pageSize,
                                                                @RequestParam(defaultValue = "id") String sortBy) {
 
@@ -74,7 +74,7 @@ public class PaymentRestController {
 
     @GetMapping("/invest/{investmentId}")
     ResponseEntity<PaymentView> getPaymentsByInvestId(@PathVariable String investmentId,
-                                                      @RequestParam(defaultValue = "0") Integer pageNo,
+                                                      @RequestParam(defaultValue = "1") Integer pageNo,
                                                       @RequestParam(defaultValue = "10") Integer pageSize,
                                                       @RequestParam(defaultValue = "id") String sortBy) {
 
