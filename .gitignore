@@ -18,11 +18,9 @@ HELP.md
 *.ipr
 *.ids
 *.orig
-**/**/*.log
-**/**/*.log*
-**/*.log*
-/**/**/.log
 **/*.log
+/ikamva-web-app/logs/*.log
+/ikamva-web-app/logs/ikamva-elethu-application.log
 
 ### NetBeans ###
 /nbproject/private/
