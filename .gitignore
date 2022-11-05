@@ -18,8 +18,11 @@ HELP.md
 *.ipr
 *.ids
 *.orig
-*.log*
+**/**/*.log
+**/**/*.log*
 **/*.log*
+/**/**/.log
+**/*.log
 
 ### NetBeans ###
 /nbproject/private/
@@ -45,4 +48,4 @@ HELP.md
 /deploy/git
 /ikamva-web-app/target/
 /ikamva-payment-bulk-processing/target/
-/ikamva-web-app/logs/*.log
+/ikamva-web-app/logs/
