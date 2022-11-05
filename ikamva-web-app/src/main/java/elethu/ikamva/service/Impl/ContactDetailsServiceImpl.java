@@ -1,5 +1,6 @@
 package elethu.ikamva.service.Impl;
 
+import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.ContactDetails;
 import elethu.ikamva.domain.Member;
@@ -29,6 +30,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactDetailsServiceImpl.class);
 
     @Override
+    @ExecutionTime
     public ContactDetails saveContactDetail(ContactDetails contactDetails) {
         LOGGER.info("Service Invoccation::{}", getClass().getSimpleName());
         var investId = contactDetails.getMemberInvestId().toUpperCase();
@@ -42,6 +44,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public ContactDetails deleteContactById(Long id) throws ContactDetailsException {
         var contact = contactDetailsRepository.findById(id)
                 .orElseThrow(() -> new ContactDetailsException(String.format("Could not find contact with id: %s to delete.", id)));
@@ -51,6 +54,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public List<ContactDetails> deleteContactDetails(String investId) {
         var contactDetails = contactDetailsRepository.findAllContactsByMemberInvestId(investId);
         if (CollectionUtils.isEmpty(contactDetails)) {
@@ -68,6 +72,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public List<ContactDetails> findMemberContactByInvestId(String investId) {
         var memberContacts = contactDetailsRepository.findAllContactsByMemberInvestId(investId.toUpperCase());
 
@@ -79,6 +84,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public List<ContactDetails> findAllContactDetails() {
         List<ContactDetails> contactDetails = new ArrayList<>();
         contactDetailsRepository.findAll().iterator().forEachRemaining(contactDetails::add);
@@ -95,6 +101,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public List<ContactDetails> findALlContactsByContactType(String contactType) {
         var contactDetailsList = contactDetailsRepository.findContactDetailsByContactType(contactType);
 
@@ -110,6 +117,7 @@ public class ContactDetailsServiceImpl implements ContactDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public ContactDetails updateContactDetail(ContactDetails contactDetail) throws ContactDetailsException {
         Member member = memberRepository.findMemberByInvestmentId(contactDetail.getMemberInvestId())
                 .orElseThrow(() -> new MemberException("Couls not find a member: " + contactDetail.getMemberInvestId() + " to update contact for: "));

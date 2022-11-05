@@ -1,5 +1,6 @@
 package elethu.ikamva.service.Impl;
 
+import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.domain.Mail;
 import elethu.ikamva.service.MailService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class MailServiceImpl implements MailService {
     private final JavaMailSender mailSender;
 
     @Override
+    @ExecutionTime
     public void sendEmail(Mail mail) throws MessagingException {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 

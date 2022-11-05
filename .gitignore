@@ -19,6 +19,7 @@ HELP.md
 *.ids
 *.orig
 *.log
+/.log
 
 ### NetBeans ###
 /nbproject/private/

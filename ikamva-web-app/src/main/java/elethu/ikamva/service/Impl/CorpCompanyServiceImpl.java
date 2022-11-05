@@ -1,5 +1,6 @@
 package elethu.ikamva.service.Impl;
 
+import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.CorpCompany;
 import elethu.ikamva.exception.CorpCompanyException;
@@ -17,6 +18,7 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     private final CorpCompanyRepository corpCompanyRepository;
 
     @Override
+    @ExecutionTime
     public CorpCompany saveCorpCompany(CorpCompany newCorpCompany) {
         if (isCorporateActive(newCorpCompany.getRegistrationNo())) {
             throw new CorpCompanyException("Corporate Company with registration number: " + newCorpCompany.getRegistrationNo() + " already exists.");
@@ -27,15 +29,18 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     }
 
     @Override
+    @ExecutionTime
     public CorpCompany updateCorpCompany(CorpCompany updateCorpCompany) {
         CorpCompany updateCompany = corpCompanyRepository.findById(updateCorpCompany.getId())
                 .orElseThrow(() -> new CorpCompanyException(String.format("There is not Corporate Company found with id: %s", updateCorpCompany.getId())));
+
 
         return corpCompanyRepository.save(updateCorpCompany);
     }
 
 
     @Override
+    @ExecutionTime
     public CorpCompany deleteCorpCompany(Long id) {
         var corpCompany = corpCompanyRepository.findById(id)
                 .orElseThrow(() -> new CorpCompanyException("Could not find corporate company id: " + id + " to delete."));
@@ -45,13 +50,10 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     }
 
     @Override
+    @ExecutionTime
     public List<CorpCompany> findAllCorpCompany() {
         List<CorpCompany> corpCompanyList = new ArrayList<>();
         corpCompanyRepository.findAll().iterator().forEachRemaining(corpCompanyList::add);
-
-        if (corpCompanyList.isEmpty()) {
-            throw new CorpCompanyException("There are no corporate companies found.");
-        }
 
         return corpCompanyList.stream()
                 .filter(corp -> Objects.isNull(corp.getEndDate()))
@@ -59,9 +61,11 @@ public class CorpCompanyServiceImpl implements CorpCompanyService {
     }
 
     @Override
+    @ExecutionTime
     public CorpCompany findCorpCompany() {
         return corpCompanyRepository.findCorpCompany()
-                .orElseThrow(() -> new CorpCompanyException("No Corporate Company could be found."));
+                .orElseThrow(
+                        () -> new CorpCompanyException("No Corporate Company could be found."));
     }
 
     public Boolean isCorporateActive(String companyRegistrationNo) {

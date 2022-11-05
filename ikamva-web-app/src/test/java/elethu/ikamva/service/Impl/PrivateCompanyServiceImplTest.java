@@ -4,7 +4,6 @@ import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Account;
 import elethu.ikamva.domain.CorpCompany;
 import elethu.ikamva.domain.PrivateCompany;
-import elethu.ikamva.exception.PrivateCompanyException;
 import elethu.ikamva.repositories.PrivateCompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -118,20 +116,29 @@ class PrivateCompanyServiceImplTest {
     @Test
     @DisplayName("Saving An Existing Company Exception - Test")
     void saveExistingPrivateCompanyThrowsException() {
+        //given
         when(privateCompanyRepository.findActivePrivateCompany(anyString())).thenReturn(Optional.ofNullable(privateCompany));
 
-        assertThrows(PrivateCompanyException.class, () -> privateCompanyService.savePrivateCompany(privateCompany));
+        //when
+        var privateCompany = privateCompanyService.savePrivateCompany(this.privateCompany);
 
-        then(privateCompanyRepository).should().findActivePrivateCompany(anyString());
+        //then
+        then(privateCompanyRepository).should(atLeastOnce()).findActivePrivateCompany(anyString());
+        assertThat(privateCompany).isNotNull();
+        assertThat(privateCompany.getCompanyName()).isEqualTo("Elethu Ikamva PTY (LTD)");
     }
 
     @Test
     @DisplayName("Finding No Private Companies Expection (Empty List) - Test")
     void findNoPrivateCompanyThrowsException() {
+        //given
         when(privateCompanyRepository.findAll()).thenReturn(Collections.emptyList());
 
-        assertThrows(PrivateCompanyException.class, () -> privateCompanyService.findAllPrivateCompany());
+        //when
+        var privateCompanyList = privateCompanyService.findAllPrivateCompany();
 
-        then(privateCompanyRepository).should().findAll();
+        //then
+        then(privateCompanyRepository).should(atLeastOnce()).findAll();
+        assertThat(privateCompanyList).isEmpty();
     }
 }

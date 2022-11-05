@@ -1,5 +1,6 @@
 package elethu.ikamva.service.Impl;
 
+import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.User;
 import elethu.ikamva.exception.UserException;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final RoleService roleService;
 
     @Override
+    @ExecutionTime
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var user = Optional.ofNullable(userRepository.findUserByUsername(username))
                 .orElseThrow(() -> new UserException("Could not find user to authenticate"));
@@ -40,34 +42,47 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("User found on the database: {}", username);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
 
-        if (!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(role ->
-                    authorities.add(new SimpleGrantedAuthority(role.getRoleDescription())));
-        } else {
+        if (CollectionUtils.isEmpty(user.getRoles())) {
             log.info("The user has no roles, cannot authenticate.");
+            return new org.springframework.security.core.userdetails.User(
+                    user.getUsername(),
+                    user.getPassword(),
+                    authorities);
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleDescription())));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
+                authorities);
     }
 
     @Override
+    @ExecutionTime
     public User registerUser(User newUser) {
+        if (Objects.isNull(newUser)) {
+            log.info("User details are null, cannot register new user.");
+            return null;
+        }
+
         var member = memberService.findMemberByInvestmentId(newUser.getUsername());
         newUser.setUserMember(member);
         newUser.setCreatedDate(DateFormatter.returnLocalDateTime());
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
 
-//        if (!CollectionUtils.isEmpty(newUser.getRoles())) {
-//            newUser.getRoles().forEach(role -> {
-//                this.addRoleToUser(newUser.getUsername(), role.getRoleDescription());
-//            });
-//        }
+        if (!CollectionUtils.isEmpty(newUser.getRoles())) {
+            newUser.getRoles().forEach(role -> {
+                this.addRoleToUser(newUser.getUsername(), role.getRoleDescription());
+            });
+        }
 
         log.info("Created the user with username: {}", newUser.getUsername());
         return userRepository.save(newUser);
     }
 
     @Override
+    @ExecutionTime
     public void deleteUser(Long id) {
         var user = userRepository.findById(id).orElseThrow(() ->
                 new UserException(String.format("User with id %s was not found, please correct.", id)));
@@ -78,6 +93,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public User addRoleToUser(String username, String roleDescription) {
         var user = Optional.ofNullable(userRepository.findUserByUsername(username))
                 .orElseThrow(() -> new UserException(String.format("Could not find a user with username: %s", username)));
@@ -89,17 +105,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @ExecutionTime
     public User updateUser(User user) {
+        if (Objects.isNull(user)) {
+            log.info("User is null, cannot update");
+            return null;
+        }
+
         return userRepository.save(user);
     }
 
     @Override
+    @ExecutionTime
     public User findUserByUsername(String username) {
         return Optional.ofNullable(userRepository.findUserByUsername(username))
                 .orElseThrow(() -> new UserException(String.format("Could not find user with username: %s", username)));
     }
 
     @Override
+    @ExecutionTime
     public List<User> findAllUsers() {
         return userRepository.findAll()
                 .stream()

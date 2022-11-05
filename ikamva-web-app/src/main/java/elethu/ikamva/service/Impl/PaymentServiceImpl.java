@@ -1,5 +1,6 @@
 package elethu.ikamva.service.Impl;
 
+import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.domain.Payment;
@@ -39,6 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final MemberService memberService;
 
     @Override
+    @ExecutionTime
     public Payment savePayment(Payment payment) {
         if (isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate())) {
             throw new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", there is already a a similar payment on the same day fot the same member: " + payment.getInvestmentId());
@@ -56,6 +58,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public void bulkSavePayments(List<Payment> payments) {
         AtomicInteger successCounter = new AtomicInteger(0);
         AtomicInteger failedCounter = new AtomicInteger(0);
@@ -83,6 +86,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public Payment updatePayment(Payment payment) {
         paymentRepository.findPaymentById(payment.getId()).orElseThrow(() ->
                 new PaymentException(String.format("Payment with id: %d does not exist, cannot update payment", payment.getId())));
@@ -91,6 +95,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public Payment deletePayment(Long id) {
         var pay = paymentRepository.findById(id)
                 .orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for with id: " + id));
@@ -100,12 +105,14 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public Payment findPaymentById(Long id) {
         return paymentRepository.findPaymentById(id)
                 .orElseThrow(() -> new PaymentException(HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for payment id: " + id));
     }
 
     @Override
+    @ExecutionTime
     public PaymentView findPaymentByInvestId(String investmentId, int pageNo, int pageSize, String sortBy) {
         var paging = PageRequest.of(pageNo - 1, pageSize, Sort.by(sortBy));
         var memberPaymentList = paymentRepository.findPaymentByInvestmentId(investmentId, paging);
@@ -114,6 +121,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public PaymentView findPaymentsBetweenDates(LocalDate fromDate, LocalDate toDate, int pageNo, int pageSize, String sortBy) {
         var pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         var memberPayments = paymentRepository.findPaymentsBetween(DateFormatter.returnLocalDate(fromDate.toString()),
@@ -123,6 +131,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public PaymentView findMemberPaymentsBetweenDates(String memberInvestId, LocalDate fromDate, LocalDate toDate, int pageNo, int pageSize, String sortBy) {
         var pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         var memberPayments = paymentRepository.findPaymentsByDateRangeForMember(memberInvestId, fromDate, toDate, pageable);
@@ -131,11 +140,13 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
+    @ExecutionTime
     public boolean isPaymentActive(double paymentAmount, String investmentID, LocalDate paymentDate) {
         return paymentRepository.checkPayment(paymentAmount, investmentID, paymentDate).isPresent();
     }
 
     @Override
+    @ExecutionTime
     public void processCSVFile(MultipartFile csvFile) {
         LOGGER.info("ServiceInvocation::ProcessCSVFile");
         try {
@@ -154,7 +165,9 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private TransactionType getTransactionType(double amount) {
-        return amount > 0 ? TransactionType.MONTHLY_CONTRIBUTION : TransactionType.BANK_CHARGES;
+        return amount > 0
+                ? TransactionType.MONTHLY_CONTRIBUTION
+                : TransactionType.BANK_CHARGES;
     }
 
     private PaymentView paymentView(Page<Payment> payments) {
@@ -175,6 +188,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private List<Payment> returnPayments(Page<Payment> payments) {
-        return payments.hasContent() ? payments.getContent() : Collections.emptyList();
+        return payments.hasContent()
+                ? payments.getContent()
+                : Collections.emptyList();
     }
 }

@@ -1,5 +1,6 @@
 package elethu.ikamva.service.Impl;
 
+import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.security.JwtUtil;
 import elethu.ikamva.service.IkamvaTokensService;
 import elethu.ikamva.service.UserService;
@@ -22,6 +23,7 @@ public class IkamvaTokensServiceImpl implements IkamvaTokensService {
     private final UserService userService;
 
     @Override
+    @ExecutionTime
     public void getAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         var authorizationHeader = request.getHeader(AUTHORIZATION);
 
