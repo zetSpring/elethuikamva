@@ -6,6 +6,7 @@ import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RequestMapping("/accounts")
@@ -69,7 +70,7 @@ public class AccountRestController {
     @ApiOperation(value = "An id for the account number to be deleted.")
     @DeleteMapping("/delete/{accountNo}")
     ResponseEntity<Account> deleteAccountByAccountNo(@ApiParam(value = "Account id for an account to be deleted:", required = true, example = "123")
-                                          @PathVariable Long accountNo )  {
+                                                     @PathVariable Long accountNo) {
         var account = accountService.deleteAccountByAccountNo(accountNo);
 
         return new ResponseEntity<>(account, HttpStatus.OK);
@@ -78,7 +79,7 @@ public class AccountRestController {
     @ApiOperation(value = "An id for the account number to be deleted.")
     @DeleteMapping("/{id}")
     ResponseEntity<Account> deleteAccountById(@ApiParam(value = "Account id for an account to be deleted:", required = true, example = "123")
-                                                     @PathVariable Long id )  {
+                                              @PathVariable Long id) {
         var account = accountService.deleteAccountById(id);
 
         return new ResponseEntity<>(account, HttpStatus.OK);

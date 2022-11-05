@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -136,17 +135,17 @@ class CorpCompanyServiceImplTest {
         then(companyRepository).should().findById(anyLong());
     }
 
-    @Test
-    @DisplayName("No Corporate Companies Found (Empty List) - Test")
-    void findAllCorpCompanyEmptyListExceptionTest(){
-        //given
-        when(companyRepository.findAll()).thenReturn(Collections.emptyList());
-
-        //when
-        assertThrows(CorpCompanyException.class, () -> service.findAllCorpCompany());
-
-        //then
-        then(companyRepository).should().findAll();
-        verifyNoMoreInteractions(companyRepository);
-    }
+//    @Test
+//    @DisplayName("No Corporate Companies Found (Empty List) - Test")
+//    void findAllCorpCompanyEmptyListExceptionTest(){
+//        //given
+//        when(companyRepository.findAll()).thenReturn(Collections.emptyList());
+//
+//        //when
+//        assertThrows(CorpCompanyException.class, () -> service.findAllCorpCompany());
+//
+//        //then
+//        then(companyRepository).should().findAll();
+//        verifyNoMoreInteractions(companyRepository);
+//    }
 }

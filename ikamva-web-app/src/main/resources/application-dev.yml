@@ -21,7 +21,7 @@ spring:
         default_schema: elethu
   #---------------------------------------------------------------------------------------------------------------------
   datasource:
-    url: jdbc:h2:mem:ikamva-test;INIT=CREATE SCHEMA IF NOT EXISTS elethu
+    url: jdbc:h2:mem:ikamva-test;DB_CLOSE_ON_EXIT=FALSE;INIT=CREATE SCHEMA IF NOT EXISTS elethu
     username: ikamva
     password: ikamva
     driverClassName: org.h2.Driver

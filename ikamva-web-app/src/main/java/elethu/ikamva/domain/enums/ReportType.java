@@ -3,7 +3,7 @@ package elethu.ikamva.domain.enums;
 public enum ReportType {
     INDIVIDUAL("Individual"),
     MONTHLY("Monthly"),
-    TOTALS("Totals"),
+    SUMMARY("Summary"),
     YEARLY("Yearly"),
     CUSTOM("Custom"),
     ALL("All");

@@ -19,25 +19,26 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("servlet path: {}", request.getServletPath());
-        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/token/refresh")) {
+        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/user/token/refresh") || request.getServletPath().equals("/h2-console")) {
             filterChain.doFilter(request, response);
-        } else {
-            var authorizationHeader = request.getHeader(AUTHORIZATION);
+            return;
+        }
 
-            if (Objects.nonNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-                try {
-                    var token = JwtUtil.retrieveToken(authorizationHeader);
-                    var authenticationToken = JwtUtil.validateToken(token);
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    filterChain.doFilter(request, response);
-                } catch (Exception e) {
-                    log.info("Error logging in: {}", e.getMessage());
-                    //response.sendError(FORBIDDEN.value());
-                    JwtUtil.setAuthorizationError(response, e);
-                }
-            } else {
+        var authorizationHeader = request.getHeader(AUTHORIZATION);
+
+        if (Objects.nonNull(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+            try {
+                var token = JwtUtil.retrieveToken(authorizationHeader);
+                var authenticationToken = JwtUtil.validateToken(token);
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 filterChain.doFilter(request, response);
+            } catch (Exception e) {
+                log.info("Error logging in: {}", e.getMessage());
+                //response.sendError(FORBIDDEN.value());
+                JwtUtil.setAuthorizationError(response, e);
             }
+        } else {
+            filterChain.doFilter(request, response);
         }
     }
 }

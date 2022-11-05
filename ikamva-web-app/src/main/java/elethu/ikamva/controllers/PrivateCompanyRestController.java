@@ -19,13 +19,13 @@ public class PrivateCompanyRestController {
     private final PrivateCompanyService privateCompanyService;
 
     @GetMapping("/{id}")
-    ResponseEntity<PrivateCompany> findPrivateCompany(@PathVariable Long id){
-       var privateAccount = privateCompanyService.findPrivateCompanyById(id);
-       return new ResponseEntity<>(privateAccount, HttpStatus.OK);
+    ResponseEntity<PrivateCompany> findPrivateCompany(@PathVariable Long id) {
+        var privateAccount = privateCompanyService.findPrivateCompanyById(id);
+        return new ResponseEntity<>(privateAccount, HttpStatus.OK);
     }
 
     @GetMapping("/")
-    List<PrivateCompany> findAllPrivateCompanies(){
+    List<PrivateCompany> findAllPrivateCompanies() {
         return privateCompanyService.findAllPrivateCompany();
     }
 }

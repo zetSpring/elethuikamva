@@ -7,6 +7,7 @@ import elethu.ikamva.domain.enums.Gender;
 import elethu.ikamva.domain.enums.TransactionType;
 import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.exception.PaymentException;
+import elethu.ikamva.repositories.MemberRepository;
 import elethu.ikamva.repositories.PaymentRepository;
 import elethu.ikamva.service.MemberService;
 import elethu.ikamva.view.PaymentView;
@@ -41,7 +42,7 @@ import static org.mockito.Mockito.*;
 class PaymentServiceImplTest {
     @Mock
     private PaymentRepository paymentRepository;
-
+    private MemberRepository memberRepository;
     @Mock
     private MemberService memberService;
 
@@ -237,12 +238,12 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void savePaymentMembeIsNullTest() {
+    void savePaymentMemberIsNullTest() {
         //given
         given(memberService.findMemberByInvestmentId(anyString())).willReturn(null);
 
         //when - then
-        assertThrows(PaymentException.class, () -> paymentService.savePayment(payment));
+        assertThrows(NullPointerException.class, () -> paymentService.savePayment(payment));
     }
 
     @Test

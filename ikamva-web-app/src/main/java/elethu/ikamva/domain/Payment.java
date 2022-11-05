@@ -83,7 +83,6 @@ public class Payment implements Serializable {
         this.amount = amount;
         this.investmentId = investmentId;
         this.paymentDate = paymentDate;
-        this.createdDate = createdDate;
         this.paymentReference = paymentReference;
         this.memberPayments = memberPayments;
     }
