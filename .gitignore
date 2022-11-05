@@ -45,4 +45,4 @@ HELP.md
 /deploy/git
 /ikamva-web-app/target/
 /ikamva-payment-bulk-processing/target/
-/ikamva-web-app/logs/
+/ikamva-web-app/logs/.log
