@@ -24,7 +24,7 @@
         <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
         <java.version>11</java.version>
         <mockito.version>4.4.0</mockito.version>
-        <postgres.version>42.3.7</postgres.version>
+        <postgres.version>42.3.8</postgres.version>
         <junit-platform.version>5.8.2</junit-platform.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
