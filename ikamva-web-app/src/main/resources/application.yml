@@ -1,10 +1,83 @@
 #-----------------------------------------------------------------------------------------------------------------------
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
   servlet:
     context-path: /api/v1
 #-----------------------------------------------------------------------------------------------------------------------
 spring:
+  h2:
+    console:
+      enabled: ${H2_CONSOLE_ENABLED:false}
+      path: /h2-console
+  output:
+    ansi:
+      enabled: ${ENABLE_ANSI}
+  servlet:
+    multipart:
+      enabled: ${MULTIPART_ENABLED}
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
+  jpa:
+    hibernate:
+      ddl-auto: ${HIBERNATE_DDL_AUTO}
+    database-platform: ${HIBERNATE_DIALECT}
+    generate-ddl: ${GENERATE_DDL}
+    show-sql: ${SHOW_SQL}
+    open-in-view: ${OPEN_IN_VIEW}
+    properties:
+      hibernate:
+        default_schema: ${DEFAULT_SCHEMA}
   profiles:
-    active: dev
-#-----------------------------------------------------------------------------------------------------------------------
+    active: ${ACTIVE_PROFILE:dev}
+  datasource:
+    url: ${DATASOURSE_URL}
+    username: ${DATASOURSE_USERNAME}
+    password: ${DATASOURSE_PASSWORD}
+    driverClassName: ${DATASOURSE_DRIVER_CLASS_NAME}
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+          starttls:
+            enable: true
+            required: true
+        transport: smtp
+    protocol: smtp
+
+logging:
+  file:
+    name: ${LOGGING_FILE_NAME}
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - [%file : %line] - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss} %clr(%-5level) %magenta([%thread]) %cyan(%logger{36}) - %clr([%file : %line]) - %msg%n"
+  level:
+    elethu.ikamva.services: INFO
+    elethu.ikamva.web: ERROR
+    elethu.ikamva.repositories: ERROR
+    elethu.ikamva.controllers: ERROR
+    elethu.ikamva.config: ERROR
+    elethu.ikamva.application: DEBUG
+    elethu.ikamva.filter: INFO
+    elethu.ikamva.security: ERROR
+    elethu.ikamva.utils: ERROR
+  logback:
+    rollingpolicy:
+      max-history: ${LOGGING_ROLLING_POLICY_MAX_HISTORY}
+      max-file-size: ${LOGGING_ROLLING_POLICY_MAX_FILE_SIZE}
+application:
+  security:
+    jwt:
+      secret: ${JWT_SECRET}
+      expiration: ${JWT_EXPIRATION_IN_MS}
+      refresh-token:
+        expiration: ${JWT_REFRESH_EXPIRATION_IN_MS}
+
+

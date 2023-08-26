@@ -1,19 +1,21 @@
 package elethu.ikamva.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import elethu.ikamva.domain.enums.Gender;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -22,12 +24,14 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Builder
+//@Builder
 @AllArgsConstructor
 @Entity
 @Table(name = "IKAMVA_MEMBERS", schema = "elethu")
 @JsonPropertyOrder({"id", "firstName", "lastName", "investmentId", "dob", "identityNo", "gender", "createdDate", "memberContacts", "user"})
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Member implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -65,16 +69,17 @@ public class Member implements Serializable {
     private CorpCompany corpMember;
     @JsonIgnore
     @OneToMany(mappedBy = "memberPayments", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Payment> payments = new LinkedList<>();
+    private List<Payment> payments = new ArrayList<>();
+    @Fetch(FetchMode.JOIN)
     @OneToMany(mappedBy = "members", cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
+    //@LazyCollection(LazyCollectionOption.FALSE)
     @ToString.Exclude
-    private List<ContactDetails> memberContacts = new LinkedList<>();
+    private List<ContactDetails> memberContacts = new ArrayList<>();
 
-    @ToString.Exclude
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "userMember")
+    //@ToString.Exclude
+   // @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonManagedReference
+    @OneToOne(mappedBy = "userMember" , cascade = CascadeType.ALL)
     private User user;
 
     /*update profile picture*/

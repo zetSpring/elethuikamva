@@ -7,19 +7,21 @@ import elethu.ikamva.domain.enums.ContactType;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
+@Entity
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Entity
 @Table(name = "CONTACT_DETAILS", schema = "elethu")
 public class ContactDetails implements Serializable {
-
+    @Serial
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

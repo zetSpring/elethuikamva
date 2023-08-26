@@ -37,8 +37,10 @@ public class MemberServiceImpl implements MemberService {
         }
 
         log.info("Member with a member investment id {} does not exist, will create", nemMember.getInvestmentId());
-        var gender = IdentityNumberUtility.getMemberGender(nemMember.getIdentityNo().toString().substring(6, 10));
-        var dob = IdentityNumberUtility.getDateOfBirth(nemMember.getIdentityNo().toString().substring(0, 6));
+        var gender = IdentityNumberUtility.getMemberGender(
+                nemMember.getIdentityNo().toString().substring(6, 10));
+        var dob = IdentityNumberUtility.getDateOfBirth(
+                nemMember.getIdentityNo().toString().substring(0, 6));
         nemMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
         nemMember.setDob(dob);
         nemMember.setGender(gender);
@@ -58,11 +60,15 @@ public class MemberServiceImpl implements MemberService {
     @ExecutionTime
     public Member updateMember(Member updateMember) {
         log.info("ServiceInvocation - MemberService.updateMember");
-        var member = memberRepository.findById(updateMember.getId())
-                .orElseThrow(() -> new MemberException(String.format("Member with investment id: %s does not exist to update.", updateMember.getInvestmentId())));
+        var member = memberRepository
+                .findById(updateMember.getId())
+                .orElseThrow(() -> new MemberException(String.format(
+                        "Member with investment id: %s does not exist to update.", updateMember.getInvestmentId())));
 
-        var gender = IdentityNumberUtility.getMemberGender(updateMember.getIdentityNo().toString().substring(6, 10));
-        var dob = IdentityNumberUtility.getDateOfBirth(updateMember.getIdentityNo().toString().substring(0, 6));
+        var gender = IdentityNumberUtility.getMemberGender(
+                updateMember.getIdentityNo().toString().substring(6, 10));
+        var dob = IdentityNumberUtility.getDateOfBirth(
+                updateMember.getIdentityNo().toString().substring(0, 6));
         updateMember.setGender(gender);
         updateMember.setDob(dob);
         updateMember.setEndDate(null);
@@ -89,8 +95,10 @@ public class MemberServiceImpl implements MemberService {
     @ExecutionTime
     public Member deleteMember(String investmentId) {
         log.info("ServiceInvocation - MemberService::deleteMember");
-        var deleteMember = memberRepository.findMemberByInvestmentId(investmentId)
-                .orElseThrow(() -> new MemberException("Member:" + investmentId + " is already inactive or could not been found"));
+        var deleteMember = memberRepository
+                .findMemberByInvestmentId(investmentId)
+                .orElseThrow(() ->
+                        new MemberException("Member:" + investmentId + " is already inactive or could not been found"));
         var memberContacts = deleteMember.getMemberContacts();
         deleteMember.setEndDate(DateFormatter.returnLocalDateTime());
         if (!CollectionUtils.isEmpty(memberContacts)) {
@@ -106,15 +114,18 @@ public class MemberServiceImpl implements MemberService {
     @ExecutionTime
     public Member findMemberByInvestmentId(String investmentId) {
         log.info("ServiceInvocation - MemberService::findMemberByInvestmentId");
-        return memberRepository.findMemberByInvestmentId(investmentId.toUpperCase())
-                .orElseThrow(() -> new MemberException(String.format("Member with investment id: %s has not been found", investmentId)));
+        return memberRepository
+                .findMemberByInvestmentId(investmentId.toUpperCase())
+                .orElseThrow(() -> new MemberException(
+                        String.format("Member with investment id: %s has not been found", investmentId)));
     }
 
     @Override
     @ExecutionTime
     public Member findMemberById(Long id) {
         log.info("ServiceInvocation - MemberService::findMemberById");
-        return memberRepository.findMemberById(id)
+        return memberRepository
+                .findMemberById(id)
                 .orElseThrow(() -> new MemberException(String.format("Member with id: %d has not been found", id)));
     }
 

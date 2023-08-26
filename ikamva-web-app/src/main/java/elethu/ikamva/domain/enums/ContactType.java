@@ -1,5 +1,8 @@
 package elethu.ikamva.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum ContactType {
     CELLPHONE("Cellphone"),
     EMAIL("Email"),

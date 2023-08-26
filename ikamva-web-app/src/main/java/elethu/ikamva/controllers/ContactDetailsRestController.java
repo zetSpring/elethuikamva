@@ -14,7 +14,9 @@ import java.util.List;
 
 @RequestMapping("/contacts")
 @RestController
-@Api(value = "Ikamva account ", description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
+@Api(
+        value = "Ikamva account ",
+        description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
 public class ContactDetailsRestController {
     ContactDetailsService contactDetailsService;
 
@@ -22,40 +24,44 @@ public class ContactDetailsRestController {
         this.contactDetailsService = contactDetailsService;
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved contacts by invest id"),
-            @ApiResponse(code = 500, message = "Tell me something I don't know")
-    })
+    @ApiResponses(
+            value = {
+                @ApiResponse(code = 200, message = "Successfully retrieved contacts by invest id"),
+                @ApiResponse(code = 500, message = "Tell me something I don't know")
+            })
     @ApiOperation("Get Contacts by Member Investment ID")
     @GetMapping("/{investId}")
     List<ContactDetails> getMemberContacts(@PathVariable String investId) {
         return contactDetailsService.findMemberContactByInvestId(investId);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved contacts by type"),
-            @ApiResponse(code = 500, message = "Tell me something I don't know")
-    })
+    @ApiResponses(
+            value = {
+                @ApiResponse(code = 200, message = "Successfully retrieved contacts by type"),
+                @ApiResponse(code = 500, message = "Tell me something I don't know")
+            })
     @ApiOperation("Get Contacts by Contact Type")
     @GetMapping("/type/{type}")
     List<ContactDetails> getMemberContactsByType(@PathVariable String type) {
         return contactDetailsService.findALlContactsByContactType(type);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
-            @ApiResponse(code = 500, message = "Tell me something I don't know")
-    })
+    @ApiResponses(
+            value = {
+                @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
+                @ApiResponse(code = 500, message = "Tell me something I don't know")
+            })
     @ApiOperation("Get All Contacts")
     @GetMapping("/")
     List<ContactDetails> getAllMemberContacts() {
         return contactDetailsService.findAllContactDetails();
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
-            @ApiResponse(code = 500, message = "Tell me something I don't know")
-    })
+    @ApiResponses(
+            value = {
+                @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
+                @ApiResponse(code = 500, message = "Tell me something I don't know")
+            })
     @ApiOperation("Get All Contacts")
     @PutMapping("/update")
     ResponseEntity<ContactDetails> updateContactDetail(@RequestBody ContactDetails contactDetail) {
@@ -69,10 +75,11 @@ public class ContactDetailsRestController {
         return new ResponseEntity<>(newContact, HttpStatus.OK);
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully deleted all contacts"),
-            @ApiResponse(code = 500, message = "Tell me something I don't know")
-    })
+    @ApiResponses(
+            value = {
+                @ApiResponse(code = 200, message = "Successfully deleted all contacts"),
+                @ApiResponse(code = 500, message = "Tell me something I don't know")
+            })
     @ApiOperation("Delete member contact details")
     @DeleteMapping("/delete-all/{investId}")
     List<ContactDetails> deleteAllMemberContacts(@PathVariable String investId) {

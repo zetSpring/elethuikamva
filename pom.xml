@@ -10,24 +10,25 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.7</version>
+        <version>3.1.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>elethu.ikamva</groupId>
     <artifactId>elethuikamva</artifactId>
     <version>1.1-SNAPSHOT</version>
     <name>elethuikamva</name>
-    <description>Elethu Ikamva portal</description>
+    <description>Elethu Ikamva Portal</description>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
-        <java.version>11</java.version>
-        <mockito.version>4.4.0</mockito.version>
-        <postgres.version>42.3.7</postgres.version>
-        <junit-platform.version>5.8.2</junit-platform.version>
+        <java.version>20</java.version>
+        <mockito.version>5.4.0</mockito.version>
+        <postgres.version>42.6.0</postgres.version>
+        <junit-platform.version>5.10.0</junit-platform.version>
+        <spring-boot.version>3.1.2</spring-boot.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.sourceEncoding>UTF-8</project.reporting.sourceEncoding>
     </properties>
 
     <scm>
@@ -40,7 +41,18 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <version>1.18.28</version>
             <optional>true</optional>
+        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>jakarta.java </groupId>-->
+        <!--            <artifactId>jakarta.persistence-api</artifactId>-->
+        <!--            <version>3.1.0</version>-->
+        <!--        </dependency>-->
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -57,7 +69,7 @@
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>5.14.2</version>
+            <version>5.16.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -67,12 +79,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.6.6</version>
+            <version>3.1.2</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>3.13.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -115,22 +127,44 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.3.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.ow2.asm</groupId>
                         <artifactId>asm</artifactId>
-                        <version>7.3.1</version>
+                        <version>9.5</version>
                     </dependency>
                 </dependencies>
             </plugin>
             <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.9.10</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0</version>
+                <configuration>
+                    <argLine>
+                        --illegal-access=permit
+                    </argLine>
+                    <includes>
+                        <include>**/*Test*.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.5.7</version>
+                <version>3.1.2</version>
                 <executions>
                     <execution>
-                        <id>build-info-plugin</id>
                         <goals>
                             <goal>build-info</goal>
                         </goals>
@@ -138,14 +172,22 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.0.0</version>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.1.2</version>
+                <configuration>
+                    <argLine>
+                        --illegal-access=permit
+                    </argLine>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

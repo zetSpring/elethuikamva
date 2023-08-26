@@ -8,7 +8,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -19,7 +19,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @RequiredArgsConstructor
-@Builder
+//@Builder
 @AllArgsConstructor
 @Entity
 @Table(name = "IKAMVA_CORPORATIVE", schema = "elethu")

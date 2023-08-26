@@ -32,7 +32,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @ExecutionTime
     public Role updateRole(Role role) {
-        var foundRole = roleRepository.findById(role.getId())
+        var foundRole = roleRepository
+                .findById(role.getId())
                 .orElseThrow(() -> new RoleException("Could not find a role to update"));
         foundRole.setRoleDescription(role.getRoleDescription());
 
@@ -43,14 +44,15 @@ public class RoleServiceImpl implements RoleService {
     @ExecutionTime
     public Role findUserByRoleDescription(String roleDescription) {
         return Optional.ofNullable(roleRepository.findRoleByRoleDescription(roleDescription))
-                .orElseThrow(() -> new RoleException(String.format("Could not find a role with id: %s", roleRepository)));
+                .orElseThrow(
+                        () -> new RoleException(String.format("Could not find a role with id: %s", roleRepository)));
     }
 
     @Override
     @ExecutionTime
     public void deleteRole(Long id) {
-        var foundRole = roleRepository.findById(id)
-                .orElseThrow(() -> new RoleException("Could not find a role to delete"));
+        var foundRole =
+                roleRepository.findById(id).orElseThrow(() -> new RoleException("Could not find a role to delete"));
         log.info("Role with id: {} was found.", id);
         foundRole.setEndDate(DateFormatter.returnLocalDateTime());
         roleRepository.save(foundRole);
@@ -59,8 +61,8 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @ExecutionTime
     public List<Role> findAllRoles() {
-        return roleRepository.findAll()
-                .stream().filter(role -> Objects.isNull(role.getEndDate()))
+        return roleRepository.findAll().stream()
+                .filter(role -> Objects.isNull(role.getEndDate()))
                 .collect(Collectors.toList());
     }
 }

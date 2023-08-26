@@ -5,17 +5,18 @@ import elethu.ikamva.domain.enums.TransactionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 @Transactional
-public interface PaymentRepository extends PagingAndSortingRepository<Payment, Long> {
+public interface PaymentRepository extends PagingAndSortingRepository<Payment, Long>, CrudRepository<Payment, Long> {
     @Query("SELECT pay from Payment pay where pay.id = ?1 AND pay.endDate = NULL")
     Optional<Payment> findPaymentById(Long id);
     @Query("SELECT pay from Payment pay where pay.investmentId = UPPER(?1) AND pay.endDate = NULL")

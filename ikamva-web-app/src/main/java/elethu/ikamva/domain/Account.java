@@ -8,7 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;

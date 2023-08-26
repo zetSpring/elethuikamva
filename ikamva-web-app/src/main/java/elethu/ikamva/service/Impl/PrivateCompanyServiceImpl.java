@@ -25,8 +25,11 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
     @ExecutionTime
     public PrivateCompany savePrivateCompany(PrivateCompany privateCompany) {
         if (isPrivateCompanyActive(privateCompany.getRegistrationNo())) {
-            log.info("Private company with registration number: {} already exists.", privateCompany.getRegistrationNo());
-            return privateCompanyRepository.findActivePrivateCompany(privateCompany.getRegistrationNo()).get();
+            log.info(
+                    "Private company with registration number: {} already exists.", privateCompany.getRegistrationNo());
+            return privateCompanyRepository
+                    .findActivePrivateCompany(privateCompany.getRegistrationNo())
+                    .get();
         }
 
         return privateCompanyRepository.save(privateCompany);
@@ -35,8 +38,10 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
     @Override
     @ExecutionTime
     public PrivateCompany deletePrivateCompany(Long id) {
-        PrivateCompany deletePtyCompany = privateCompanyRepository.findPrivateCompaniesById(id)
-                .orElseThrow(() -> new PrivateCompanyException(String.format("Could not find pty company with id %d to delete", id)));
+        PrivateCompany deletePtyCompany = privateCompanyRepository
+                .findPrivateCompaniesById(id)
+                .orElseThrow(() -> new PrivateCompanyException(
+                        String.format("Could not find pty company with id %d to delete", id)));
         deletePtyCompany.setEndDate(DateFormatter.returnLocalDateTime());
 
         return privateCompanyRepository.save(deletePtyCompany);
@@ -45,15 +50,18 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
     @Override
     @ExecutionTime
     public PrivateCompany findPrivateCompanyById(Long id) {
-        return privateCompanyRepository.findPrivateCompaniesById(id)
+        return privateCompanyRepository
+                .findPrivateCompaniesById(id)
                 .orElseThrow(() -> new PrivateCompanyException("Could not find a private company: " + id));
     }
 
     @Override
     @ExecutionTime
     public PrivateCompany findPrivateCompanyByRegistration(String registrationNo) {
-        return privateCompanyRepository.findPrivateCompanyByRegistrationNo(registrationNo)
-                .orElseThrow(() -> new PrivateCompanyException(String.format("Could not find pty company with registration no %s.", registrationNo)));
+        return privateCompanyRepository
+                .findPrivateCompanyByRegistrationNo(registrationNo)
+                .orElseThrow(() -> new PrivateCompanyException(
+                        String.format("Could not find pty company with registration no %s.", registrationNo)));
     }
 
     @Override
@@ -67,9 +75,7 @@ public class PrivateCompanyServiceImpl implements PrivateCompanyService {
             return new ArrayList<>();
         }
 
-        return privateCompanies.stream()
-                .filter(pty -> pty.getEndDate() == null)
-                .collect(Collectors.toList());
+        return privateCompanies.stream().filter(pty -> pty.getEndDate() == null).collect(Collectors.toList());
     }
 
     @Override
