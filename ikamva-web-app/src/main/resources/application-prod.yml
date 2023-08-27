@@ -1,80 +1,55 @@
 #-----------------------------------------------------------------------------------------------------------------------
-spring:
-  output:
-    ansi:
-      enabled: always
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 2MB
-      max-request-size: 2MB
-  #---------------------------------------------------------------------------------------------------------------------
-  jpa:
-    hibernate:
-      ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: true
-    show-sql: false
-    #open-in-view: false
-    properties:
-      hibernate:
-        default_schema: elethu
-  #---------------------------------------------------------------------------------------------------------------------
-  datasource:
-    url: jdbc:postgresql://localhost:5432/ikamvadb
-    username: zukoyawa
-    password: ^Wu3H1bE4Gr*nJxPpTME7!t
-    driver-class-name: org.postgresql.Driver
-  #---------------------------------------------------------------------------------------------------------------------
-  sql:
-    init:
-      platform: postgres
-  #---------------------------------------------------------------------------------------------------------------------
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: czyawa@gmail.com
-    password: TBC
-    properties:
-      mail:
-        smtp:
-          auth: true
-          connectiontimeout: 5000
-          timeout: 5000
-          writetimeout: 5000
-          starttls:
-            enable: true
-        transport: smtp
-    protocol: smtp
+#Start :: Spring Boot configuration for development environment
 #-----------------------------------------------------------------------------------------------------------------------
-logging:
-  file:
-    name: logs/ikamva-elethu-application.log
-  pattern:
-    file: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - [%file : %line] - %msg%n"
-    console: "%d{yyyy-MM-dd HH:mm:ss} %clr(%-5level) %magenta([%thread]) %cyan(%logger{36}) - %clr([%file : %line]) - %msg%n"
-  level:
-    elethu.ikamva.services: ERROR
-    elethu.ikamva.web: ERROR
-    elethu.ikamva.repositories: ERROR
-    elethu.ikamva.controllers: ERROR
-    elethu.ikamva.config: ERROR
-    elethu.ikamva.application: DEBUG
-    elethu.ikamva.filter: ERROR
-    elethu.ikamva.security: ERROR
-    elethu.ikamva.utils: ERROR
-  logback:
-    rollingpolicy:
-      max-history: 14
-      max-file-size: 10MB
+SERVER_PORT: 8083
 #-----------------------------------------------------------------------------------------------------------------------
-management:
-  endpoint:
-    health:
-      show-details: always
+# Spring: Servlet
 #-----------------------------------------------------------------------------------------------------------------------
-  endpoints:
-    web:
-      exposure:
-        include: info, health, beans, dump, env, mappings, metrics
+ENABLE_ANSI: always
+MULTIPART_ENABLED: true
+MAX_FILE_SIZE: 2MB
+MAX_REQUEST_SIZE: 2MB
+#-----------------------------------------------------------------------------------------------------------------------
+# Spring: JPA:
+#-----------------------------------------------------------------------------------------------------------------------
+HIBERNATE_DDL_AUTO: update
+HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+GENERATE_DDL: true
+SHOW_SQL: false
+OPEN_IN_VIEW: false
+DEFAULT_SCHEMA: elethu
+H2_CONSOLE_ENABLED: false
+SQL_INIT_PLATFORM: postgres
+#-----------------------------------------------------------------------------------------------------------------------
+# Datasource:
+#-----------------------------------------------------------------------------------------------------------------------
+DATASOURSE_URL: jdbc:postgresql://localhost:5432/ikamvadb
+DATASOURSE_USERNAME: zukoyawa
+DATASOURSE_PASSWORD: ^Wu3H1bE4Gr*nJxPpTME7!t
+DATASOURSE_DRIVER_CLASS_NAME: org.postgresql.Driver
+#-----------------------------------------------------------------------------------------------------------------------
+# Mail:
+#-----------------------------------------------------------------------------------------------------------------------
+MAIL_HOST: smtp.gmail.com
+MAIL_PORT: 587
+MAIL_USERNAME: czyawa@gmail.com
+MAIL_PASSWORD: TBC
+#-----------------------------------------------------------------------------------------------------------------------
+# Logging:
+#-----------------------------------------------------------------------------------------------------------------------
+LOGGING_FILE_NAME: logs/ikamva-elethu-application.log
+LOGGING_ROLLING_POLICY_MAX_HISTORY: 14
+LOGGING_ROLLING_POLICY_MAX_FILE_SIZE: 10MB
+#----------------------------------------------------------------------------------------------------------------------
+# Spring: Profiles:
+#-----------------------------------------------------------------------------------------------------------------------
+ACTIVE_PROFILE: prod
+#-----------------------------------------------------------------------------------------------------------------------
+# Spring: Security:
+#-----------------------------------------------------------------------------------------------------------------------
+JWT_SECRET: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+JWT_EXPIRATION_IN_MS: 3600000
+JWT_REFRESH_EXPIRATION_IN_MS: 86400000
+#-----------------------------------------------------------------------------------------------------------------------
+#End :: Spring Boot configuration for development environment
 #-----------------------------------------------------------------------------------------------------------------------

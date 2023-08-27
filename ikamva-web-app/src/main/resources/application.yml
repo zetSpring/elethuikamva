@@ -34,6 +34,9 @@ spring:
     username: ${DATASOURSE_USERNAME}
     password: ${DATASOURSE_PASSWORD}
     driverClassName: ${DATASOURSE_DRIVER_CLASS_NAME}
+  sql:
+    init:
+      platform: ${SQL_INIT_PLATFORM}
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
@@ -60,14 +63,14 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss} %clr(%-5level) %magenta([%thread]) %cyan(%logger{36}) - %clr([%file : %line]) - %msg%n"
   level:
     elethu.ikamva.services: INFO
-    elethu.ikamva.web: ERROR
-    elethu.ikamva.repositories: ERROR
-    elethu.ikamva.controllers: ERROR
-    elethu.ikamva.config: ERROR
-    elethu.ikamva.application: DEBUG
-    elethu.ikamva.filter: INFO
-    elethu.ikamva.security: ERROR
-    elethu.ikamva.utils: ERROR
+    elethu.ikamva.web: INFO
+    elethu.ikamva.repositories: INFO
+    elethu.ikamva.controllers: INFO
+    elethu.ikamva.config: INFO
+    elethu.ikamva.application: INFO
+    elethu.ikamva.filter: DEBUG
+    elethu.ikamva.security: INFO
+    elethu.ikamva.utils: INFO
   logback:
     rollingpolicy:
       max-history: ${LOGGING_ROLLING_POLICY_MAX_HISTORY}

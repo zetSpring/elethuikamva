@@ -1,5 +1,8 @@
 package elethu.ikamva.domain.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Gender {
     MALE("Male"),
     FEMALE("Female");

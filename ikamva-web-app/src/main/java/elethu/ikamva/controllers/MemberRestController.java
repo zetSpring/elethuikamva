@@ -12,7 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/members")
-@Api(value = "Elethu Ikamva Members", description = "Operations pertaining to the details about the members of elethu ikamva.")
+@Api(
+        value = "Elethu Ikamva Members",
+        description = "Operations pertaining to the details about the members of elethu ikamva.")
 public class MemberRestController {
     private final MemberService memberService;
 
@@ -20,7 +22,7 @@ public class MemberRestController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add", consumes = "application/json", produces = "application/json")
     ResponseEntity<Member> saveNewMember(@RequestBody Member member) {
         Member newMember = memberService.saveNewMember(member);
         return new ResponseEntity<>(newMember, HttpStatus.CREATED);
@@ -43,7 +45,6 @@ public class MemberRestController {
     Member findMemberByInvestId(@PathVariable String investId) {
         return memberService.findMemberByInvestmentId(investId);
     }
-
 
     @GetMapping("/{id}")
     Member findMemberById(@PathVariable Long id) throws ResourceNotFoundException {

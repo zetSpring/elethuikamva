@@ -4,9 +4,7 @@ import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.dao.UserRegistrationRequestData;
 import elethu.ikamva.domain.CorpCompany;
 import elethu.ikamva.domain.Member;
-import elethu.ikamva.domain.User;
 import elethu.ikamva.domain.enums.Gender;
-import elethu.ikamva.domain.enums.Role;
 import elethu.ikamva.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,6 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static elethu.ikamva.domain.enums.Role.MEMBER;
 
 @SpringBootApplication
 @EnableTransactionManagement
@@ -29,8 +29,6 @@ public class ElethuikamvaApplication {
     @Bean
     @Profile("dev")
     CommandLineRunner run(
-            UserService userService,
-            RoleService roleService,
             MemberService memberService,
             CorpCompanyService companyService,
             AuthenticationService authenticationService) {
@@ -71,77 +69,10 @@ public class ElethuikamvaApplication {
                     "Ngqiba",
                     DateFormatter.returnLocalDate(),
                     Gender.MALE));
-            members.add(new Member(
-                    null,
-                    Long.parseLong("8707050199084"),
-                    "NT012015",
-                    "Nomaxabiso",
-                    "Tata",
-                    DateFormatter.returnLocalDate(),
-                    Gender.FEMALE));
-            members.add(new Member(
-                    null,
-                    Long.parseLong("9006216168086"),
-                    "MM012015",
-                    "Mmeli",
-                    "Mnyani",
-                    DateFormatter.returnLocalDate(),
-                    Gender.MALE));
-            members.add(new Member(
-                    null,
-                    Long.parseLong("8211095735085"),
-                    "BN012015",
-                    "Bonginkosi",
-                    "Ngcaweni",
-                    DateFormatter.returnLocalDate(),
-                    Gender.MALE));
-            members.add(new Member(
-                    null,
-                    Long.parseLong("8208237501084"),
-                    "LWG012015",
-                    "Lwandile",
-                    "Gagela ",
-                    DateFormatter.returnLocalDate(),
-                    Gender.MALE));
-            members.add(new Member(
-                    null,
-                    Long.parseLong("7911245300083"),
-                    "SG012015",
-                    "Simphiwe",
-                    "Gxashe",
-                    DateFormatter.returnLocalDate(),
-                    Gender.MALE));
-            members.add(new Member(
-                    null,
-                    Long.parseLong("8903165773083"),
-                    "XP012015",
-                    "Xolisani",
-                    "Pato",
-                    DateFormatter.returnLocalDate(),
-                    Gender.MALE));
             memberService.saveAllMembers(members);
 
-            // paymentService.savePayment(new Payment(1500.0d, "ZY012015",
-            // DateFormatter.returnLocalDate().minusDays(10), "ZY012015"));
-
             authenticationService.registerUser(
-                    new UserRegistrationRequestData("ZY012015", "czyawa@gmail.com", "password", Role.USER));
-
-            //            userService.registerUser(new User(null, "ZY012015", "password"));
-            //            userService.registerUser(new User(null, "SM012015", "password"));
-            //
-            //            roleService.saveRole(new Role(null, "USER"));
-            //            roleService.saveRole(new Role(null, "SYS_ADMIN"));
-            //
-            //            userService.addRoleToUser("ZY012015", "USER");
-            //            userService.addRoleToUser("ZY012015", "SYS_ADMIN");
-            //
-            //            userService.addRoleToUser("SM012015", "USER");
+                    new UserRegistrationRequestData("ZY012015", "czyawa@gmail.com", "password", MEMBER));
         };
     }
-
-    //    @Bean
-    //    public PasswordEncoder passwordEncoder() {
-    //        return new BCryptPasswordEncoder();
-    //    }
 }

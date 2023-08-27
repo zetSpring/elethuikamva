@@ -11,13 +11,21 @@ import java.util.stream.Collectors;
 
 import static elethu.ikamva.domain.enums.Permission.*;
 
+@Getter
 @RequiredArgsConstructor
 public enum Role {
     USER(Collections.emptySet()),
-    ADMIN(Set.of(ADMIN_UPDATE, ADMIN_DELETE, ADMIN_READ, ADMIN_WRITE, USER_READ, USER_WRITE, USER_DELETE, USER_UPDATE)),
-    MEMBER(Set.of(USER_READ, USER_WRITE, USER_DELETE, USER_UPDATE));
+    ADMIN(Set.of(
+            ADMIN_UPDATE,
+            ADMIN_DELETE,
+            ADMIN_READ,
+            ADMIN_WRITE,
+            MEMBER_READ,
+            MEMBER_WRITE,
+            MEMBER_DELETE,
+            MEMBER_UPDATE)),
+    MEMBER(Set.of(MEMBER_READ, MEMBER_WRITE, MEMBER_DELETE, MEMBER_UPDATE));
 
-    @Getter
     private final Set<Permission> permissions;
 
     public List<SimpleGrantedAuthority> getAuthorities() {

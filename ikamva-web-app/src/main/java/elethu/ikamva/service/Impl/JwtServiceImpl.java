@@ -83,7 +83,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private String createToken(Map<String, Object> claims, UserDetails userDetails, long expirationTime) {
-        log.info("Creating token for user: {} expirationTime: {}", userDetails.getUsername(), expirationTime);
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())

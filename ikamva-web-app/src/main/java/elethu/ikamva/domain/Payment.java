@@ -59,6 +59,7 @@ public class Payment implements Serializable {
     private String deleteReason;
     @Column(name = "PAYMENT_REFERENCE", nullable = false)
     private String paymentReference;
+    @Enumerated(EnumType.STRING)
     @Column(name = "TRANSACTION_TYPE")
     private TransactionType transactionType;
 

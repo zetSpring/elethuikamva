@@ -65,20 +65,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-
-        //        if (Objects.nonNull(autHeader) && autHeader.startsWith("Bearer ")) {
-        //            try {
-        //                var token = JwtUtil.retrieveToken(autHeader);
-        //                var authenticationToken = JwtUtil.validateToken(token);
-        //                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        //                filterChain.doFilter(request, response);
-        //            } catch (Exception e) {
-        //                log.info("Error logging in: {}", e.getMessage());
-        //                // response.sendError(FORBIDDEN.value());
-        //                JwtUtil.setAuthorizationError(response, e);
-        //            }
-        //        } else {
-        //            filterChain.doFilter(request, response);
-        //        }
     }
 }

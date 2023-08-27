@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("ServiceInvocation - MemberService.saveNewMember");
 
         if (isMemberActive(nemMember.getInvestmentId())) {
-            return updateMember(nemMember);
+            return this.updateMember(nemMember);
         }
 
         log.info("Member with a member investment id {} does not exist, will create", nemMember.getInvestmentId());
@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
                 nemMember.getIdentityNo().toString().substring(6, 10));
         var dob = IdentityNumberUtility.getDateOfBirth(
                 nemMember.getIdentityNo().toString().substring(0, 6));
-        nemMember.setCorpMember(corpCompanyRepository.findCorpCompany().get());
+        nemMember.setCorpMember(corpCompanyRepository.findCorpCompany().orElse(null));
         nemMember.setDob(dob);
         nemMember.setGender(gender);
         nemMember.setCreatedDate(DateFormatter.returnLocalDateTime());
@@ -61,10 +61,11 @@ public class MemberServiceImpl implements MemberService {
     public Member updateMember(Member updateMember) {
         log.info("ServiceInvocation - MemberService.updateMember");
         var member = memberRepository
-                .findById(updateMember.getId())
+                .findMemberByInvestmentId(updateMember.getInvestmentId())
                 .orElseThrow(() -> new MemberException(String.format(
                         "Member with investment id: %s does not exist to update.", updateMember.getInvestmentId())));
 
+        updateMember.setId(member.getId());
         var gender = IdentityNumberUtility.getMemberGender(
                 updateMember.getIdentityNo().toString().substring(6, 10));
         var dob = IdentityNumberUtility.getDateOfBirth(

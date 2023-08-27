@@ -19,7 +19,7 @@ public class Mail {
     private String mailContent;
     private List<Object> attachments;
 
-    public Mail(){
+    public Mail() {
         this.contentType = "text/plain";
     }
 }
