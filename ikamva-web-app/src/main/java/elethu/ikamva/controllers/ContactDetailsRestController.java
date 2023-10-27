@@ -6,6 +6,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/contacts")
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @Api(
         value = "Ikamva account ",
         description = "Operations pertaining to the bank accounts of the elethu ikamva investment")
@@ -28,8 +30,8 @@ public class ContactDetailsRestController {
 
     @ApiResponses(
             value = {
-                @ApiResponse(code = 200, message = "Successfully retrieved contacts by invest id"),
-                @ApiResponse(code = 500, message = "Tell me something I don't know")
+                    @ApiResponse(code = 200, message = "Successfully retrieved contacts by invest id"),
+                    @ApiResponse(code = 500, message = "Tell me something I don't know")
             })
     @ApiOperation("Get Contacts by Member Investment ID")
     @GetMapping("/{investId}")
@@ -39,8 +41,8 @@ public class ContactDetailsRestController {
 
     @ApiResponses(
             value = {
-                @ApiResponse(code = 200, message = "Successfully retrieved contacts by type"),
-                @ApiResponse(code = 500, message = "Tell me something I don't know")
+                    @ApiResponse(code = 200, message = "Successfully retrieved contacts by type"),
+                    @ApiResponse(code = 500, message = "Tell me something I don't know")
             })
     @ApiOperation("Get Contacts by Contact Type")
     @GetMapping("/type/{type}")
@@ -50,8 +52,8 @@ public class ContactDetailsRestController {
 
     @ApiResponses(
             value = {
-                @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
-                @ApiResponse(code = 500, message = "Tell me something I don't know")
+                    @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
+                    @ApiResponse(code = 500, message = "Tell me something I don't know")
             })
     @ApiOperation("Get All Contacts")
     @GetMapping("/")
@@ -61,8 +63,8 @@ public class ContactDetailsRestController {
 
     @ApiResponses(
             value = {
-                @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
-                @ApiResponse(code = 500, message = "Tell me something I don't know")
+                    @ApiResponse(code = 200, message = "Successfully retrieved all contacts"),
+                    @ApiResponse(code = 500, message = "Tell me something I don't know")
             })
     @ApiOperation("Get All Contacts")
     @PutMapping("/update")
@@ -80,8 +82,8 @@ public class ContactDetailsRestController {
 
     @ApiResponses(
             value = {
-                @ApiResponse(code = 200, message = "Successfully deleted all contacts"),
-                @ApiResponse(code = 500, message = "Tell me something I don't know")
+                    @ApiResponse(code = 200, message = "Successfully deleted all contacts"),
+                    @ApiResponse(code = 500, message = "Tell me something I don't know")
             })
     @ApiOperation("Delete member contact details")
     @DeleteMapping("/delete-all/{investId}")

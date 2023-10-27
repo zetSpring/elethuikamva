@@ -4,12 +4,16 @@ import elethu.ikamva.domain.PrivateCompany;
 
 import java.util.List;
 
-
 public interface PrivateCompanyService {
-    PrivateCompany savePrivateCompany(PrivateCompany privateCompany);
     PrivateCompany deletePrivateCompany(Long id);
-    PrivateCompany findPrivateCompanyById(Long id);
-    PrivateCompany findPrivateCompanyByRegistration(String registrationNo);
+
     List<PrivateCompany> findAllPrivateCompany();
+
+    PrivateCompany findPrivateCompanyById(Long id);
+
     boolean isPrivateCompanyActive(String registrationNo);
+
+    PrivateCompany savePrivateCompany(PrivateCompany privateCompany);
+
+    PrivateCompany findPrivateCompanyByRegistration(String registrationNo);
 }

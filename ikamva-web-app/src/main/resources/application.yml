@@ -18,12 +18,12 @@ spring:
       max-file-size: ${MAX_FILE_SIZE}
       max-request-size: ${MAX_REQUEST_SIZE}
   jpa:
+    show-sql: ${SHOW_SQL}
+    generate-ddl: ${GENERATE_DDL}
+    open-in-view: ${OPEN_IN_VIEW}
     hibernate:
       ddl-auto: ${HIBERNATE_DDL_AUTO}
     database-platform: ${HIBERNATE_DIALECT}
-    generate-ddl: ${GENERATE_DDL}
-    show-sql: ${SHOW_SQL}
-    open-in-view: ${OPEN_IN_VIEW}
     properties:
       hibernate:
         default_schema: ${DEFAULT_SCHEMA}
@@ -46,9 +46,9 @@ spring:
       mail:
         smtp:
           auth: true
-          connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
+          connectiontimeout: 5000
           starttls:
             enable: true
             required: true
@@ -62,15 +62,15 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss} %-5level [%thread] %logger{36} - [%file : %line] - %msg%n"
     console: "%d{yyyy-MM-dd HH:mm:ss} %clr(%-5level) %magenta([%thread]) %cyan(%logger{36}) - %clr([%file : %line]) - %msg%n"
   level:
-    elethu.ikamva.services: INFO
-    elethu.ikamva.web: INFO
-    elethu.ikamva.repositories: INFO
-    elethu.ikamva.controllers: INFO
-    elethu.ikamva.config: INFO
-    elethu.ikamva.application: INFO
-    elethu.ikamva.filter: DEBUG
-    elethu.ikamva.security: INFO
-    elethu.ikamva.utils: INFO
+    elethu.ikamva.web: ${LOGGING_LEVEL_WEB:INFO}
+    elethu.ikamva.utils: ${LOGGING_LEVEL_UTILS:INFO}
+    elethu.ikamva.config: ${LOGGING_LEVEL_CONFIG:DEBUG}
+    elethu.ikamva.filter: ${LOGGING_LEVEL_FILTER:ERROR}
+    elethu.ikamva.security: ${LOGGING_LEVEL_SECURITY:DEBUG}
+    elethu.ikamva.services: ${LOGGING_LEVEL_SERVICES:INFO}
+    elethu.ikamva.controllers: ${LOGGING_LEVEL_CONTROLLERS:INFO}
+    elethu.ikamva.application: ${LOGGING_LEVEL_APPLICATION:INFO}
+    elethu.ikamva.repositories: ${LOGGING_LEVEL_REPOSITORIES:ERROR}
   logback:
     rollingpolicy:
       max-history: ${LOGGING_ROLLING_POLICY_MAX_HISTORY}
@@ -83,4 +83,10 @@ application:
       refresh-token:
         expiration: ${JWT_REFRESH_EXPIRATION_IN_MS}
 
-
+# Thread pool configuration
+threading:
+  completable-future:
+    max-pool-size: ${THREADING_COMPLETABLE_FUTURE_MAX_POOL_SIZE:10}
+    core-pool-size: ${THREADING_COMPLETABLE_FUTURE_CORE_POOL_SIZE:10}
+    queue-capacity: ${THREADING_COMPLETABLE_FUTURE_QUEUE_CAPACITY:100}
+    thread-name-prefix: ${THREADING_COMPLETABLE_FUTURE_THREAD_NAME_PREFIX:Ikamva-Completable-Future-}

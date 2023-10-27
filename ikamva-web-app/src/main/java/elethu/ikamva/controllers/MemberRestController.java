@@ -3,18 +3,22 @@ package elethu.ikamva.controllers;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.exception.ResourceNotFoundException;
 import elethu.ikamva.service.MemberService;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
 import java.util.List;
 
 @RestController
 @RequestMapping("/members")
-@Api(
+@ApiOperation(
         value = "Elethu Ikamva Members",
-        description = "Operations pertaining to the details about the members of elethu ikamva.")
+        notes = "Operations pertaining to the details about the members of elethu ikamva.")
+@SecurityRequirement(name = "bearerAuth")
 public class MemberRestController {
     private final MemberService memberService;
 

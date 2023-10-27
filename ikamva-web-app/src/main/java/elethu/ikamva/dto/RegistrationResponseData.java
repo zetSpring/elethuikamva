@@ -1,4 +1,4 @@
-package elethu.ikamva.dao;
+package elethu.ikamva.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginRequest {
-    private String username;
-    private String password;
+public class RegistrationResponseData {
+    boolean success;
+    String message;
+    String username;
 }

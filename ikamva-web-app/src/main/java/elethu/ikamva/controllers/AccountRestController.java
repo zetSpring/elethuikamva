@@ -3,14 +3,16 @@ package elethu.ikamva.controllers;
 import elethu.ikamva.domain.Account;
 import elethu.ikamva.service.AccountService;
 import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/accounts")
 @RestController
+@RequestMapping("/accounts")
+@SecurityRequirement(name = "bearerAuth")
 @Api(
         value = "Elethu Ikamva Investment",
         description = "Operations pertaining to the bank accounts of the elethu ikamva investment")

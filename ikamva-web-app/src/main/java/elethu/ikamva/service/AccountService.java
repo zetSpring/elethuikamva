@@ -5,12 +5,19 @@ import elethu.ikamva.domain.Account;
 import java.util.List;
 
 public interface AccountService {
-    Account saveNewAccount(Account account);
-    Account deleteAccountByAccountNo(Long accountNo);
-    Account deleteAccountById(Long id);
-    Account findAccountById(Long id);
-    Account findAccountByAccountNo(Long account);
-    Account findAccountByCompany(Long id);
     List<Account> findAllAccounts();
+
+    Account findAccountById(Long id);
+
+    Account deleteAccountById(Long id);
+
+    Account findAccountByCompany(Long id);
+
     boolean isAccountActive(Long account);
+
+    Account saveNewAccount(Account account);
+
+    Account findAccountByAccountNo(Long account);
+
+    Account deleteAccountByAccountNo(Long accountNo);
 }

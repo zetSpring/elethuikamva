@@ -1,4 +1,4 @@
-package elethu.ikamva.dao;
+package elethu.ikamva.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

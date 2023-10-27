@@ -1,0 +1,17 @@
+services:
+  ikamva-web-app:
+    container_name: ikamva-web-app
+    build:
+      context: ../.
+      dockerfile: ikamva-web-app/Dockerfile
+      args:
+        SERVER_PORT: ${SERVER_PORT}
+    image: ikamva-web-app:v1
+    restart: unless-stopped
+    env_file:
+      - ${ENV_FILE}
+    expose:
+      - ${SERVER_PORT}
+    ports:
+      - ${SERVER_PORT}:${HOST_PORT}
+

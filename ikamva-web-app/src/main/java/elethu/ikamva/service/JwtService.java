@@ -9,14 +9,14 @@ import java.util.function.Function;
 public interface JwtService {
     String extractUsername(String token);
 
-    <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
+    boolean isValidDbStatus(String jwtToken);
 
     String generateToken(UserDetails userDetails);
-
-    String generateToken(Map<String, Object> extractClaims, UserDetails userDetails);
 
     String generateRefreshToken(UserDetails userDetails);
 
     boolean isTokenValid(String token, UserDetails userDetails);
-    boolean isValidDbStatus(String jwtToken);
+
+    <T> T extractClaim(String token, Function<Claims, T> claimsResolver);
+    String generateToken(Map<String, Object> extractClaims, UserDetails userDetails);
 }

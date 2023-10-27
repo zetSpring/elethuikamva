@@ -2,6 +2,7 @@ package elethu.ikamva.controllers;
 
 import elethu.ikamva.domain.Role;
 import elethu.ikamva.service.RoleService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/role")
+@SecurityRequirement(name = "bearerAuth")
 public class RoleRestController {
     private final RoleService roleService;
 

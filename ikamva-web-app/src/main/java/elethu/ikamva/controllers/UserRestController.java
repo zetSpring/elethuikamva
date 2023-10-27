@@ -4,6 +4,7 @@ package elethu.ikamva.controllers;
 import elethu.ikamva.domain.User;
 import elethu.ikamva.service.IkamvaTokensService;
 import elethu.ikamva.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
+@SecurityRequirement(name = "bearerAuth")
 public class UserRestController {
     private final UserService userService;
     private final IkamvaTokensService tokensService;

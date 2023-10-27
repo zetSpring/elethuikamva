@@ -40,7 +40,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(toH2Console(), new AntPathRequestMatcher("/auth/**"))
+                        .requestMatchers(toH2Console(),
+                                new AntPathRequestMatcher("/auth/**"),
+                                new AntPathRequestMatcher("/swagger-ui/**"),
+                                new AntPathRequestMatcher("/v3/api-docs/**"))
                         .permitAll()
                         .anyRequest()
                         .authenticated())

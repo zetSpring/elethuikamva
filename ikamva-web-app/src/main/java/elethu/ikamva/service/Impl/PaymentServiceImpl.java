@@ -4,18 +4,18 @@ import elethu.ikamva.aspects.ExecutionTime;
 import elethu.ikamva.commons.DateFormatter;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.domain.Payment;
+import elethu.ikamva.domain.PaymentFile;
 import elethu.ikamva.domain.enums.TransactionType;
 import elethu.ikamva.exception.MemberException;
 import elethu.ikamva.exception.PaymentException;
 import elethu.ikamva.repositories.PaymentRepository;
 import elethu.ikamva.service.MemberService;
+import elethu.ikamva.service.PaymentFileService;
 import elethu.ikamva.service.PaymentService;
 import elethu.ikamva.utils.CSVPaymentProcessor;
 import elethu.ikamva.view.PaymentView;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -26,18 +26,17 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentServiceImpl.class);
-    private final PaymentRepository paymentRepository;
     private final MemberService memberService;
+    private final PaymentRepository paymentRepository;
+    private final PaymentFileService paymentFileService;
 
     @Override
     @ExecutionTime
@@ -61,16 +60,18 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @ExecutionTime
-    public void bulkSavePayments(List<Payment> payments) {
+    public Map<Double, Map<Integer, List<Payment>>> bulkSavePayments(List<Payment> payments) {
         AtomicInteger successCounter = new AtomicInteger(0);
         AtomicInteger failedCounter = new AtomicInteger(0);
+        AtomicReference<Double> totalAmount = new AtomicReference<>(0d);
+        AtomicReference<List<Payment>> paymentAtomicReference = new AtomicReference<>(new ArrayList<>());
         payments.forEach(payment -> {
             var paymentExists =
                     isPaymentActive(payment.getAmount(), payment.getInvestmentId(), payment.getPaymentDate());
             try {
                 Member member = memberService.findMemberByInvestmentId(payment.getInvestmentId());
                 if (paymentExists) {
-                    LOGGER.error(
+                    log.error(
                             "Payment for investment id: {} with amount: {} on date: {} already exists.",
                             payment.getInvestmentId(),
                             payment.getAmount(),
@@ -79,23 +80,27 @@ public class PaymentServiceImpl implements PaymentService {
                     payment.setMemberPayments(member);
                     payment.setCreatedDate(DateFormatter.returnLocalDateTime());
                     payment.setTransactionType(getTransactionType(payment.getAmount()));
-                    paymentRepository.save(payment);
+                    Payment savedPayment = paymentRepository.save(payment);
                     successCounter.getAndIncrement();
+                    totalAmount.set(payment.getAmount());
+                    paymentAtomicReference.get().add(savedPayment);
                 }
             } catch (MemberException e) {
                 failedCounter.getAndIncrement();
-                LOGGER.error("Did not find member with investment id: {}", payment.getInvestmentId());
+                log.error("Did not find member with investment id: {}", payment.getInvestmentId());
             }
         });
-        LOGGER.info("Total number of successful payments made: {}", successCounter);
-        LOGGER.info("Total number of unsuccessful payments is: {}", failedCounter);
+        log.info("Total number of successful payments made: {}", successCounter);
+        log.info("Total number of unsuccessful payments is: {}", failedCounter);
+
+        return Map.of(totalAmount.get(), Map.of(successCounter.get(), paymentAtomicReference.get()));
     }
 
     @Override
     @ExecutionTime
     public Payment updatePayment(Payment payment) {
         paymentRepository
-                .findPaymentById(payment.getId())
+                .findPaymentByIdAndEndDateIsNull(payment.getId())
                 .orElseThrow(() -> new PaymentException(
                         String.format("Payment with id: %d does not exist, cannot update payment", payment.getId())));
 
@@ -109,7 +114,7 @@ public class PaymentServiceImpl implements PaymentService {
                 .findById(id)
                 .orElseThrow(() -> new PaymentException(
                         HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for with id: " + id));
-        pay.setEndDate(DateFormatter.returnLocalDate());
+        pay.setEndDate(DateFormatter.returnLocalDateTime());
 
         return paymentRepository.save(pay);
     }
@@ -118,7 +123,7 @@ public class PaymentServiceImpl implements PaymentService {
     @ExecutionTime
     public Payment findPaymentById(Long id) {
         return paymentRepository
-                .findPaymentById(id)
+                .findPaymentByIdAndEndDateIsNull(id)
                 .orElseThrow(() -> new PaymentException(
                         HttpStatus.INTERNAL_SERVER_ERROR.value() + ", Could not find payment for payment id: " + id));
     }
@@ -127,9 +132,9 @@ public class PaymentServiceImpl implements PaymentService {
     @ExecutionTime
     public PaymentView findPaymentByInvestId(String investmentId, int pageNo, int pageSize, String sortBy) {
         var paging = PageRequest.of(pageNo - 1, pageSize, Sort.by(sortBy));
-        var memberPaymentList = paymentRepository.findPaymentByInvestmentId(investmentId, paging);
+        var memberPaymentList = paymentRepository.findPaymentsByInvestmentIdAndEndDateIsNull(investmentId, paging);
 
-        return paymentView(memberPaymentList);
+        return this.paymentView(memberPaymentList);
     }
 
     @Override
@@ -142,7 +147,7 @@ public class PaymentServiceImpl implements PaymentService {
                 DateFormatter.returnLocalDate(toDate.toString()),
                 pageable);
 
-        return paymentView(memberPayments);
+        return this.paymentView(memberPayments);
     }
 
     @Override
@@ -153,7 +158,7 @@ public class PaymentServiceImpl implements PaymentService {
         var memberPayments =
                 paymentRepository.findPaymentsByDateRangeForMember(memberInvestId, fromDate, toDate, pageable);
 
-        return paymentView(memberPayments);
+        return this.paymentView(memberPayments);
     }
 
     @Override
@@ -167,18 +172,53 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @ExecutionTime
     public void processCSVFile(MultipartFile csvFile) {
-        LOGGER.info("ServiceInvocation::ProcessCSVFile");
+        log.info("ServiceInvocation::ProcessCSVFile");
         try {
             if (!CSVPaymentProcessor.isCSVFormat(csvFile) || csvFile.isEmpty()) {
-                LOGGER.error("Error with a file type");
+                log.error("Error with a file type");
                 throw new FileNotFoundException("The file uploaded is not a CSV file, please correct and upload again");
             }
 
-            var csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
-            LOGGER.info("Total csv records: {}", csvBulkPayments.size());
-            this.bulkSavePayments(csvBulkPayments);
+            List<Payment> csvBulkPayments = CSVPaymentProcessor.bulkCSVFileProcessing(csvFile.getInputStream());
+            log.info("Total csv records: {}", csvBulkPayments.size());
+
+            if (csvBulkPayments.isEmpty()) {
+                log.error("No payments found in the file.");
+                throw new PaymentException("No payments found in the csv file");
+            }
+
+            csvBulkPayments.forEach(payment -> {
+                try {
+                    Member member = memberService.findMemberByInvestmentId(payment.getInvestmentId());
+                    payment.setMemberPayments(member);
+                    payment.setTransactionType(getTransactionType(payment.getAmount()));
+                    payment.setCreatedDate(DateFormatter.returnLocalDateTime());
+                } catch (MemberException e) {
+                    log.error("Could not find member with investment id: {}", payment.getInvestmentId());
+                }
+            });
+
+            List<Payment> filteredPayments = csvBulkPayments.stream()
+                    .filter(p -> Objects.nonNull(p.getCreatedDate()))
+                    .toList();
+
+            Double totalFileAmount =
+                    filteredPayments.stream().map(Payment::getAmount).reduce(0.0, Double::sum);
+
+            PaymentFile paymentFile = PaymentFile.builder()
+                    .fileTotalAmount(totalFileAmount)
+                    .fileType(csvFile.getContentType())
+                    .fileData(csvFile.getBytes())
+                    .fileName(csvFile.getOriginalFilename())
+                    .numberOfTransactions(filteredPayments.size())
+                    .fileUploadedDate(DateFormatter.returnLocalDateTime())
+                    .build();
+
+            paymentFile.setPayments(filteredPayments);
+            PaymentFile savedPaymentFile = paymentFileService.saveFile(paymentFile);
+            log.info("Total number of payments saved: {}", savedPaymentFile.getId());
         } catch (IOException e) {
-            LOGGER.info("There was a problem with the usre of the CSV processor");
+            log.info("There was a problem with the usre of the CSV processor", e);
             throw new PaymentException(
                     "There was a problem processing uploaded file, please make sure its a csv file.");
         }
@@ -193,7 +233,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         paymentView.setPayments(payments.getContent());
         paymentView.setPage(String.format("%s of %s", payments.getNumber() + 1, payments.getTotalPages()));
-        paymentView.setSize(payments.getSize());
+        paymentView.setSize(payments.getContent().size());
         var pageTotal = payments.getContent().stream()
                 .filter(payment -> payment.getTransactionType().equals(TransactionType.MONTHLY_CONTRIBUTION))
                 .map(Payment::getAmount)

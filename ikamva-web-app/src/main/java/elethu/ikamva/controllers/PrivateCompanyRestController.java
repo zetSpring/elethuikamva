@@ -2,6 +2,7 @@ package elethu.ikamva.controllers;
 
 import elethu.ikamva.domain.PrivateCompany;
 import elethu.ikamva.service.PrivateCompanyService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/private-company")
-@RestController
+@SecurityRequirement(name = "bearerAuth")
 public class PrivateCompanyRestController {
     private final PrivateCompanyService privateCompanyService;
 

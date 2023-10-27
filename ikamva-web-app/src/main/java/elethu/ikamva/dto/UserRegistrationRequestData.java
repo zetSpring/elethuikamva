@@ -1,4 +1,4 @@
-package elethu.ikamva.dao;
+package elethu.ikamva.dto;
 
 import elethu.ikamva.domain.enums.Role;
 

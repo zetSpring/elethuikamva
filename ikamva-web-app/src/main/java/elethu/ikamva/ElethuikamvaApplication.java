@@ -1,11 +1,15 @@
 package elethu.ikamva;
 
 import elethu.ikamva.commons.DateFormatter;
-import elethu.ikamva.dao.UserRegistrationRequestData;
+import elethu.ikamva.dto.UserRegistrationRequestData;
 import elethu.ikamva.domain.CorpCompany;
 import elethu.ikamva.domain.Member;
 import elethu.ikamva.domain.enums.Gender;
 import elethu.ikamva.service.*;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,6 +22,7 @@ import java.util.List;
 
 import static elethu.ikamva.domain.enums.Role.MEMBER;
 
+@Slf4j
 @SpringBootApplication
 @EnableTransactionManagement
 public class ElethuikamvaApplication {
@@ -70,6 +75,14 @@ public class ElethuikamvaApplication {
                     DateFormatter.returnLocalDate(),
                     Gender.MALE));
             memberService.saveAllMembers(members);
+
+            int i1 = Runtime.getRuntime().availableProcessors();
+            long i = Runtime.getRuntime().freeMemory();
+
+            log.info("Number of free memory: {}", i);
+            log.info("Number of processors: {}", i1);
+
+
 
             authenticationService.registerUser(
                     new UserRegistrationRequestData("ZY012015", "czyawa@gmail.com", "password", MEMBER));

@@ -49,7 +49,7 @@ public class ContactDetails implements Serializable {
     @Column(name = "END_DATE")
     private LocalDate endDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "MEMBER_ID_FK", nullable = false)
     private Member members;

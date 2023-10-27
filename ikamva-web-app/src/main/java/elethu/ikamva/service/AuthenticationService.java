@@ -1,9 +1,9 @@
 package elethu.ikamva.service;
 
-import elethu.ikamva.dao.AuthenticatedResponse;
-import elethu.ikamva.dao.LoginRequest;
-import elethu.ikamva.dao.RegistrationResponseData;
-import elethu.ikamva.dao.UserRegistrationRequestData;
+import elethu.ikamva.dto.AuthenticatedResponse;
+import elethu.ikamva.dto.LoginRequest;
+import elethu.ikamva.dto.RegistrationResponseData;
+import elethu.ikamva.dto.UserRegistrationRequestData;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
